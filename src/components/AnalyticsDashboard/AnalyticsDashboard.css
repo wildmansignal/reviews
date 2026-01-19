@@ -1,0 +1,193 @@
+/* Analytics Dashboard - Modern Light Mode */
+:root {
+    --ana-bg-gray: #f6f6f7;
+    --ana-card-white: #ffffff;
+    --ana-text-dark: #202223;
+    /* Shopify-like dark gray */
+    --ana-text-sub: #6d7175;
+    --ana-bar-color: #92d4d9;
+    /* Light Cyan/Teal from screenshot */
+    --ana-bar-hover: #7abcc1;
+    --ana-border: #e1e3e5;
+    --ana-font: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+.ana-app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    padding: 20px;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    color: var(--ana-text-dark);
+}
+
+/* --- Controls --- */
+.ana-controls {
+    width: 350px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e1e1;
+}
+
+.ana-control-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* --- Phone/Card Frame --- */
+/* The screenshot looks like a card widget, but we'll put it in a phone frame context for consistency with prev requests,
+   OR we can make it a standalone dashboard card view. The user said "build me a custom analytics dashboard like this".
+   I'll stick to the "Phone Frame" container style but with a clean internal UI.
+*/
+.ana-phone-frame {
+    width: 100%;
+    max-width: 375px;
+    background-color: var(--ana-bg-gray);
+    color: var(--ana-text-dark);
+    font-family: var(--ana-font);
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    border: 8px solid #333;
+    position: relative;
+}
+
+.ana-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: white;
+    /* Clean white background */
+}
+
+/* Header Section */
+.ana-header {
+    margin-bottom: 20px;
+}
+
+.ana-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ana-text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.ana-value-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.ana-big-value {
+    font-size: 32px;
+    font-weight: 500;
+    /* Regular/Medium weight per screenshot */
+    color: #333;
+    letter-spacing: -0.5px;
+}
+
+.ana-meta-col {
+    text-align: right;
+}
+
+.ana-date-range {
+    font-size: 14px;
+    color: var(--ana-text-sub);
+    margin-bottom: 4px;
+}
+
+.ana-orders {
+    font-size: 13px;
+    color: var(--ana-text-sub);
+}
+
+/* Chart Area */
+.ana-chart-wrapper {
+    margin-top: 40px;
+    padding-bottom: 20px;
+    position: relative;
+    height: 300px;
+}
+
+.ana-y-axis {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 30px;
+    /* Space for X labels */
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #999;
+    font-size: 11px;
+    padding-bottom: 10px;
+    /* Align with 0 line */
+    z-index: 10;
+}
+
+.ana-chart-content {
+    margin-left: 40px;
+    /* Space for Y axis */
+    height: 100%;
+    position: relative;
+    border-bottom: 1px solid #eee;
+    /* X axis line */
+}
+
+.ana-grid-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.ana-bars-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    padding-bottom: 1px;
+    /* Sit on line */
+    position: relative;
+}
+
+.ana-bar {
+    width: 6px;
+    /* Thin bars */
+    background-color: var(--ana-bar-color);
+    border-radius: 1px 1px 0 0;
+    transition: height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ana-bar:hover {
+    background-color: var(--ana-bar-hover);
+}
+
+.ana-x-labels {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    color: #999;
+    font-size: 11px;
+}

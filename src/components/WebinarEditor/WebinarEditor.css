@@ -1,0 +1,247 @@
+/* Keynote Dark Mode Styles */
+
+:root {
+    --bg-dark: #1e1e1e;
+    --bg-darker: #161616;
+    --bg-panel: #262626;
+    --border-color: #333;
+    --accent-blue: #0b84ff;
+    --text-primary: #e6e6e6;
+    --text-secondary: #999;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* Prevent global scroll */
+}
+
+.keynote-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- Toolbar --- */
+.keynote-toolbar {
+    height: 52px;
+    background-color: #2b2b2b;
+    border-bottom: 1px solid #111;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    user-select: none;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 4px;
+}
+
+.toolbar-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 500;
+    min-width: 44px;
+}
+
+.toolbar-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.toolbar-btn.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.toolbar-btn svg {
+    margin-bottom: 1px;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 32px;
+    background-color: #444;
+    margin: 0 8px;
+}
+
+/* --- Main Layout --- */
+.keynote-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Sidebar (Thumbnails) */
+.keynote-sidebar {
+    width: 200px;
+    /* Reduced to match Keynote default approx */
+    background-color: var(--bg-panel);
+    border-right: 1px solid #111;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-top: 10px;
+}
+
+.slide-thumbnail {
+    display: flex;
+    padding: 8px 16px 8px 8px;
+    /* Room for number */
+    cursor: pointer;
+}
+
+.slide-num {
+    width: 24px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-secondary);
+    padding-right: 8px;
+    padding-top: 4px;
+}
+
+.thumbnail-preview {
+    flex: 1;
+    aspect-ratio: 16/9;
+    background: white;
+    border-radius: 2px;
+    border: 1px solid #555;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide-thumbnail.active .thumbnail-preview {
+    border: 2px solid var(--accent-blue);
+    box-shadow: 0 0 0 1px var(--accent-blue);
+    /* Double border effect */
+}
+
+/* Canvas Area */
+.keynote-canvas-area {
+    flex: 1;
+    background-color: var(--bg-darker);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    position: relative;
+}
+
+.keynote-slide {
+    width: 960px;
+    /* Base resolution, can scale */
+    height: 540px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Properties Panel */
+.keynote-inspector {
+    width: 240px;
+    background-color: var(--bg-panel);
+    border-left: 1px solid #111;
+    display: flex;
+    flex-direction: column;
+}
+
+.inspector-tabs {
+    display: flex;
+    border-bottom: 1px solid #111;
+    background: #2b2b2b;
+}
+
+.inspector-tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 11px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.inspector-tab.active {
+    color: white;
+    font-weight: 600;
+    border-bottom-color: white;
+    /* Keynote style underline? or icon toggle */
+}
+
+.inspector-content {
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.inspector-section {
+    margin-bottom: 20px;
+}
+
+.inspector-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.inspector-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.inspector-input {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    width: 100%;
+}
+
+/* Elements */
+.canvas-element {
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    border: 1px solid transparent;
+    /* Selection indicator */
+}
+
+.canvas-element.selected {
+    border: 1px solid var(--accent-blue);
+}
+
+.canvas-element:hover {
+    border: 1px solid rgba(11, 132, 255, 0.5);
+}
+
+.resize-handle {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border: 1px solid var(--accent-blue);
+    position: absolute;
+}

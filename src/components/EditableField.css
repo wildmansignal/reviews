@@ -1,0 +1,32 @@
+.editable-field-wrapper {
+    display: inline-flex;
+    position: relative;
+    cursor: pointer;
+}
+
+.editable-input {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 2px;
+    padding: 0 2px;
+    margin: 0;
+    line-height: inherit;
+    outline: none;
+    min-width: 20px;
+    height: 100%;
+}
+
+.editable-text {
+    /* No special styles, inherits from parent wrapper/context */
+    white-space: pre;
+}
+
+.editable-field-wrapper:hover .editable-text {
+    /* Optional: visual cue on hover? User said "doesn't look like it can be edited unless i click", so maybe Keep subtle */
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+}

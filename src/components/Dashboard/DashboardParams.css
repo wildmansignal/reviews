@@ -1,0 +1,175 @@
+.dashboard-params {
+    max-width: 1080px;
+    /* Slightly constrained to match the 'contained' feel */
+    margin: 0 auto;
+    padding-bottom: 60px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-md);
+}
+
+.dashboard-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.2px;
+    /* Tighter tracking for headlines */
+}
+
+.btn-secondary {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #f9fafb;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+.chart-section {
+    position: relative;
+    /* ensure it doesn't overflow */
+}
+
+/* Balance Row */
+.balance-row {
+    display: flex;
+    gap: 60px;
+    /* Wider gap */
+    padding: 32px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.balance-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.balance-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.balance-label {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.balance-link {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.balance-link:hover {
+    text-decoration: underline;
+}
+
+.balance-amount {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.1px;
+}
+
+.balance-sub {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-top: 6px;
+}
+
+/* Overview Section */
+.overview-section {
+    margin-top: 40px;
+}
+
+.overview-section h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--color-text-primary);
+}
+
+.overview-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pill-group {
+    display: flex;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.pill-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    border-right: 1px solid var(--color-border);
+    cursor: pointer;
+    line-height: 20px;
+    transition: background 0.1s;
+}
+
+.pill-btn:hover {
+    background-color: #f7f9fc;
+}
+
+.pill-btn:last-child {
+    border-right: none;
+}
+
+.pill-btn strong {
+    color: var(--color-accent-primary);
+    font-weight: 500;
+}
+
+.overview-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.btn-icon-text {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: var(--color-text-primary);
+    transition: all 0.15s;
+}
+
+.btn-icon-text:hover {
+    background-color: #f7f9fc;
+    border-color: #cfd7df;
+}

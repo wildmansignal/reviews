@@ -1,0 +1,85 @@
+.metric-container {
+    padding: var(--spacing-md) 0;
+}
+
+.metric-columns {
+    display: flex;
+    gap: 60px;
+    /* Match the gap of balance row usually, or user specified spacing */
+}
+
+.metric-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+    /* Tighter to value */
+    height: 20px;
+    /* Enforce height for alignment */
+    cursor: pointer;
+}
+
+.metric-header.text-muted .metric-label {
+    color: var(--color-text-secondary);
+    /* Ensure it mimics the label style */
+    text-transform: none;
+    /* 'Yesterday' is usually generic text, not uppercase? User screenshot shows 'Yesterday' normal case */
+}
+
+.metric-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+}
+
+.dropdown-arrow {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.metric-value:hover {
+    color: var(--color-accent-primary);
+}
+
+.metric-input {
+    font-size: 28px;
+    font-weight: 600;
+    font-family: inherit;
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 4px;
+    padding: 0 4px;
+    width: 160px;
+    outline: none;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.sub-value {
+    font-size: 16px;
+    color: var(--color-text-muted);
+    /* It was grey in screenshot */
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+.metric-time {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--color-text-muted);
+}

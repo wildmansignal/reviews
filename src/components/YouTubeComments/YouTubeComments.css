@@ -1,0 +1,232 @@
+/* YouTube Comments - Dark Mode Mobile */
+:root {
+    --yt-bg-black: #0f0f0f;
+    --yt-text-white: #f1f1f1;
+    --yt-text-gray: #aaaaaa;
+    --yt-hover-gray: #272727;
+    --yt-separator: #272727;
+    --yt-font: Roboto, Arial, sans-serif;
+    --yt-blue: #3ea6ff;
+}
+
+.yt-app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #1f1f1f;
+    /* Workspace bg */
+    padding: 20px;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--yt-font);
+}
+
+/* --- Controls --- */
+.yt-controls {
+    width: 350px;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid #333;
+}
+
+.yt-control-group {
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}
+
+.yt-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #ccc;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.yt-input {
+    width: 100%;
+    padding: 8px;
+    background: #333;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+/* --- Phone Frame --- */
+.yt-phone-frame {
+    width: 100%;
+    max-width: 375px;
+    background-color: var(--yt-bg-black);
+    color: var(--yt-text-white);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    border: 8px solid #222;
+    position: relative;
+}
+
+/* Comments List */
+.yt-comments-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 16px;
+}
+
+.yt-comment-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.yt-avatar {
+    width: 34px;
+    /* Screenshot looks slightly smallish standard YT mobile is usually 24-40 depending on depth. Top level seems 30-40 */
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.yt-comment-content {
+    flex: 1;
+}
+
+.yt-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+    font-size: 13px;
+}
+
+.yt-handle {
+    color: var(--yt-text-gray);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.yt-handle.creator {
+    background: #272727;
+    /* Or just text. Screenshot shows "@nikotrip" with a checkmark badge? Yes checkmark badge */
+    color: white;
+    padding: 0 6px;
+    /* Wait, screenshot: "@nikotrip • 2y ago" -> The handle is white, has a checkmark. */
+    /* Wait, the first one "@darren861" is gray text. 
+       The second one "@nikotrip" has a checkmark and is possibly highlighted? 
+       Actually, standard YT is gray handle. If verified, gray handle + badge.
+    */
+}
+
+.yt-time {
+    color: var(--yt-text-gray);
+    font-size: 12px;
+}
+
+.yt-comment-text {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--yt-text-white);
+    margin-bottom: 8px;
+    font-weight: 400;
+    /* Regular Roboto */
+}
+
+/* Toolbar: Like, Dislike, Heart, Reply */
+.yt-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--yt-text-white);
+}
+
+.yt-tool-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.yt-icon {
+    /* Using Lucide icons, but sizing need to be small and thin */
+}
+
+.yt-like-count {
+    font-size: 12px;
+    color: var(--yt-text-gray);
+}
+
+/* Creator Hearted Stack */
+.yt-creator-heart {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+}
+
+.yt-creator-avatar-mini {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.yt-heart-mini {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: transparent;
+    border-radius: 50%;
+    padding: 0;
+}
+
+/* Replies Button */
+.yt-replies-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    color: var(--yt-blue);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Bottom Input Bar */
+.yt-bottom-bar {
+    padding: 8px 12px;
+    background: #212121;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid #333;
+}
+
+.yt-user-avatar-mini {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.yt-input-field {
+    flex: 1;
+    background: #0f0f0f;
+    border: none;
+    /* YouTube internal has a gray rectangle bg usually or just placeholder text? 
+       Screenshot 2 bottom: "Add a comment or @mention..." in a gray rounded rectangle.
+    */
+    background: #272727;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--yt-text-white);
+    font-size: 14px;
+}

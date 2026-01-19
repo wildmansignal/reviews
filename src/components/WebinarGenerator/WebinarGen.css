@@ -1,0 +1,359 @@
+/* Webinar Generator Branding */
+:root {
+    --wg-bg-dark: #111827;
+    --wg-bg-card: #1f2937;
+    --wg-text-main: #f9fafb;
+    --wg-text-sec: #9ca3af;
+    --wg-accent: #6366f1;
+    /* Indigo */
+    --wg-border: #374151;
+}
+
+.wg-app-container {
+    display: flex;
+    height: 100vh;
+    background-color: var(--wg-bg-dark);
+    color: var(--wg-text-main);
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- Sidebar / Setup --- */
+.wg-setup-panel {
+    width: 400px;
+    background-color: var(--wg-bg-card);
+    border-right: 1px solid var(--wg-border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.wg-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--wg-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wg-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.wg-scroll-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.wg-section {
+    margin-bottom: 30px;
+}
+
+.wg-section-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--wg-text-sec);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.wg-input-group {
+    margin-bottom: 16px;
+}
+
+.wg-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #e5e7eb;
+}
+
+.wg-input,
+.wg-textarea,
+.wg-select {
+    width: 100%;
+    background-color: #374151;
+    border: 1px solid #4b5563;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+.wg-input:focus {
+    border-color: var(--wg-accent);
+}
+
+.wg-btn {
+    background-color: var(--wg-accent);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.wg-btn:hover {
+    background-color: #4f46e5;
+}
+
+.wg-btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--wg-border);
+    color: var(--wg-text-sec);
+}
+
+.wg-btn-secondary:hover {
+    border-color: #9ca3af;
+    color: white;
+}
+
+/* --- Main Content / Preview --- */
+.wg-main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #0f1115;
+}
+
+.wg-toolbar {
+    height: 60px;
+    border-bottom: 1px solid var(--wg-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background-color: var(--wg-bg-card);
+}
+
+.wg-mode-switch {
+    display: flex;
+    background: #111827;
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.wg-mode-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--wg-text-sec);
+}
+
+.wg-mode-btn.active {
+    background: var(--wg-accent);
+    color: white;
+}
+
+/* Preview Canvas */
+.wg-canvas {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    align-items: flex-start;
+    /* Changed from center to prevent top clipping */
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.wg-slide-container {
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 16/9;
+    background: white;
+    color: #333;
+    /* Default slide text */
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Slide Content Styles */
+.wg-slide-content {
+    flex: 1;
+    padding: 0;
+    /* Reset padding, handle in layouts */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Common Layout Containers */
+.wg-layout-base {
+    display: grid;
+    height: 100%;
+    width: 100%;
+}
+
+/* Split Layouts */
+.wg-layout-split-left {
+    grid-template-columns: 1fr 1fr;
+}
+
+.wg-layout-split-right {
+    grid-template-columns: 1fr 1fr;
+    direction: rtl;
+    /* visual hack for swapping cols, resets in children */
+}
+
+.wg-region {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    direction: ltr;
+    /* reset direction */
+}
+
+.wg-region-media {
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+}
+
+.wg-region-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Collage Grid */
+.wg-collage-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    padding: 40px;
+    height: 100%;
+}
+
+.wg-collage-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.wg-collage-item:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.wg-collage-item:nth-child(2) {
+    grid-column: span 2;
+}
+
+.wg-collage-item:nth-child(3) {
+    grid-column: span 2;
+}
+
+/* Testimonials */
+.wg-testimonial-grid {
+    display: grid;
+    gap: 20px;
+    padding: 60px;
+    align-content: center;
+}
+
+.wg-testimonial-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 24px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+/* Interactive Placeholder */
+.wg-placeholder-click {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: inherit;
+    opacity: 0.5;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wg-placeholder-click:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.wg-slide-thumb {
+    aspect-ratio: 16/9;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.wg-slide-thumb:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.wg-slide-thumb.selected {
+    border-color: var(--wg-accent);
+}
+
+/* Video Bubble */
+.wg-host-bubble {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #333;
+    border: 4px solid white;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.wg-host-bubble img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Upload Dropzone */
+.wg-dropzone {
+    border: 2px dashed var(--wg-border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.wg-dropzone:hover {
+    border-color: var(--wg-accent);
+    background: rgba(99, 102, 241, 0.1);
+}

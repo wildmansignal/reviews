@@ -1,0 +1,102 @@
+.sidebar {
+    width: 240px;
+    background-color: var(--color-bg-sidebar);
+    border-right: 1px solid var(--color-border);
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-md);
+    padding-top: 12px;
+}
+
+.sidebar-header {
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xs);
+    padding-top: 4px;
+}
+
+.store-selector {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.arrow {
+    font-size: 10px;
+    opacity: 0.6;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    /* Increased separation between groups */
+}
+
+.nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    /* Tighter item spacing */
+}
+
+.nav-group-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+    padding-left: 10px;
+    letter-spacing: 0.5px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 10px;
+    /* Slightly more padding */
+    border-radius: 4px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.1s ease-in-out;
+}
+
+.nav-item:hover {
+    background-color: #f7f9fc;
+    /* Use the specific light gray */
+    color: var(--color-text-primary);
+}
+
+.nav-item.active {
+    background-color: #e2fbfe;
+    /* Using the Sail blue-25 approximate but checking accent */
+    background-color: #f0f2f5;
+    /* Actually Stripe uses a very subtle gray usually, or the tint */
+    background-color: rgba(99, 91, 255, 0.08);
+    /* Transparent primary accent */
+    color: var(--color-accent-primary);
+}
+
+.nav-item svg {
+    opacity: 0.7;
+}
+
+.nav-item:hover svg,
+.nav-item.active svg {
+    opacity: 1;
+}
+
+.nav-item.active svg {
+    color: var(--color-accent-primary);
+}

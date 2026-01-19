@@ -1,0 +1,515 @@
+/* Messenger Theme - Mobile Dark Mode */
+:root {
+    --ms-bg-black: #000000;
+    --ms-bg-gray: #1c1c1e;
+    --ms-bg-blue: #0084ff;
+    --ms-text-white: #ffffff;
+    --ms-text-gray: #8e8e93;
+    --ms-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.messenger-app-container {
+    background-color: var(--ms-bg-black);
+    color: var(--ms-text-white);
+    font-family: var(--ms-font-family);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Center strictly */
+    gap: 40px;
+    /* Space between Phone and Controls */
+    padding: 20px;
+}
+
+/* Messenger Frame */
+.messenger-frame {
+    width: 100%;
+    max-width: 400px;
+    /* narrowed from 550px */
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    /* Fixed height for simulator feel */
+    border: 1px solid #333;
+    border-radius: 40px;
+    /* Rounded corners for phone check */
+    overflow: hidden;
+    /* Clip images */
+    position: relative;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Side Control Panel */
+.control-panel {
+    width: 300px;
+    background-color: #1c1c1e;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8e8e93;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.control-input {
+    background-color: #2c2c2e;
+    border: 1px solid #3a3a3c;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.control-btn {
+    background-color: var(--ms-bg-blue);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.control-btn:hover {
+    opacity: 0.9;
+}
+
+.control-btn.secondary {
+    background-color: #3a3a3c;
+}
+
+/* Static Images */
+.static-header-img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    /* user might want to overlay text on this if we keep "editability", 
+       but user said "controls on the side so they cant be seen inside". 
+       So likely just the raw image. */
+}
+
+.static-footer-img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.messenger-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Border bottom optional, screenshot is very dark */
+}
+
+/* Header Left: Back Arrow */
+.header-left {
+    display: flex;
+    align-items: center;
+    width: 40px;
+    /* Space for back button */
+}
+
+/* Header Center: Avatar + Info */
+.header-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-avatar-container {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+}
+
+.header-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #333;
+    display: block;
+}
+
+.header-active-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background-color: #31a24c;
+    /* Messenger Green */
+    border: 2px solid black;
+    border-radius: 50%;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-name-input {
+    font-weight: 700;
+    /* Bold Name */
+    font-size: 16px;
+    color: white;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+}
+
+.header-status-text {
+    font-size: 12px;
+    color: #b0b3b8;
+    /* Light gray for status */
+    font-weight: 400;
+    margin-top: 1px;
+}
+
+/* Header Right: Actions */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Tighter spacing (was 24px) */
+    padding-right: 4px;
+}
+
+/* Chat Area */
+.messenger-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    /* Tighter gap like sent messages */
+}
+
+.message-row {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 2px;
+    gap: 8px;
+}
+
+.message-row.me {
+    justify-content: flex-end;
+}
+
+.message-row.them {
+    justify-content: flex-start;
+}
+
+.message-row.me {
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.delivered-status {
+    font-size: 11px;
+    color: #8e8e93;
+    margin-top: 2px;
+    margin-right: 2px;
+    font-weight: 500;
+}
+
+.row-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    background: #333;
+    /* Should be avatar image potentially */
+    border-radius: 50%;
+    margin-bottom: 4px;
+    background-image: url('https://placehold.co/28');
+    /* Placeholder */
+    background-size: cover;
+    opacity: 0;
+    /* Hiding for now unless explicit request for per-message avatar */
+}
+
+.row-avatar {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.row-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Only show avatar for last message in group? Logic complex. User screenshot shows small avatar on left. */
+/* Let's make it visible for 'them' */
+/* Updating logic: */
+.message-row.them .row-avatar-placeholder {
+    opacity: 1;
+    background-image: url('https://placehold.co/28');
+    /* Placeholder */
+}
+
+.bubble {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.4;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.bubble.them {
+    background-color: #262626;
+    color: white;
+    border-bottom-left-radius: 4px;
+}
+
+.bubble.me {
+    background-color: var(--ms-bg-blue);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Bubble Text Input */
+.bubble-text-input {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    line-height: 1.4;
+    resize: none;
+    /* Disable manual resize handle */
+    overflow: hidden;
+    display: block;
+}
+
+/* Image Bubble */
+.bubble.image-bubble {
+    background: transparent;
+    padding: 0;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.chat-image {
+    max-width: 100%;
+    display: block;
+    border-radius: 18px;
+    cursor: pointer;
+}
+
+/* Preview Bubble */
+.bubble.preview-bubble {
+    background-color: #262626;
+    padding: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-image-container {
+    position: relative;
+    width: 100%;
+}
+
+.preview-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 30px;
+    background: red;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+}
+
+.preview-content {
+    padding: 12px;
+}
+
+.preview-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+    outline: none;
+}
+
+.preview-desc {
+    font-size: 13px;
+    color: #b0b3b8;
+    outline: none;
+}
+
+/* Footer */
+.messenger-footer {
+    padding: 10px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    /* Wider gap for icons */
+}
+
+.footer-icon {
+    display: flex;
+    /* alignment */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Sprite Base - Adjusted for individual images */
+.ms-icon {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    vertical-align: middle;
+}
+
+/* Header Icons */
+.ms-icon-back {
+    width: 24px;
+    /* Scaled down to match phone icon */
+    height: 24px;
+    background-image: url('../../assets/messenger/More Messages.png');
+    /* Switched to user requested image */
+    background-size: contain;
+}
+
+.ms-icon-phone {
+    width: 24px;
+    /* Smaller */
+    height: 24px;
+    background-image: url('../../assets/messenger/Phone.png');
+    /* Using exact filename match */
+}
+
+.ms-icon-video {
+    width: 28px;
+    /* Smaller */
+    height: 24px;
+    background-image: url('../../assets/messenger/Video.png');
+    /* Using exact filename match */
+}
+
+/* Footer Icons */
+.ms-icon-plus {
+    /* Missing explicit plus image, using sprite fallback or CSS? 
+       User said "bottom left plus icon". I will use the previous sprite's plus for now 
+       or simpler: just a blue plus text if we want "bigger". 
+       Actually, let's keep the sprite plus but scale it up? 
+       Or better: Create a pure CSS blue plus to match the vibe if image missing.
+    */
+    background-image: url('../../assets/messenger/footer_actions.png');
+    background-size: 400% 100%;
+    background-position: 0% 0;
+    width: 30px;
+    height: 30px;
+}
+
+.ms-icon-camera {
+    width: 34px;
+    height: 30px;
+    background-image: url('../../assets/messenger/icon_camera.png');
+}
+
+.ms-icon-gallery {
+    width: 32px;
+    height: 32px;
+    background-image: url('../../assets/messenger/icon_gallery.png');
+}
+
+.ms-icon-mic {
+    width: 28px;
+    height: 32px;
+    background-image: url('../../assets/messenger/icon_mic.png');
+}
+
+.ms-icon-thumb {
+    font-size: 32px;
+    /* Bigger thumb */
+}
+
+.message-input-wrapper {
+    flex: 1;
+    background-color: #1c1c1e;
+    border-radius: 20px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+}
+
+.message-input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 15px;
+    width: 100%;
+    outline: none;
+}
+
+.edited-label {
+    font-size: 11px;
+    color: var(--ms-text-gray);
+    align-self: flex-end;
+    /* right side */
+    margin-right: 12px;
+    margin-bottom: 2px;
+    font-weight: 500;
+}

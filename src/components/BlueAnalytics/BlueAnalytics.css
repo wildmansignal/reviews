@@ -1,0 +1,193 @@
+/* Blue Analytics - Dark Blue Mode */
+:root {
+    --blue-bg-main: #181b4f;
+    /* Deep blue from screenshot */
+    --blue-bg-lighter: #262a67;
+    --blue-accent-btn: #536dfe;
+    /* Periwinkle blue button */
+    --blue-text-white: #ffffff;
+    --blue-text-dim: #8b92b6;
+    --blue-grid-line: #303575;
+    --blue-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.blue-app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0c0d21;
+    /* Very dark workspace bg */
+    padding: 20px;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* --- Controls --- */
+.blue-controls {
+    width: 350px;
+    background-color: #1e2140;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.blue-control-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: #111330;
+    border: 1px solid #303575;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* --- Phone Frame --- */
+.blue-phone-frame {
+    width: 100%;
+    max-width: 375px;
+    background-color: var(--blue-bg-main);
+    color: var(--blue-text-white);
+    font-family: var(--blue-font);
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    border: 8px solid #000;
+    position: relative;
+    padding: 20px;
+}
+
+/* Top Navigation Tabs */
+.blue-tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 0 4px;
+}
+
+.blue-tab {
+    font-size: 13px;
+    color: var(--blue-text-dim);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.blue-tab.active {
+    background-color: var(--blue-accent-btn);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(83, 109, 254, 0.4);
+}
+
+/* Metric Section */
+.blue-metrics-row {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.blue-metric-col {
+    flex: 1;
+}
+
+.blue-metric-label {
+    font-size: 13px;
+    color: var(--blue-text-dim);
+    margin-bottom: 6px;
+}
+
+.blue-metric-val {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.blue-metric-sub {
+    font-size: 13px;
+    color: var(--blue-text-dim);
+    margin-top: 4px;
+}
+
+/* Dashboard Button */
+.blue-dash-btn {
+    background: transparent;
+    border: 1px solid var(--blue-text-dim);
+    color: white;
+    padding: 8px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin: 0 auto 40px auto;
+    display: block;
+    cursor: pointer;
+}
+
+/* Chart */
+.blue-chart-container {
+    height: 250px;
+    position: relative;
+    width: 100%;
+}
+
+.blue-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.blue-grid-line {
+    border-top: 1px dashed var(--blue-grid-line);
+    width: 100%;
+    position: relative;
+}
+
+.blue-y-label {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    font-size: 11px;
+    color: var(--blue-text-dim);
+}
+
+.blue-bars-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 40px;
+    /* Space for Y axis labels */
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 1px;
+}
+
+.blue-bar {
+    width: 8px;
+    background-color: white;
+    transition: height 0.5s ease;
+}
+
+.blue-x-axis {
+    position: absolute;
+    bottom: -25px;
+    left: 40px;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    color: var(--blue-text-dim);
+    font-size: 11px;
+}

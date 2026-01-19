@@ -1,0 +1,86 @@
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-secondary);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 240px;
+  /* Sidebar width */
+  min-width: 0;
+}
+
+.top-search-bar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-xl);
+  background-color: transparent;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f7f9fc;
+  /* Simulating the input hover/focus state could go here, but keeping it simple for now */
+  padding: 6px 12px;
+  border-radius: 4px;
+  width: 300px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+  background-color: #e3e8ee;
+  /* Placeholder background color from screenshot area roughly */
+  background-color: #f0f2f5;
+}
+
+.search-input-wrapper:hover {
+  background-color: #e3e8ee;
+}
+
+.search-input-wrapper input {
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-left: 8px;
+  font-size: 14px;
+  color: var(--color-text-primary);
+  width: 100%;
+}
+
+.search-icon {
+  opacity: 0.7;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.top-actions a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.content-scrollable {
+  padding: var(--spacing-xl);
+  padding-top: var(--spacing-md);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.avatar-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #635bff;
+  border: none;
+  cursor: pointer;
+}

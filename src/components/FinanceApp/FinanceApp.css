@@ -1,0 +1,269 @@
+/* Finance App - Dark Mode */
+:root {
+    --fin-bg-black: #000000;
+    --fin-card-gray: #151515;
+    /* Slightly lighter for cards */
+    --fin-text-white: #ffffff;
+    --fin-text-gray: #9ca3af;
+    --fin-accent-pink: #d996dd;
+    /* Lavender/Pink from screenshot (button) */
+    --fin-accent-purple: #ae6cc6;
+    /* Purple for text amounts? Or matching pink? Screenshot shows pinkish amounts */
+    --fin-bg-purple-dark: #4a1f4f;
+    /* Dark Purple for secondary buttons */
+    --fin-bg-purple-darker: #2d1b33;
+    --fin-divider: #333333;
+    --fin-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.fin-app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    /* Workspace bg */
+    color: white;
+    padding: 20px;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Controls --- */
+.fin-controls {
+    width: 350px;
+    background-color: #262626;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: fit-content;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* --- Phone Frame --- */
+.fin-phone-frame {
+    width: 100%;
+    max-width: 375px;
+    /* iPhone width */
+    background-color: var(--fin-bg-black);
+    color: var(--fin-text-white);
+    font-family: var(--fin-font-family);
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    position: relative;
+    border: 8px solid #222;
+}
+
+/* Content Area */
+.fin-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--fin-bg-black);
+}
+
+.fin-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.fin-header-title {
+    font-size: 20px;
+    /* Big title like "Transactions" */
+    font-weight: 800;
+}
+
+.fin-search-btn {
+    background: #1a1a1a;
+    border: 1px solid #d996dd;
+    color: #d996dd;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Cards */
+.fin-card {
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+/* Texts */
+.fin-label {
+    font-size: 14px;
+    color: var(--fin-text-white);
+    margin-bottom: 4px;
+}
+
+.fin-h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.fin-balance-large {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 10px 0;
+}
+
+/* Buttons */
+.fin-action-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.fin-btn-primary {
+    flex: 1;
+    background-color: var(--fin-accent-pink);
+    color: black;
+    border: none;
+    padding: 14px;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+}
+
+.fin-btn-secondary {
+    flex: 1;
+    background-color: var(--fin-bg-purple-dark);
+    color: white;
+    /* Or light pink */
+    border: none;
+    padding: 14px;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.fin-btn-tertiary {
+    flex: 1;
+    background-color: #4a1f4f;
+    /* Darker variant */
+    color: #e3bce5;
+    padding: 8px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+/* Transactions List */
+.fin-transaction-row {
+    display: flex;
+    padding: 16px 0;
+    border-bottom: 1px solid #1a1a1a;
+    cursor: pointer;
+}
+
+.fin-transaction-row:hover {
+    background-color: #0a0a0a;
+}
+
+.fin-trans-info {
+    flex: 1;
+}
+
+.fin-trans-title {
+    font-size: 15px;
+    font-weight: 500;
+    /* Regular per screenshot */
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.fin-trans-sub {
+    font-size: 13px;
+    color: #b0b0b0;
+    /* Light gray */
+    margin-bottom: 2px;
+}
+
+.fin-trans-amount {
+    font-size: 16px;
+    font-weight: 800;
+    text-align: right;
+}
+
+.fin-amount-credit {
+    color: #d996dd;
+    /* Pink credits */
+}
+
+.fin-amount-debit {
+    color: #d996dd;
+    /* Also pink based on screenshot? "Sproutvideo" is pink/lavender. Wait, screenshot shows -$10.00 is pink. Positive is also pink. It seems all amounts are styled unless specific. Wait, checking screenshot... 
+    Stripe Transfer $27.20 is Pink/Purple.
+    Sproutvideo -$10.00 is Pink/Purple.
+    DigitalOcean -$17.00 is Pink/Purple.
+    Okay, use the accent pink for EVERYTHING.
+    */
+    color: #d996dd;
+}
+
+.fin-trans-balance {
+    font-size: 12px;
+    color: #888;
+    text-align: right;
+    margin-top: 4px;
+}
+
+
+/* Bottom Nav */
+.fin-bottom-nav {
+    background-color: #1a1a1a;
+    /* Dark gray nav bar */
+    padding: 10px 20px 25px 20px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 30px;
+    /* Floating look? No, standard bar but rounded top? Screenshot cuts off. Assuming standard bar */
+    margin: 10px;
+    /* Floating pill bar actually per screenshot?
+    Screenshot "Snapshot" tab is in a pill shape at bottom.
+    Wait, screenshot shows a floating bottom bar design: `Snap... | Profile | Explore | Menu`
+    Usually these are floating islands.
+    */
+    border-radius: 35px;
+}
+
+.fin-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    font-size: 10px;
+    cursor: pointer;
+    min-width: 50px;
+}
+
+.fin-nav-item.active {
+    color: #d996dd;
+}
