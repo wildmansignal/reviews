@@ -14,6 +14,7 @@ import GmailThreadApp from './components/GmailThread/GmailThreadApp';
 import HabituationApp from './components/HabituationMock/HabituationApp';
 import WebinarGeneratorApp from './components/WebinarGenerator/WebinarGeneratorApp';
 import WebinarEditorApp from './components/WebinarEditor/WebinarEditorApp';
+import Launchpad from './components/Launchpad';
 import './App.css';
 
 function App() {
@@ -21,8 +22,9 @@ function App() {
     <GenerationProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Launchpad />} />
+          <Route path="/dashboard" element={<DashboardLayout />} />
           <Route path="/master-control" element={<MasterControlPage />} />
-          <Route path="/" element={<DashboardLayout />} />
           <Route path="/messenger" element={<MessengerApp />} />
           <Route path="/facebook-post" element={<PostEditorApp />} />
           <Route path="/business-dashboard" element={<BusinessDashboardApp />} />

@@ -26,7 +26,7 @@ const Sidebar = () => {
     return (
         <aside className="sidebar">
             <div className="sidebar-header">
-                <div className="store-selector">
+                <div className="store-selector" style={{ marginBottom: 10 }}>
                     <span className="store-name">Dan Plants Tinnitus...</span>
                     <span className="arrow">▼</span>
                 </div>
@@ -34,10 +34,14 @@ const Sidebar = () => {
 
             <nav className="sidebar-nav">
                 <div className="nav-group">
-                    <a href="#" className="nav-item active">
+                    <Link to="/" className="nav-item title-nav">
+                        <Layers size={16} className="text-blue-400" />
+                        <span className="font-bold text-blue-400">All Apps</span>
+                    </Link>
+                    <Link to="/dashboard" className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}>
                         <Home size={16} />
-                        <span>Home</span>
-                    </a>
+                        <span>Dashboard</span>
+                    </Link>
                     <a href="#" className="nav-item">
                         <CreditCard size={16} />
                         <span>Balances</span>
