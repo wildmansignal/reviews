@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Settings2, X, Image as ImageIcon, Smile, AtSign } from 'lucide-react';
 import TikTokCommentItem from './TikTokCommentItem';
 import TikTokControlPanel from './TikTokControlPanel';

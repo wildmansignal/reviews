@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, Archive, AlertCircle, Trash2, Mail, Folder, MoreVertical, CornerUpLeft, Printer, ExternalLink, Smile } from 'lucide-react';
 import GmailMessage from './GmailMessage';
 import GmailControlPanel from './GmailControlPanel';

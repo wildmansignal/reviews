@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Reply, MoreVertical, CornerUpLeft } from 'lucide-react';
+import { Star, Reply, MoreVertical } from 'lucide-react';
 import './GmailThread.css';
 
 interface GmailMessageProps {

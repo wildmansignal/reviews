@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MessageBubble, { type MessageData } from './MessageBubble';
 import ChatHeader from './ChatHeader';
+import { useGenerationContext } from '../../contexts/GenerationContext';
 import './Messenger.css';
 
 // Initial Mock Data
@@ -22,7 +23,16 @@ const INITIAL_MESSAGES: MessageData[] = [
 ];
 
 const MessengerApp = () => {
+    const { data } = useGenerationContext();
     const [messages, setMessages] = useState<MessageData[]>(INITIAL_MESSAGES);
+
+    useEffect(() => {
+        if (data.messenger && data.messenger.messages) {
+            setMessages(data.messenger.messages);
+            if (data.messenger.headerName) setHeaderName(data.messenger.headerName);
+            if (data.messenger.themAvatar) setThemAvatar(data.messenger.themAvatar);
+        }
+    }, [data.messenger]);
 
     // Control Panel State
     const [myMessage, setMyMessage] = useState("");

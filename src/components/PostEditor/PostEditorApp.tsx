@@ -13,7 +13,7 @@ const PostEditorApp = () => {
     const [likesCount, setLikesCount] = useState("462");
     const [commentsCount, setCommentsCount] = useState("64");
     const [sharesCount, setSharesCount] = useState("99");
-    const [isLiked, setIsLiked] = useState(false);
+    const [isLiked] = useState(false);
 
     // Handlers
     const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

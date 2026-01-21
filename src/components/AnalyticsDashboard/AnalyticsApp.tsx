@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AnalyticsChart from './AnalyticsChart';
 import AnalyticsControlPanel from './AnalyticsControlPanel';
+import { useGenerationContext } from '../../contexts/GenerationContext';
 import './AnalyticsDashboard.css';
 
 const AnalyticsApp = () => {
+    const { data } = useGenerationContext();
+
     // State
     const [totalProfit, setTotalProfit] = useState("137,987.69");
     const [dateRange, setDateRange] = useState("Sep 21–Oct 31");
     const [ordersCount, setOrdersCount] = useState("2,039 orders");
     const [chartData, setChartData] = useState<number[]>([]);
+
+    useEffect(() => {
+        if (data.analytics) {
+            if (data.analytics.totalProfit) setTotalProfit(data.analytics.totalProfit);
+            if (data.analytics.dateRange) setDateRange(data.analytics.dateRange);
+            if (data.analytics.ordersCount) setOrdersCount(data.analytics.ordersCount);
+        }
+    }, [data.analytics]);
 
     // Logic: Generate Trending Up Data
     useEffect(() => {
@@ -19,12 +30,6 @@ const AnalyticsApp = () => {
         // 2. Generate 30 bars
         const barsCount = 30;
         const generatedData = [];
-
-        // We want the SUM of bars to roughly equate to Total? 
-        // Or usually "Total Sales" is the sum over period. 
-        // Screenshot graph shows bars around $2k - $10k. 
-        // Sum of ~ avg $5k * 30 days = $150k. Which matches $137k.
-        // So we should aim for the SUM to match the input.
 
         // Base Average per day
         const avgPerDay = maxTotal / barsCount;

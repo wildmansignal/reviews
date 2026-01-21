@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Layout, Image as ImageIcon, Upload, Trash2, Download } from 'lucide-react';
+import { Layout, Image as ImageIcon, Trash2, Download } from 'lucide-react';
 import './WebinarDesigner.css';
 
 interface ImageState {

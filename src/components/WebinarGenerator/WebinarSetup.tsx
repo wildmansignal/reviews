@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Trash2, Plus, Image, Type } from 'lucide-react';
+import { Trash2, Plus } from 'lucide-react';
 import './WebinarGen.css';
 
 interface WebinarSetupProps {

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SnapshotScreen from './SnapshotScreen';
 import AccountScreen from './AccountScreen';
 import TransactionsScreen from './TransactionsScreen';
 import FinanceControlPanel from './FinanceControlPanel';
+import { useGenerationContext } from '../../contexts/GenerationContext';
 import { Home, User, Compass, Menu } from 'lucide-react';
 import './FinanceApp.css';
 
@@ -16,6 +17,7 @@ interface Transaction {
 }
 
 const FinanceApp = () => {
+    const { data } = useGenerationContext();
     // State
     const [activeTab, setActiveTab] = useState<'snapshot' | 'spending' | 'transactions'>('snapshot');
     const [userName, setUserName] = useState("Daniel");
@@ -30,6 +32,13 @@ const FinanceApp = () => {
         { id: '5', title: 'STRIPE TRANSFER', date: 'Dec 31, 2025', amount: '27.42' },
         { id: '6', title: 'STRIPE TRANSFER', date: 'Dec 30, 2025', amount: '27.42' },
     ]);
+
+    useEffect(() => {
+        if (data.finance) {
+            if (data.finance.totalBalance) setTotalBalance(data.finance.totalBalance);
+            if (data.finance.transactions) setTransactions(data.finance.transactions);
+        }
+    }, [data.finance]);
 
     // Editing logic
     const [selectedTxId, setSelectedTxId] = useState<string | null>(null);

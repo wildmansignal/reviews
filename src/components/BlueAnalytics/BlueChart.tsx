@@ -7,7 +7,7 @@ interface BlueChartProps {
 
 const BlueChart: React.FC<BlueChartProps> = ({ data }) => {
     const maxVal = Math.max(...data, 100);
-    const ticks = [0, 200, 400, 600]; // Fixed ticks like screenshot or dynamic?
+
     // Screenshot has: 0, 200, 400, 600.
     // Let's make it dynamic anyway for the "customizable" requirement, 
     // but scale visually to fit the screenshot style container.

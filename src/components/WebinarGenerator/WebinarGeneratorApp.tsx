@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Download, LayoutGrid, MonitorPlay, Save } from 'lucide-react';
+import { useState } from 'react';
+import { Download, LayoutGrid, MonitorPlay } from 'lucide-react';
 import WebinarSetup from './WebinarSetup';
 import WebinarPreview from './WebinarPreview';
 import SlideGrid from './SlideGrid';
@@ -20,7 +20,6 @@ const WebinarGeneratorApp = () => {
     const [slides, setSlides] = useState<any[]>(
         Array.from({ length: 100 }, (_, i) => ({ id: i, type: 'empty', title: 'Empty Slide' }))
     );
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const handleClearDeck = () => {
         if (confirm("Are you sure? This will wipe all slides.")) {
@@ -42,19 +41,7 @@ const WebinarGeneratorApp = () => {
         setViewMode('preview');
     };
 
-    const handleAnalyze = () => {
-        setIsAnalyzing(true);
-        setTimeout(() => {
-            setIsAnalyzing(false);
-            // Simulate AI recognizing the 187 slides
-            setConfig(prev => ({
-                ...prev,
-                general: { ...prev.general, title: "AI Analyzed: 187 Slide Blueprint" },
-                style: { ...prev.style, slideCount: 187 } // Set to 187 specifically
-            }));
-            alert("Analysis Complete! 187 Slides Processed.");
-        }, 1500);
-    };
+
 
     const handleDownload = () => {
         alert("Downloading .pptx and Keynote assets...");

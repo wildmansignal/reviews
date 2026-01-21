@@ -1,4 +1,4 @@
-import React from 'react';
+
 import './OverviewCards.css';
 
 const FailedPaymentsCard = () => {

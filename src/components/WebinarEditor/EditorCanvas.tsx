@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Slide } from './types';
+import React from 'react';
+import type { Slide } from './types';
 
 interface EditorCanvasProps {
     slide: Slide;

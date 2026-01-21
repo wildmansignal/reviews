@@ -1,5 +1,5 @@
 import React from 'react';
-import { SlideElement } from './types';
+import type { SlideElement } from './types';
 
 interface EditorPropertiesProps {
     element?: SlideElement;

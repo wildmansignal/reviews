@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Key, ArrowRight, Bell, MessageCircle, Mail, HelpCircle } from 'lucide-react';
+import { Bell, MessageCircle, Mail, HelpCircle } from 'lucide-react';
 import './FinanceApp.css';
 
 interface SnapshotScreenProps {

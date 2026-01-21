@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './OverviewCards.css';
 import EditableField from '../EditableField';
 

@@ -142,7 +142,7 @@ const InteractiveChart: React.FC<InteractiveChartProps> = ({ data, labels, onDat
                     if (!label) return null;
                     const xPos = padding + (i / (labels.length - 1)) * (width - 2 * padding);
                     // Adjust text anchor
-                    let anchor = 'middle';
+                    let anchor: "start" | "middle" | "end" | "inherit" | undefined = 'middle';
                     if (i === 0) anchor = 'start';
                     if (i === labels.length - 1) anchor = 'end';
 

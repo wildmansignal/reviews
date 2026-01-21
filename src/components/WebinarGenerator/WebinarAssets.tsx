@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Upload, Image as ImageIcon } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import './WebinarGen.css';
 
 interface WebinarAssetsProps {

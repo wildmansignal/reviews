@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreHorizontal, X, Globe, ThumbsUp, MessageCircle, Share2, Heart } from 'lucide-react';
+import { MoreHorizontal, X, ThumbsUp, MessageCircle, Share2, Heart } from 'lucide-react';
 import './PostEditor.css';
 
 export interface FacebookPostProps {

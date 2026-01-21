@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import './YouTubeComments.css';
 
 interface YouTubeControlPanelProps {
@@ -16,8 +16,8 @@ interface YouTubeControlPanelProps {
 }
 
 const YouTubeControlPanel: React.FC<YouTubeControlPanelProps> = ({
-    myAvatar, setMyAvatar,
-    creatorAvatar, setCreatorAvatar,
+    setMyAvatar,
+    setCreatorAvatar,
     selectedComment, onUpdateComment,
     onAddComment
 }) => {

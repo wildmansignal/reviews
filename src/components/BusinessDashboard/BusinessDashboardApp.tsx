@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Home, CreditCard, Users, Plus, Search } from 'lucide-react';
 import HomeScreen from './HomeScreen';
 import PaymentsScreen from './PaymentsScreen';
 import type { PaymentItem } from './PaymentsScreen';
 import BusinessControlPanel from './BusinessControlPanel';
+import { useGenerationContext } from '../../contexts/GenerationContext';
 import './BusinessDashboard.css';
 
 const BusinessDashboardApp = () => {
+    const { data } = useGenerationContext();
     // Navigation State
     const [activeTab, setActiveTab] = useState<'home' | 'payments' | 'customers'>('home');
 
@@ -29,6 +31,15 @@ const BusinessDashboardApp = () => {
         { id: '4', amount: '29.00', name: 'Sarah Smith', email: 's.smith@example.com', date: 'Jan 3 at 9:15 AM', status: 'succeeded' },
     ]);
 
+    useEffect(() => {
+        if (data.business) {
+            if (data.business.grossVolume) setGrossVolume(data.business.grossVolume);
+            if (data.business.netVolume) setNetVolume(data.business.netVolume);
+            if (data.business.newCustomers) setNewCustomers(data.business.newCustomers);
+            if (data.business.payments) setPayments(data.business.payments as any);
+        }
+    }, [data.business]);
+
     // Editing State
     const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
@@ -41,7 +52,7 @@ const BusinessDashboardApp = () => {
         const seed = parseFloat(grossVolume.replace(/,/g, '')) || 100;
 
         // Generate pseudo-random chart data that "scales" with the volume
-        const generateChart = (baseValue: number, volatility: number) => {
+        const generateChart = (baseValue: number) => {
             return Array.from({ length: 15 }, (_, i) => {
                 // Random variation relative to base value
                 const randomFactor = 0.5 + Math.random();
@@ -49,9 +60,9 @@ const BusinessDashboardApp = () => {
             });
         };
 
-        setChartDataGross(generateChart(seed, 0.5));
-        setChartDataNet(generateChart(parseFloat(netVolume) || seed * 0.9, 0.5));
-        setChartDataCustomers(generateChart(parseInt(newCustomers) || 10, 0.5));
+        setChartDataGross(generateChart(seed));
+        setChartDataNet(generateChart(parseFloat(netVolume) || seed * 0.9));
+        setChartDataCustomers(generateChart(parseInt(newCustomers) || 10));
 
     }, [grossVolume, netVolume, newCustomers]);
 

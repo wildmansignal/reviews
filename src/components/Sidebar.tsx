@@ -1,12 +1,6 @@
 import {
-    LayoutDashboard,
     MessageSquare,
     MoreHorizontal,
-    Settings,
-    LogOut,
-    Search,
-    Bell,
-    Store,
     Layers,
     BarChart2,
     CreditCard,
@@ -16,7 +10,13 @@ import {
     Mail,
     Activity,
     Presentation,
-    MonitorPlay
+    Home,
+    Users,
+    Box,
+    FileText,
+    Clock,
+    MessageCircle,
+    Link as LinkIcon
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import './Sidebar.css';
@@ -43,7 +43,7 @@ const Sidebar = () => {
                         <span>Balances</span>
                     </a>
                     <a href="#" className="nav-item">
-                        <Link size={16} />
+                        <LinkIcon size={16} />
                         <span>Transactions</span>
                     </a>
                     <a href="#" className="nav-item">
@@ -71,7 +71,7 @@ const Sidebar = () => {
                         <span>Reports</span>
                     </a>
                     <a href="#" className="nav-item">
-                        <Link size={16} />
+                        <LinkIcon size={16} />
                         <span>Payment Links</span>
                     </a>
                 </div>

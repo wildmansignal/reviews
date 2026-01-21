@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import BlueChart from './BlueChart';
 import BlueControlPanel from './BlueControlPanel';
 import './BlueAnalytics.css';

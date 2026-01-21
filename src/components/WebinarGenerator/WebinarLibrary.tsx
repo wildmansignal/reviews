@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Folder, ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { Folder, ArrowLeft } from 'lucide-react';
 import './WebinarGen.css';
 
 interface WebinarLibraryProps {

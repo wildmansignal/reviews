@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Headphones } from 'lucide-react';
 import YouTubeCommentItem from './YouTubeCommentItem';
 import YouTubeControlPanel from './YouTubeControlPanel';

@@ -24,9 +24,7 @@ interface MessageBubbleProps {
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onUpdate, themAvatar, onAvatarClick, showDelivered }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onUpdate(message.id, { text: e.target.value });
-    };
+
 
     const handleImageClick = () => {
         fileInputRef.current?.click();

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import MetricDisplay from './MetricDisplay';
 import InteractiveChart from './InteractiveChart';
 import FailedPaymentsCard from './FailedPaymentsCard';
 import NewCustomersCard from './NewCustomersCard';
 import TopCustomersCard from './TopCustomersCard';
+import EditableAmount from './EditableAmount';
 import './OverviewCards.css';
 import './DashboardParams.css';
 
@@ -13,7 +14,11 @@ const DashboardParams = () => {
     const [chartData, setChartData] = useState<number[]>(initialData);
 
     const [grossVolume, setGrossVolume] = useState(1218);
-    const yesterdayVolume = 1204;
+    // Editable state for other numbers
+    const [yesterdayVolume, setYesterdayVolume] = useState(1204);
+    const [usdBalance, setUsdBalance] = useState("2,714.64");
+    const [payouts, setPayouts] = useState("2,732.64");
+    const [payoutsExpected, setPayoutsExpected] = useState("Expected tomorrow");
 
     // Date Range State
     const [dateRangeInput, setDateRangeInput] = useState("Sep 21 - Oct 31");
@@ -60,9 +65,18 @@ const DashboardParams = () => {
         newData[index] = val;
         setChartData(newData);
 
-        // If the manipulated point is the last one, update the main MetricDisplay
         if (index === chartData.length - 1) {
             setGrossVolume(val);
+        }
+    };
+
+    const updateLabel = (index: number) => {
+        const currentLabel = chartLabels[index];
+        const newLabel = prompt("Enter new label:", currentLabel);
+        if (newLabel) {
+            const newLabels = [...chartLabels];
+            newLabels[index] = newLabel;
+            setChartLabels(newLabels);
         }
     };
 
@@ -82,6 +96,7 @@ const DashboardParams = () => {
                     subValue={yesterdayVolume}
                     subLabel="Yesterday"
                     onChange={handleMetricChange}
+                    onSubChange={setYesterdayVolume}
                 />
 
                 <InteractiveChart
@@ -118,15 +133,29 @@ const DashboardParams = () => {
                         <span className="balance-label">USD balance</span>
                         <a href="#" className="balance-link">View</a>
                     </div>
-                    <div className="balance-amount">$2,714.64</div>
+                    <EditableAmount
+                        value={usdBalance}
+                        onChange={setUsdBalance}
+                        className="balance-amount"
+                        prefix="$"
+                    />
                 </div>
                 <div className="balance-item">
                     <div className="balance-header">
                         <span className="balance-label">Payouts</span>
                         <a href="#" className="balance-link">View</a>
                     </div>
-                    <div className="balance-amount">$2,732.64</div>
-                    <div className="balance-sub">Expected tomorrow</div>
+                    <EditableAmount
+                        value={payouts}
+                        onChange={setPayouts}
+                        className="balance-amount"
+                        prefix="$"
+                    />
+                    <EditableAmount
+                        value={payoutsExpected}
+                        onChange={setPayoutsExpected}
+                        className="balance-sub"
+                    />
                 </div>
             </div>
 

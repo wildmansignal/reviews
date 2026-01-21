@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import './TikTokComments.css';
 
 interface TikTokControlPanelProps {
@@ -20,12 +20,10 @@ interface TikTokControlPanelProps {
 const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
     headerComments, setHeaderComments,
     headerLikes, setHeaderLikes,
-    myAvatar, setMyAvatar,
+    setMyAvatar,
     selectedComment, onUpdateComment,
     onAddComment
 }) => {
-    const fileRef = useRef<HTMLInputElement>(null);
-    const commentImgRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string) => void) => {
         if (e.target.files && e.target.files[0]) {

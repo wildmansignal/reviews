@@ -7,12 +7,18 @@ interface MetricDisplayProps {
     subValue?: number;
     subLabel?: string;
     onChange: (newValue: number) => void;
+    onSubChange?: (newValue: number) => void;
 }
 
-const MetricDisplay: React.FC<MetricDisplayProps> = ({ label, value, subValue, subLabel, onChange }) => {
+const MetricDisplay: React.FC<MetricDisplayProps> = ({ label, value, subValue, subLabel, onChange, onSubChange }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(value.toString());
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Sub-value editing state
+    const [isSubEditing, setIsSubEditing] = useState(false);
+    const [subInputValue, setSubInputValue] = useState(subValue?.toString() || '');
+    const subInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (isEditing && inputRef.current) {
@@ -21,8 +27,20 @@ const MetricDisplay: React.FC<MetricDisplayProps> = ({ label, value, subValue, s
     }, [isEditing]);
 
     useEffect(() => {
+        if (isSubEditing && subInputRef.current) {
+            subInputRef.current.focus();
+        }
+    }, [isSubEditing]);
+
+    useEffect(() => {
         setInputValue(value.toString());
     }, [value]);
+
+    useEffect(() => {
+        if (subValue !== undefined) {
+            setSubInputValue(subValue.toString());
+        }
+    }, [subValue]);
 
     const handleClick = () => {
         setIsEditing(true);
@@ -41,6 +59,26 @@ const MetricDisplay: React.FC<MetricDisplayProps> = ({ label, value, subValue, s
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             handleBlur();
+        }
+    };
+
+    const handleSubClick = () => {
+        if (onSubChange) setIsSubEditing(true);
+    };
+
+    const handleSubBlur = () => {
+        setIsSubEditing(false);
+        const num = parseFloat(subInputValue);
+        if (!isNaN(num) && onSubChange) {
+            onSubChange(num);
+        } else if (subValue !== undefined) {
+            setSubInputValue(subValue.toString());
+        }
+    };
+
+    const handleSubKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSubBlur();
         }
     };
 
@@ -81,7 +119,24 @@ const MetricDisplay: React.FC<MetricDisplayProps> = ({ label, value, subValue, s
                         <div className="metric-header text-muted">
                             <span className="metric-label">{subLabel}</span>
                         </div>
-                        <div className="sub-value">{formatCurrency(subValue)}</div>
+                        <div className="sub-value">
+                            {isSubEditing ? (
+                                <input
+                                    ref={subInputRef}
+                                    type="number"
+                                    className="metric-input"
+                                    style={{ fontSize: '14px', width: '80px' }} // Inline style for quick sizing
+                                    value={subInputValue}
+                                    onChange={(e) => setSubInputValue(e.target.value)}
+                                    onBlur={handleSubBlur}
+                                    onKeyDown={handleSubKeyDown}
+                                />
+                            ) : (
+                                <span onClick={handleSubClick} style={{ cursor: onSubChange ? 'pointer' : 'default' }} title={onSubChange ? "Click to edit" : ""}>
+                                    {formatCurrency(subValue)}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Headphones, Flame, Menu, TrendingUp } from 'lucide-react';
 import HabituationCalendar from './HabituationCalendar';
 import HabituationControlPanel from './HabituationControlPanel';
