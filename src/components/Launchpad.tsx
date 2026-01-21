@@ -16,139 +16,140 @@ import {
     Settings,
     Zap
 } from 'lucide-react';
+import './Launchpad.css';
 
 const Launchpad = () => {
     return (
-        <div className="min-h-screen bg-slate-900 text-white p-8 font-sans">
-            <div className="max-w-6xl mx-auto">
-                <header className="mb-12 text-center">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
+        <div className="launchpad-container">
+            <div className="launchpad-content">
+                <header className="launchpad-header">
+                    <h1 className="launchpad-title">
                         Review Builder Suite
                     </h1>
-                    <p className="text-slate-400 text-lg">Select a tool to begin.</p>
+                    <p className="launchpad-subtitle">Select a tool to begin.</p>
                 </header>
 
-                <div className="space-y-12">
+                <div className="launchpad-sections">
                     {/* Section: Core Dashboards */}
                     <section>
-                        <h2 className="text-xl font-semibold text-slate-300 mb-6 flex items-center gap-2">
-                            <LayoutDashboard className="text-blue-400" size={20} />
+                        <h2 className="launchpad-section-title">
+                            <LayoutDashboard color="#60a5fa" size={20} />
                             Core Dashboards
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="launchpad-grid">
                             <Card
                                 to="/dashboard"
                                 title="Main Dashboard"
                                 desc="Central overview of all metrics and activity."
-                                icon={<LayoutDashboard size={24} className="text-blue-400" />}
+                                icon={<LayoutDashboard size={24} color="#60a5fa" />}
                             />
                             <Card
                                 to="/business-dashboard"
                                 title="Business Dashboard"
                                 desc="Revenue, payments, and customer management."
-                                icon={<DollarSign size={24} className="text-green-400" />}
+                                icon={<DollarSign size={24} color="#4ade80" />}
                             />
                             <Card
                                 to="/analytics-dashboard"
                                 title="Analytics Dashboard"
                                 desc="Traffic sources, conversion rates, and funnel tracking."
-                                icon={<BarChart2 size={24} className="text-purple-400" />}
+                                icon={<BarChart2 size={24} color="#c084fc" />}
                             />
                             <Card
                                 to="/blue-analytics"
                                 title="Blue Analytics"
                                 desc="Alternative high-contrast analytics view."
-                                icon={<Activity size={24} className="text-cyan-400" />}
+                                icon={<Activity size={24} color="#22d3ee" />}
                             />
                             <Card
                                 to="/finance-app"
                                 title="Finance App"
                                 desc="Financial snapshots and projections."
-                                icon={<DollarSign size={24} className="text-yellow-400" />}
+                                icon={<DollarSign size={24} color="#facc15" />}
                             />
                         </div>
                     </section>
 
                     {/* Section: Social Mockups */}
                     <section>
-                        <h2 className="text-xl font-semibold text-slate-300 mb-6 flex items-center gap-2">
-                            <MessageSquare className="text-pink-400" size={20} />
+                        <h2 className="launchpad-section-title">
+                            <MessageSquare color="#f472b6" size={20} />
                             Social Mockups
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="launchpad-grid">
                             <Card
                                 to="/tiktok-comments"
                                 title="TikTok Comments"
                                 desc="Simulate TikTok comment sections and engagement."
-                                icon={<Video size={24} className="text-pink-500" />}
+                                icon={<Video size={24} color="#ec4899" />}
                             />
                             <Card
                                 to="/youtube-comments"
                                 title="YouTube Comments"
                                 desc="Create realistic YouTube comment threads."
-                                icon={<Youtube size={24} className="text-red-500" />}
+                                icon={<Youtube size={24} color="#ef4444" />}
                             />
                             <Card
                                 to="/facebook-post"
                                 title="Facebook Post"
                                 desc="Mockup Facebook posts and interactions."
-                                icon={<Facebook size={24} className="text-blue-600" />}
+                                icon={<Facebook size={24} color="#2563eb" />}
                             />
                             <Card
                                 to="/gmail-thread"
                                 title="Gmail Thread"
                                 desc="Generate email thread visualizations."
-                                icon={<Mail size={24} className="text-red-400" />}
+                                icon={<Mail size={24} color="#f87171" />}
                             />
                             <Card
                                 to="/messenger"
                                 title="Messenger"
                                 desc="Simulate chat conversations."
-                                icon={<MessageSquare size={24} className="text-blue-500" />}
+                                icon={<MessageSquare size={24} color="#3b82f6" />}
                             />
                         </div>
                     </section>
 
                     {/* Section: Content & Webinar */}
                     <section>
-                        <h2 className="text-xl font-semibold text-slate-300 mb-6 flex items-center gap-2">
-                            <MonitorPlay className="text-orange-400" size={20} />
+                        <h2 className="launchpad-section-title">
+                            <MonitorPlay color="#fb923c" size={20} />
                             Content & Webinars
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="launchpad-grid">
                             <Card
                                 to="/webinar-generator"
                                 title="Webinar Generator"
                                 desc="Generate slide decks and webinar assets."
-                                icon={<Zap size={24} className="text-yellow-500" />}
+                                icon={<Zap size={24} color="#eab308" />}
                             />
                             <Card
                                 to="/webinar-editor"
                                 title="Webinar Editor"
                                 desc="Edit and refine webinar presentations."
-                                icon={<Edit size={24} className="text-orange-500" />}
+                                icon={<Edit size={24} color="#f97316" />}
                             />
                         </div>
                     </section>
 
                     {/* Section: Tools */}
                     <section>
-                        <h2 className="text-xl font-semibold text-slate-300 mb-6 flex items-center gap-2">
-                            <Settings className="text-gray-400" size={20} />
+                        <h2 className="launchpad-section-title">
+                            <Settings color="#9ca3af" size={20} />
                             Tools & Utilities
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="launchpad-grid">
                             <Card
                                 to="/master-control"
                                 title="Master Control"
                                 desc="Global settings and configuration."
-                                icon={<Settings size={24} className="text-gray-400" />}
+                                icon={<Settings size={24} color="#9ca3af" />}
                             />
                             <Card
                                 to="/habituation-report"
                                 title="Habituation Report"
                                 desc="View habituation metrics and reports."
-                                icon={<FileText size={24} className="text-green-500" />}
+                                icon={<FileText size={24} color="#22c55e" />}
                             />
                         </div>
                     </section>
@@ -160,18 +161,18 @@ const Launchpad = () => {
 
 // Helper Card Component
 const Card = ({ to, title, desc, icon }: { to: string, title: string, desc: string, icon: React.ReactNode }) => (
-    <Link to={to} className="block group">
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-6 h-full transition-all duration-200 hover:border-blue-500/50 hover:bg-slate-800/80 hover:scale-[1.02]">
-            <div className="flex items-start justify-between mb-4">
-                <div className="p-3 bg-slate-900 rounded-lg group-hover:bg-slate-950 transition-colors">
+    <Link to={to} className="launchpad-card-link group">
+        <div className="launchpad-card">
+            <div className="card-header">
+                <div className="card-icon-wrapper">
                     {icon}
                 </div>
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-400 text-sm font-medium">
+                <div className="card-arrow">
                     Open →
                 </div>
             </div>
-            <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">{title}</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
+            <h3 className="card-title">{title}</h3>
+            <p className="card-desc">{desc}</p>
         </div>
     </Link>
 );
