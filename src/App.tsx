@@ -14,6 +14,7 @@ import GmailThreadApp from './components/GmailThread/GmailThreadApp';
 import HabituationApp from './components/HabituationMock/HabituationApp';
 import WebinarGeneratorApp from './components/WebinarGenerator/WebinarGeneratorApp';
 import WebinarEditorApp from './components/WebinarEditor/WebinarEditorApp';
+import ReviewSliderApp from './components/ReviewSlider/ReviewSliderApp';
 import Launchpad from './components/Launchpad';
 import './App.css';
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/habituation-report" element={<HabituationApp />} />
           <Route path="/webinar-generator" element={<WebinarGeneratorApp />} />
           <Route path="/webinar-editor" element={<WebinarEditorApp />} />
+          <Route path="/review-slider" element={<ReviewSliderApp />} />
         </Routes>
       </BrowserRouter>
     </GenerationProvider>

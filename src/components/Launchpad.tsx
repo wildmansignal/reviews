@@ -14,7 +14,8 @@ import {
     MonitorPlay,
     Edit,
     Settings,
-    Zap
+    Zap,
+    Smartphone
 } from 'lucide-react';
 import './Launchpad.css';
 
@@ -128,6 +129,12 @@ const Launchpad = () => {
                                 title="Webinar Editor"
                                 desc="Edit and refine webinar presentations."
                                 icon={<Edit size={24} color="#f97316" />}
+                            />
+                            <Card
+                                to="/review-slider"
+                                title="Review Slider"
+                                desc="Auto-scroll review screenshots in a phone frame."
+                                icon={<Smartphone size={24} color="#a855f7" />}
                             />
                         </div>
                     </section>

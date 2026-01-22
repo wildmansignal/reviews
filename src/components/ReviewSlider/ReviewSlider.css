@@ -1,0 +1,211 @@
+/* ReviewSlider.css */
+.review-slider-workspace {
+    min-height: 100vh;
+    background-color: #0f172a;
+    /* slate-900 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    color: white;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.controls-panel {
+    background: #1e293b;
+    /* slate-800 */
+    border: 1px solid #334155;
+    /* slate-700 */
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    /* slate-400 */
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    /* blue-500 */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+    /* blue-600 */
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: #334155;
+    /* slate-700 */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #475569;
+    /* slate-600 */
+}
+
+.file-input {
+    display: none;
+}
+
+.slider-container {
+    padding: 0.5rem 1rem;
+    background: #0f172a;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.speed-slider {
+    width: 100px;
+    accent-color: #3b82f6;
+}
+
+/* iPhone 17 Pro Max Frame */
+/* Dimensions approx based on ratio, scaled down slightly to fit screen */
+.iphone-frame {
+    position: relative;
+    width: 380px;
+    /* roughly 1/3 of 1320ish or scaled */
+    height: 780px;
+    /* roughly scaled */
+    background-color: #000;
+    border-radius: 55px;
+    box-shadow:
+        0 0 0 12px #3e3e3e,
+        /* outer bevel */
+        0 0 0 14px #1a1a1a,
+        /* antenna band area */
+        0 20px 50px -10px rgba(0, 0, 0, 0.5);
+    /* drop shadow */
+    overflow: hidden;
+    border: 4px solid #121212;
+    /* inner Bezel */
+}
+
+.dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 35px;
+    background-color: black;
+    border-radius: 20px;
+    z-index: 50;
+    transition: all 0.3s ease;
+}
+
+.screen-content {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    overflow-y: scroll;
+    /* Allow manual scroll */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+    position: relative;
+}
+
+.screen-content::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+    /* Chrome/Safari/Opera */
+}
+
+.reviews-feed {
+    padding: 60px 0 40px 0;
+    /* Padding for notch */
+    display: flex;
+    flex-direction: column;
+    /* No gap, let images touch or be separated by margin if needed, usually screenshots have boundaries */
+}
+
+.review-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    border-bottom: 1px solid #f1f5f9;
+    /* light separator if needed */
+}
+
+.empty-state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Status Bar Simulation (Time/Battery) could be added nicely for realism */
+.status-bar-time {
+    position: absolute;
+    top: 16px;
+    left: 35px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 50;
+}
+
+.status-bar-icons {
+    position: absolute;
+    top: 18px;
+    right: 30px;
+    display: flex;
+    gap: 6px;
+    z-index: 50;
+    color: white;
+}
+
+/* When playing, we might want to hide scrollbars even more strictly or change behavior */
+/* .is-playing .screen-content { pointer-events: none; } */
