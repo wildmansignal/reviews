@@ -4,9 +4,14 @@
     background-color: #0f172a;
     /* slate-900 */
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    /* Changed to row for side-by-side */
+    justify-content: center;
     align-items: center;
+    /* Center vertically */
     padding: 2rem;
+    gap: 4rem;
+    /* Space between controls and phone */
     color: white;
     font-family: system-ui, -apple-system, sans-serif;
 }
@@ -17,20 +22,27 @@
     border: 1px solid #334155;
     /* slate-700 */
     color: white;
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: 1rem;
-    margin-bottom: 2rem;
+    /* Removed margin-bottom */
     display: flex;
-    gap: 1.5rem;
-    align-items: center;
+    flex-direction: column;
+    /* Stack controls vertically */
+    gap: 2rem;
+    align-items: flex-start;
+    /* Align contents to left */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    width: 300px;
+    /* Fixed width for sidebar */
+    flex-shrink: 0;
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    width: 100%;
 }
 
 .control-label {
@@ -38,6 +50,8 @@
     color: #94a3b8;
     /* slate-400 */
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .btn-primary {
@@ -45,14 +59,17 @@
     /* blue-500 */
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     transition: background 0.2s;
+    width: 100%;
+    /* Full width buttons */
 }
 
 .btn-primary:hover {
@@ -70,14 +87,16 @@
     /* slate-700 */
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     transition: background 0.2s;
+    /* width: 100%; Optional */
 }
 
 .btn-secondary:hover {
@@ -90,41 +109,69 @@
 }
 
 .slider-container {
-    padding: 0.5rem 1rem;
-    background: #0f172a;
+    padding: 0.5rem 0;
+    /* Adjusted padding */
+    /* background: #0f172a; Removed background for cleaner look on vertical stack */
     border-radius: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    width: 100%;
 }
 
 .speed-slider {
-    width: 100px;
+    flex: 1;
+    /* Take available width */
     accent-color: #3b82f6;
+    cursor: pointer;
 }
 
 /* iPhone 17 Pro Max Frame */
-/* Dimensions approx based on ratio, scaled down slightly to fit screen */
 .iphone-frame {
     position: relative;
     width: 380px;
-    /* roughly 1/3 of 1320ish or scaled */
     height: 780px;
-    /* roughly scaled */
     background-color: #000;
     border-radius: 55px;
     box-shadow:
         0 0 0 12px #3e3e3e,
-        /* outer bevel */
         0 0 0 14px #1a1a1a,
-        /* antenna band area */
         0 20px 50px -10px rgba(0, 0, 0, 0.5);
-    /* drop shadow */
     overflow: hidden;
     border: 4px solid #121212;
-    /* inner Bezel */
+    flex-shrink: 0;
+    /* Don't shrink phone */
 }
 
+/* Responsiveness for smaller screens */
+@media (max-height: 850px) {
+    .review-slider-workspace {
+        /* If screen is short, maybe scale down? or just scroll? */
+        align-items: flex-start;
+        /* Scroll if too tall */
+        padding-top: 4rem;
+        height: auto;
+        min-height: 100vh;
+    }
+}
+
+@media (max-width: 1024px) {
+    .review-slider-workspace {
+        flex-direction: column;
+        height: auto;
+        padding-top: 2rem;
+    }
+
+    .controls-panel {
+        width: 100%;
+        max-width: 500px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+}
+
+/* Rest of the CSS remains same */
 .dynamic-island {
     position: absolute;
     top: 12px;
@@ -143,11 +190,8 @@
     height: 100%;
     background-color: white;
     overflow-y: scroll;
-    /* Allow manual scroll */
     scrollbar-width: none;
-    /* Firefox */
     -ms-overflow-style: none;
-    /* IE/Edge */
     position: relative;
 }
 
@@ -155,15 +199,12 @@
     width: 0;
     height: 0;
     display: none;
-    /* Chrome/Safari/Opera */
 }
 
 .reviews-feed {
     padding: 60px 0 40px 0;
-    /* Padding for notch */
     display: flex;
     flex-direction: column;
-    /* No gap, let images touch or be separated by margin if needed, usually screenshots have boundaries */
 }
 
 .review-image {
@@ -172,7 +213,6 @@
     display: block;
     object-fit: contain;
     border-bottom: 1px solid #f1f5f9;
-    /* light separator if needed */
 }
 
 .empty-state {
@@ -186,7 +226,6 @@
     padding: 2rem;
 }
 
-/* Status Bar Simulation (Time/Battery) could be added nicely for realism */
 .status-bar-time {
     position: absolute;
     top: 16px;
@@ -206,6 +245,3 @@
     z-index: 50;
     color: white;
 }
-
-/* When playing, we might want to hide scrollbars even more strictly or change behavior */
-/* .is-playing .screen-content { pointer-events: none; } */
