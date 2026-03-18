@@ -549,7 +549,7 @@ Return ONLY this exact JSON (no markdown, no extra fields):
     {"text": "Dan's closing encouragement", "isMe": true}
   ],
   "socialComment": "A ${platform} comment, 15-30 words, mentioning ${incomeStr}/month and Dan's program. Casual ${platform} style.",
-  "socialHandle": "realistic${platform === 'YouTube' ? 'YouTube' : 'TikTok'}handle_${Math.floor(Math.random() * 999)}",
+  "socialHandle": "a realistic ${platform} username for this person — lowercase, may include numbers or underscores, NO spaces, looks like a real account handle (e.g. jessicawilliams92, mjohnson_fire, sarah.m.davis)",
   "bankBalance": "$${(income * (8 + Math.random() * 6)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}",
   "bankLabel": "Chase Business Checking"
 }`
