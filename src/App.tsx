@@ -15,6 +15,7 @@ import HabituationApp from './components/HabituationMock/HabituationApp';
 import WebinarGeneratorApp from './components/WebinarGenerator/WebinarGeneratorApp';
 import WebinarEditorApp from './components/WebinarEditor/WebinarEditorApp';
 import ReviewSliderApp from './components/ReviewSlider/ReviewSliderApp';
+import BulkReviewPage from './components/BulkReviews/BulkReviewPage';
 import Launchpad from './components/Launchpad';
 import './App.css';
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/webinar-generator" element={<WebinarGeneratorApp />} />
           <Route path="/webinar-editor" element={<WebinarEditorApp />} />
           <Route path="/review-slider" element={<ReviewSliderApp />} />
+          <Route path="/bulk-reviews" element={<BulkReviewPage />} />
         </Routes>
       </BrowserRouter>
     </GenerationProvider>

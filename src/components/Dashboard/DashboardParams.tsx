@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MetricDisplay from './MetricDisplay';
 import InteractiveChart from './InteractiveChart';
 import FailedPaymentsCard from './FailedPaymentsCard';
@@ -9,6 +10,7 @@ import './OverviewCards.css';
 import './DashboardParams.css';
 
 const DashboardParams = () => {
+    const navigate = useNavigate();
     // Initial data matching the shape of the screenshot roughly
     const initialData = [500, 800, 450, 1218, 900, 1100, 1000];
     const [chartData, setChartData] = useState<number[]>(initialData);
@@ -85,6 +87,26 @@ const DashboardParams = () => {
             <header className="dashboard-header">
                 <h1>Today</h1>
                 <div className="header-actions">
+                    <button
+                        className="btn-ai-reviews"
+                        onClick={() => navigate('/bulk-reviews')}
+                        style={{
+                            background: 'linear-gradient(135deg, #ff6b35, #e55a2a)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '8px 16px',
+                            borderRadius: 8,
+                            fontSize: 13,
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 6,
+                            marginRight: 8
+                        }}
+                    >
+                        🔥 AI Generate Reviews
+                    </button>
                     <button className="btn-secondary">Pay out funds</button>
                 </div>
             </header>

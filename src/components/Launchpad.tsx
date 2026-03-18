@@ -15,7 +15,8 @@ import {
     Edit,
     Settings,
     Zap,
-    Smartphone
+    Smartphone,
+    Sparkles
 } from 'lucide-react';
 import './Launchpad.css';
 
@@ -31,6 +32,28 @@ const Launchpad = () => {
                 </header>
 
                 <div className="launchpad-sections">
+                    {/* Featured: AI Generator */}
+                    <section>
+                        <h2 className="launchpad-section-title">
+                            <Sparkles color="#ff6b35" size={20} />
+                            AI Generators
+                        </h2>
+                        <div className="launchpad-grid">
+                            <Link to="/bulk-reviews" className="launchpad-card-link group" style={{ gridColumn: 'span 2' }}>
+                                <div className="launchpad-card" style={{ background: 'linear-gradient(135deg, #1a0d00 0%, #1c1010 100%)', borderColor: '#ff6b3540' }}>
+                                    <div className="card-header">
+                                        <div className="card-icon-wrapper">
+                                            <Sparkles size={24} color="#ff6b35" />
+                                        </div>
+                                        <div className="card-arrow" style={{ color: '#ff6b35' }}>Open →</div>
+                                    </div>
+                                    <h3 className="card-title" style={{ color: '#ff6b35' }}>🔥 AI Bulk Review Generator</h3>
+                                    <p className="card-desc">Generate 10-30 unique Facebook testimonial screenshots about Code On Fire in one click. AI writes reviews, names, avatars — all mentioning Dan & real income amounts.</p>
+                                </div>
+                            </Link>
+                        </div>
+                    </section>
+
                     {/* Section: Core Dashboards */}
                     <section>
                         <h2 className="launchpad-section-title">
