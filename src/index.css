@@ -92,11 +92,9 @@ body {
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
   font-size: 14px;
-  /* From dump */
   font-weight: 400;
-  /* From dump */
   line-height: normal;
-  /* From dump */
+  overflow-y: auto;
 }
 
 /* Utilities */

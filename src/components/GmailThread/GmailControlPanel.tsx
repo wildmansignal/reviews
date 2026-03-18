@@ -1,19 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { generateGmailThread } from '../../services/openai';
 import './GmailThread.css';
 
 interface GmailControlPanelProps {
-    // Selected Message
     selectedMsg: any;
     onUpdateMsg: (id: string, field: string, value: any) => void;
     onAddMsg: () => void;
+    onAIGenerate?: (messages: any[], subject: string) => void;
 }
 
 const GmailControlPanel: React.FC<GmailControlPanelProps> = ({
-    selectedMsg, onUpdateMsg, onAddMsg
+    selectedMsg, onUpdateMsg, onAddMsg, onAIGenerate
 }) => {
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState('');
+
+    const handleAIGenerate = async () => {
+        setAiLoading(true);
+        setAiError('');
+        try {
+            const result = await generateGmailThread();
+            if (onAIGenerate) onAIGenerate(result.messages, result.subject);
+        } catch (e: unknown) {
+            setAiError(e instanceof Error ? e.message : 'AI generation failed');
+        } finally {
+            setAiLoading(false);
+        }
+    };
     return (
         <div className="gm-controls">
-            <h3>Gmail Simulation</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <h3 style={{ margin: 0 }}>Gmail Simulation</h3>
+                <button
+                    onClick={handleAIGenerate}
+                    disabled={aiLoading}
+                    style={{ background: 'linear-gradient(135deg,#1a73e8,#0d47a1)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: aiLoading ? 'not-allowed' : 'pointer', opacity: aiLoading ? 0.7 : 1 }}
+                >
+                    {aiLoading ? '...' : '⚡ AI Fill'}
+                </button>
+            </div>
+            {aiError && <div style={{ color: '#d93025', fontSize: 12, marginBottom: 8 }}>{aiError}</div>}
 
             <div className="gm-control-group">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

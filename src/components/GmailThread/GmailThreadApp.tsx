@@ -79,6 +79,19 @@ const GmailThreadApp = () => {
         setSelectedMsgId(newId);
     };
 
+    const handleAIResults = (aiMessages: any[], subject: string) => {
+        const newMessages = aiMessages.map((m: any, i: number) => ({
+            id: (i + 1).toString(),
+            senderName: m.senderName,
+            details: m.isMe ? 'to them ▼' : 'to me ▼',
+            avatar: m.isMe ? 'letter:d:#009688' : `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(m.senderName)}`,
+            date: `${['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][i % 5]}, Jan ${i + 5}, ${5 + i}:0${i} AM (${i + 1} days ago)`,
+            content: m.content,
+        }));
+        setMessages(newMessages);
+        void subject; // subject could be used to update a subject line state if added
+    };
+
     const selectedMsg = messages.find(m => m.id === selectedMsgId);
 
     return (
@@ -88,6 +101,7 @@ const GmailThreadApp = () => {
                 selectedMsg={selectedMsg}
                 onUpdateMsg={handleUpdateMsg}
                 onAddMsg={handleAddMsg}
+                onAIGenerate={handleAIResults}
             />
 
             {/* Desktop Frame */}

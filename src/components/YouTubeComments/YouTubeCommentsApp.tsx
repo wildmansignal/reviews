@@ -66,6 +66,20 @@ const YouTubeCommentsApp = () => {
         setSelectedCommentId(newId);
     };
 
+    const handleAIResults = (aiComments: any[]) => {
+        const newComments = aiComments.map((c: any, i: number) => ({
+            id: (Date.now() + i).toString(),
+            handle: c.handle,
+            avatar: `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(c.handle)}&backgroundColor=b6e3f4,d1d4f9`,
+            text: c.text,
+            time: c.timeAgo,
+            likes: c.likes,
+            isHearted: i === 0, // heart the first one
+            replyCount: '0',
+        }));
+        setComments(newComments);
+    };
+
     const selectedComment = comments.find(c => c.id === selectedCommentId);
 
     return (
@@ -77,6 +91,7 @@ const YouTubeCommentsApp = () => {
                 selectedComment={selectedComment}
                 onUpdateComment={handleUpdateComment}
                 onAddComment={handleAddComment}
+                onAIGenerate={handleAIResults}
             />
 
             {/* Phone Screen */}

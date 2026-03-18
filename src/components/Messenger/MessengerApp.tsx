@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { generateMessengerThread } from '../../services/openai';
 import MessageBubble, { type MessageData } from './MessageBubble';
 import ChatHeader from './ChatHeader';
 import { useGenerationContext } from '../../contexts/GenerationContext';
@@ -37,11 +38,10 @@ const MessengerApp = () => {
     // Control Panel State
     const [myMessage, setMyMessage] = useState("");
     const [theirMessage, setTheirMessage] = useState("");
-    const [themAvatar, setThemAvatar] = useState("https://placehold.co/28"); // Default small avatar
-
-    // Note: Header Name/Status are currently static in the image, 
-    // but we can keep state here if we decide to overlay them later.
+    const [themAvatar, setThemAvatar] = useState("https://placehold.co/28");
     const [headerName, setHeaderName] = useState("Sai Garcia");
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState('');
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -99,11 +99,40 @@ const MessengerApp = () => {
     };
 
 
+    const handleAIFill = async () => {
+        setAiLoading(true);
+        setAiError('');
+        try {
+            const result = await generateMessengerThread();
+            const newMsgs = result.messages.map((m: any, i: number) => ({
+                id: Date.now() + i,
+                text: m.text,
+                sender: (m.isMe ? 'me' : 'them') as 'me' | 'them',
+            }));
+            setMessages(newMsgs);
+            setHeaderName(result.contactName);
+        } catch (e: unknown) {
+            setAiError(e instanceof Error ? e.message : 'AI generation failed');
+        } finally {
+            setAiLoading(false);
+        }
+    };
+
     return (
         <div className="messenger-app-container">
             {/* Side Control Panel */}
             <div className="control-panel">
-                <h3 style={{ color: 'white', marginBottom: 10 }}>Simulation Controls</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                    <h3 style={{ color: 'white', margin: 0 }}>Simulation Controls</h3>
+                    <button
+                        onClick={handleAIFill}
+                        disabled={aiLoading}
+                        style={{ background: 'linear-gradient(135deg,#0099ff,#0d47a1)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: aiLoading ? 'not-allowed' : 'pointer', opacity: aiLoading ? 0.7 : 1 }}
+                    >
+                        {aiLoading ? '...' : '⚡ AI Fill'}
+                    </button>
+                </div>
+                {aiError && <div style={{ color: '#f87171', fontSize: 12, marginBottom: 8 }}>{aiError}</div>}
 
                 <div className="control-group">
                     <label className="control-label">My Message (Blue)</label>

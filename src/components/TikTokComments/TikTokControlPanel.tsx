@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { generateTikTokComments } from '../../services/openai';
 import './TikTokComments.css';
+
 
 interface TikTokControlPanelProps {
     headerComments: string;
@@ -15,6 +17,7 @@ interface TikTokControlPanelProps {
     selectedComment: any;
     onUpdateComment: (id: string, field: string, value: any) => void;
     onAddComment: () => void;
+    onAIGenerate?: (comments: any[], totalComments: string, totalLikes: string) => void;
 }
 
 const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
@@ -22,9 +25,25 @@ const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
     headerLikes, setHeaderLikes,
     setMyAvatar,
     selectedComment, onUpdateComment,
-    onAddComment
+    onAddComment, onAIGenerate
 }) => {
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState('');
 
+    const handleAIGenerate = async () => {
+        setAiLoading(true);
+        setAiError('');
+        try {
+            const result = await generateTikTokComments();
+            if (onAIGenerate) {
+                onAIGenerate(result.comments, result.totalComments, result.totalLikes);
+            }
+        } catch (e: unknown) {
+            setAiError(e instanceof Error ? e.message : 'AI generation failed');
+        } finally {
+            setAiLoading(false);
+        }
+    };
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string) => void) => {
         if (e.target.files && e.target.files[0]) {
             const url = URL.createObjectURL(e.target.files[0]);
@@ -41,7 +60,17 @@ const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
 
     return (
         <div className="tt-controls">
-            <h3>TikTok Simulation</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <h3 style={{ margin: 0 }}>TikTok Simulation</h3>
+                <button
+                    onClick={handleAIGenerate}
+                    disabled={aiLoading}
+                    style={{ background: 'linear-gradient(135deg,#fe2c55,#ff6b35)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: aiLoading ? 'not-allowed' : 'pointer', opacity: aiLoading ? 0.7 : 1 }}
+                >
+                    {aiLoading ? '...' : '⚡ AI Fill'}
+                </button>
+            </div>
+            {aiError && <div style={{ color: '#f87171', fontSize: 12, marginBottom: 8 }}>{aiError}</div>}
 
             {/* Global */}
             <div className="tt-control-group">

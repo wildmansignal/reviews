@@ -84,6 +84,23 @@ const TikTokCommentsApp = () => {
         setSelectedCommentId(newId);
     };
 
+    const handleAIResults = (aiComments: any[], totalComments: string, totalLikes: string) => {
+        const newComments = aiComments.map((c: any, i: number) => ({
+            id: (Date.now() + i).toString(),
+            username: c.username,
+            avatar: `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(c.username)}&backgroundColor=b6e3f4,d1d4f9,ffd5dc`,
+            text: c.text,
+            image: null,
+            date: '2025-12-' + (Math.floor(Math.random() * 28) + 1),
+            likes: c.likes,
+            isCreator: false,
+            likedByCreator: false,
+        }));
+        setComments(newComments);
+        setHeaderComments(totalComments);
+        setHeaderLikes(totalLikes);
+    };
+
     const selectedComment = comments.find(c => c.id === selectedCommentId);
 
     return (
@@ -96,6 +113,7 @@ const TikTokCommentsApp = () => {
                 selectedComment={selectedComment}
                 onUpdateComment={handleUpdateComment}
                 onAddComment={handleAddComment}
+                onAIGenerate={handleAIResults}
             />
 
             {/* Phone Screen */}

@@ -1,26 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { generateYouTubeComments } from '../../services/openai';
 import './YouTubeComments.css';
 
 interface YouTubeControlPanelProps {
     myAvatar: string;
     setMyAvatar: (val: string) => void;
-
-    // Creator for Heart icon
     creatorAvatar: string;
     setCreatorAvatar: (val: string) => void;
-
-    // Selected Comment
     selectedComment: any;
     onUpdateComment: (id: string, field: string, value: any) => void;
     onAddComment: () => void;
+    onAIGenerate?: (comments: any[]) => void;
 }
 
 const YouTubeControlPanel: React.FC<YouTubeControlPanelProps> = ({
-    setMyAvatar,
-    setCreatorAvatar,
+    setMyAvatar, setCreatorAvatar,
     selectedComment, onUpdateComment,
-    onAddComment
+    onAddComment, onAIGenerate
 }) => {
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState('');
+
+    const handleAIGenerate = async () => {
+        setAiLoading(true);
+        setAiError('');
+        try {
+            const result = await generateYouTubeComments();
+            if (onAIGenerate) onAIGenerate(result.comments);
+        } catch (e: unknown) {
+            setAiError(e instanceof Error ? e.message : 'AI generation failed');
+        } finally {
+            setAiLoading(false);
+        }
+    };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: (val: string) => void) => {
         if (e.target.files && e.target.files[0]) {
@@ -38,7 +50,17 @@ const YouTubeControlPanel: React.FC<YouTubeControlPanelProps> = ({
 
     return (
         <div className="yt-controls">
-            <h3>YouTube Simulation</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <h3 style={{ margin: 0 }}>YouTube Simulation</h3>
+                <button
+                    onClick={handleAIGenerate}
+                    disabled={aiLoading}
+                    style={{ background: 'linear-gradient(135deg,#ff0000,#ff6b35)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: aiLoading ? 'not-allowed' : 'pointer', opacity: aiLoading ? 0.7 : 1 }}
+                >
+                    {aiLoading ? '...' : '⚡ AI Fill'}
+                </button>
+            </div>
+            {aiError && <div style={{ color: '#f87171', fontSize: 12, marginBottom: 8 }}>{aiError}</div>}
 
             <div className="yt-control-group">
                 <label className="yt-label">Global Avatars</label>
