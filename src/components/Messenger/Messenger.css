@@ -15,12 +15,71 @@
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    /* Center strictly */
-    gap: 40px;
-    /* Space between Phone and Controls */
-    padding: 20px;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 20px;
+    overflow-y: auto;
 }
+
+/* ─── Conversation List (left panel) ─── */
+.ms-convo-list {
+    width: 300px;
+    flex-shrink: 0;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    overflow: hidden;
+}
+
+.ms-convo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.15s;
+}
+
+.ms-convo-row:hover {
+    background: #1a1a1a;
+}
+
+.ms-convo-row.active {
+    background: #1c2a3a;
+}
+
+.ms-convo-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: #333;
+}
+
+.ms-convo-online-dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 13px;
+    height: 13px;
+    background: #31a24c;
+    border: 2px solid #111;
+    border-radius: 50%;
+}
+
+.ms-unread-dot {
+    width: 10px;
+    height: 10px;
+    background: #0084ff;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
 
 /* Messenger Frame */
 .messenger-frame {
