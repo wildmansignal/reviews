@@ -30,10 +30,26 @@ const BusinessControlPanel: React.FC<BusinessControlPanelProps> = ({
     paymentDate, setPaymentDate,
     onSavePayment
 }) => {
+    const handleRandomize = () => {
+        const gross = Math.floor(Math.random() * 990000) + 10000; // $10k - $1M
+        const net = Math.floor(gross * (0.90 + Math.random() * 0.06)); // 90–96% of gross
+        const customers = Math.floor(Math.random() * 190) + 10; // 10–200
+        setGrossVolume(gross.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        setNetVolume(net.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        setNewCustomers(customers.toString());
+    };
 
     return (
         <div className="bd-controls">
-            <h3 style={{ color: 'white', marginTop: 0 }}>Dashboard Controls</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <h3 style={{ color: 'white', margin: 0 }}>Dashboard Controls</h3>
+                <button
+                    onClick={handleRandomize}
+                    style={{ background: 'linear-gradient(135deg,#635bff,#4f46e5)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                    🎲 Randomize
+                </button>
+            </div>
 
             <div style={{ marginBottom: 20 }}>
                 <div style={{ color: '#aab7c4', fontSize: '13px', textTransform: 'uppercase', marginBottom: 10 }}>Global Metrics</div>

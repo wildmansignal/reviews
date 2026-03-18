@@ -25,9 +25,30 @@ const BlueControlPanel: React.FC<BlueControlPanelProps> = ({
     onlineCount, setOnlineCount,
     onlineRate, setOnlineRate
 }) => {
+    const handleRandomize = () => {
+        const sales = Math.floor(Math.random() * 990000) + 10000;
+        const orders = Math.floor(Math.random() * 14000) + 100;
+        const visits = Math.floor(Math.random() * 90000) + 5000;
+        const online = Math.floor(Math.random() * 8000) + 200;
+        const rate = (Math.random() * 15 + 1).toFixed(1);
+        setTotalSales('$' + sales.toLocaleString());
+        setOrdersCount(orders.toLocaleString() + ' orders');
+        setVisitsCount(visits.toLocaleString());
+        setOnlineCount(online.toLocaleString());
+        setOnlineRate(rate + '% online rate');
+        void visitsLabel; setVisitsLabel('unique visits this month');
+    };
     return (
         <div className="blue-controls">
-            <h3 style={{ marginTop: 0, color: 'white' }}>Settings</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <h3 style={{ margin: 0, color: 'white' }}>Settings</h3>
+                <button
+                    onClick={handleRandomize}
+                    style={{ background: 'linear-gradient(135deg,#536dfe,#3949ab)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                    🎲 Randomize
+                </button>
+            </div>
 
             <div style={{ paddingBottom: 15, borderBottom: '1px solid #303575' }}>
                 <label className="blue-metric-label" style={{ display: 'block', color: '#536dfe' }}>Main Metric</label>

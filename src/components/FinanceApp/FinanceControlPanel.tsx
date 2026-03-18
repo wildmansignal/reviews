@@ -27,9 +27,22 @@ const FinanceControlPanel: React.FC<FinanceControlPanelProps> = ({
     txDate, setTxDate,
     onSaveTx
 }) => {
+    const handleRandomize = () => {
+        const balance = Math.floor(Math.random() * 990000) + 10000;
+        setTotalBalance('$' + balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        void userName; // name stays as-is since it's personal
+    };
     return (
         <div className="fin-controls">
-            <h3 style={{ color: 'white', marginTop: 0 }}>Finance App Controls</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <h3 style={{ color: 'white', margin: 0 }}>Finance App Controls</h3>
+                <button
+                    onClick={handleRandomize}
+                    style={{ background: 'linear-gradient(135deg,#d996dd,#9c27b0)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                    🎲 Randomize
+                </button>
+            </div>
 
             <div style={{ marginBottom: 20 }}>
                 <div style={{ color: '#d996dd', fontSize: '13px', textTransform: 'uppercase', marginBottom: 10 }}>Global Settings</div>

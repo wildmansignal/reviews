@@ -15,9 +15,26 @@ const AnalyticsControlPanel: React.FC<AnalyticsControlPanelProps> = ({
     dateRange, setDateRange,
     ordersCount, setOrdersCount
 }) => {
+    const handleRandomize = () => {
+        const profit = Math.floor(Math.random() * 990000) + 10000;
+        const orders = Math.floor(Math.random() * 4500) + 50;
+        setTotalProfit(profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        setOrdersCount(orders.toString());
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'];
+        const mIdx = Math.floor(Math.random() * 10);
+        setDateRange(`${months[mIdx]} 1 – ${months[mIdx + 1]} 1, 2025`);
+    };
     return (
         <div className="ana-controls">
-            <h3 style={{ marginTop: 0 }}>Dashboard Controls</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <h3 style={{ margin: 0 }}>Dashboard Controls</h3>
+                <button
+                    onClick={handleRandomize}
+                    style={{ background: 'linear-gradient(135deg,#635bff,#4f46e5)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                    🎲 Randomize
+                </button>
+            </div>
 
             <div>
                 <label className="ana-label" style={{ display: 'block' }}>Total Profit Metric</label>
