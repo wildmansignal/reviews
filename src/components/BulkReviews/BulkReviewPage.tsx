@@ -179,7 +179,7 @@ const FBPostCard: React.FC<{ review: GeneratedReview }> = ({ review }) => {
                     <div className="fbc-meta-row">
                         <span className="fbc-time">{review.timestamp}</span>
                         <span className="fbc-dot">·</span>
-                        <span className="fbc-globe">🌐</span>
+                        <img src="/my-avatar/profile.jpg" alt="Dan" style={{ width: 14, height: 14, borderRadius: '50%', objectFit: 'cover', border: '1px solid #ccc', verticalAlign: 'middle' }} />
                     </div>
                 </div>
                 <div className="fbc-header-actions">
