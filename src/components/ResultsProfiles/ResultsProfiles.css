@@ -344,6 +344,28 @@
     margin: 0 2px;
 }
 
+.rp-fb-dan-avatar {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.rp-fb-dots {
+    font-size: 18px;
+    color: #65676b;
+    letter-spacing: 1px;
+}
+
+.rp-fb-close {
+    font-size: 15px;
+    color: #65676b;
+}
+
+
 .rp-fb-header-actions {
     display: flex;
     gap: 12px;

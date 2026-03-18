@@ -10,7 +10,8 @@ const fmtFull = (n: number) => `$${n.toLocaleString()}`;
 // ── Dan's avatar (always the same selfie) ─────────────────────────────────
 const DAN_AVATAR = '/my-avatar/profile.jpg';
 
-// ── FB Post Card — matches the PostEditor look exactly ────────────────────
+
+// ── FB Post Card — matches real Facebook look ─────────────────────────────
 const FBCard: React.FC<{ p: ResultsProfile }> = ({ p }) => (
     <div className="rp-card rp-fb">
         <div className="rp-card-label">📘 Facebook Post</div>
@@ -27,12 +28,13 @@ const FBCard: React.FC<{ p: ResultsProfile }> = ({ p }) => (
                 <div className="rp-fb-meta">
                     <span>{p.fbTimestamp}</span>
                     <span className="rp-fb-dot"> · </span>
-                    <span>🌐</span>
+                    {/* Dan's tiny avatar replaces the globe icon */}
+                    <img src={DAN_AVATAR} className="rp-fb-dan-avatar" alt="Dan" />
                 </div>
             </div>
             <div className="rp-fb-header-actions">
-                <span style={{ fontSize: 18, color: '#65676b' }}>···</span>
-                <span style={{ fontSize: 16, color: '#65676b' }}>✕</span>
+                <span className="rp-fb-dots">···</span>
+                <span className="rp-fb-close">✕</span>
             </div>
         </div>
 
@@ -49,20 +51,27 @@ const FBCard: React.FC<{ p: ResultsProfile }> = ({ p }) => (
             <span>{p.fbComments} comments · {p.fbShares} shares</span>
         </div>
 
-        {/* Action bar */}
+        {/* Action bar — outline SVG icons like real FB */}
         <div className="rp-fb-action-bar">
             <button className="rp-fb-action-btn">
-                <span>👍</span><span>Like</span>
+                {/* Thumbs up outline */}
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#65676b" strokeWidth="1.8"><path d="M7 22V11M2 13v7a2 2 0 002 2h11.8a2 2 0 001.97-1.67l1.17-7A2 2 0 0017 11H13V5a2 2 0 00-2-2h0a2 2 0 00-2 2v3.5L7 11H4a2 2 0 00-2 2v0z" /></svg>
+                <span>Like</span>
             </button>
             <button className="rp-fb-action-btn">
-                <span>💬</span><span>Comment</span>
+                {/* Speech bubble outline */}
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#65676b" strokeWidth="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
+                <span>Comment</span>
             </button>
             <button className="rp-fb-action-btn">
-                <span>↗️</span><span>Share</span>
+                {/* Share arrows */}
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#65676b" strokeWidth="1.8"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49" /></svg>
+                <span>Share</span>
             </button>
         </div>
     </div>
 );
+
 
 // ── Income / Stripe-style Card ─────────────────────────────────────────────
 const IncomeCard: React.FC<{ p: ResultsProfile }> = ({ p }) => {
