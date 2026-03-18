@@ -22,10 +22,20 @@ const DashboardParams = () => {
     const [payouts, setPayouts] = useState("2,732.64");
     const [payoutsExpected, setPayoutsExpected] = useState("Expected tomorrow");
 
+    // Compute a real default: 6 weeks ago → today
+    const todayDate = new Date();
+    const sixWeeksAgo = new Date(todayDate);
+    sixWeeksAgo.setDate(todayDate.getDate() - 42);
+    const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const defaultRange = `${fmt(sixWeeksAgo)} - ${fmt(todayDate)}`;
+
     // Date Range State
-    const [dateRangeInput, setDateRangeInput] = useState("Sep 21 - Oct 31");
+    const [dateRangeInput, setDateRangeInput] = useState(defaultRange);
     // Default matching the screenshot request
-    const [chartLabels, setChartLabels] = useState<string[]>(['Sep 21', 'Oct 4', 'Oct 18', 'Oct 31']);
+    const [chartLabels, setChartLabels] = useState<string[]>(() => {
+        const step = 42 / 3;
+        return [0, 1, 2, 3].map(i => fmt(new Date(sixWeeksAgo.getTime() + i * step * 86400000)));
+    });
 
     const generateLabels = (input: string) => {
         const parts = input.split('-').map(s => s.trim());
@@ -72,15 +82,6 @@ const DashboardParams = () => {
         }
     };
 
-    const updateLabel = (index: number) => {
-        const currentLabel = chartLabels[index];
-        const newLabel = prompt("Enter new label:", currentLabel);
-        if (newLabel) {
-            const newLabels = [...chartLabels];
-            newLabels[index] = newLabel;
-            setChartLabels(newLabels);
-        }
-    };
 
     return (
         <div className="dashboard-params">
@@ -141,26 +142,7 @@ const DashboardParams = () => {
                     onDataChange={handleChartChange}
                 />
 
-                {/* Editable X-Axis Labels */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: -10, paddingLeft: 20, paddingRight: 20 }}>
-                    {chartLabels.map((label, i) => (
-                        <button
-                            key={i}
-                            onClick={() => updateLabel(i)}
-                            className="btn-text-edit" // Define this style or assume existing reset
-                            style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#9ca3af',
-                                fontSize: 12,
-                                cursor: 'pointer',
-                                fontFamily: 'sans-serif'
-                            }}
-                        >
-                            {label}
-                        </button>
-                    ))}
-                </div>
+
             </section>
 
             <div className="balance-row">
