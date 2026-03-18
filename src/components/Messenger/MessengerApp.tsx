@@ -22,7 +22,7 @@ const MALE_NAMES = [
 
 // ── Message Templates ──────────────────────────────────────────────────────
 // Indexed by [0=opener from them, 1=me reply, 2=them update, 3=me react, 4=them income reveal, 5=me congrats, 6=them thanks, 7=me close]
-function buildThread(name: string, income: string, firstName: string): MessageData[] {
+function buildThread(_name: string, income: string, firstName: string): MessageData[] {
     const templates = [
         [
             `Hey Dan! I've been wanting to reach out for months but kept putting it off. I honestly wasn't sure if I should message you or not 😅`,

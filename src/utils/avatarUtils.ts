@@ -16,7 +16,8 @@ const AI_BASE = '/avatars/Human Faces Dataset/AI-Generated Images/';
 
 // How many images are in each folder (used as fallback when manifest not loaded)
 const REAL_COUNT = 5000;
-const AI_COUNT = 4630;
+
+
 
 // ─── Gender manifest (loaded lazily at runtime) ─────────────────────────────
 
