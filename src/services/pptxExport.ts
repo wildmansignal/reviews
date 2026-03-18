@@ -143,11 +143,6 @@ function addFullWidthSlide(pSlide: any, slide: any, scheme: SchemeColors) {
 
     // Bullets
     if (slide.bullets?.length) {
-        const bulletItems = slide.bullets.map((b: string) => ({
-            text: `  ${b}`,
-            options: { fontSize: 18, color: scheme.text, paraSpaceAfter: 12 }
-        }));
-
         // Colored bullet dots
         const dotItems = slide.bullets.map((b: string) => ({
             text: `● ${b}`,
