@@ -1,4 +1,5 @@
 import {
+    DollarSign,
     MessageSquare,
     MoreHorizontal,
     Layers,
@@ -149,6 +150,14 @@ const Sidebar = () => {
                     <Link to="/webinar-editor" className={`nav-item ${location.pathname === '/webinar-editor' ? 'active' : ''}`}>
                         <Presentation size={16} />
                         <span>Webinar Editor</span>
+                    </Link>
+                    <Link to="/profit-growth" className={`nav-item ${location.pathname === '/profit-growth' ? 'active' : ''}`}>
+                        <TrendingUp size={16} />
+                        <span>Profit Growth</span>
+                    </Link>
+                    <Link to="/profit-table" className={`nav-item ${location.pathname === '/profit-table' ? 'active' : ''}`}>
+                        <DollarSign size={16} />
+                        <span>Profit Analytics</span>
                     </Link>
                 </div>
             </nav>

@@ -16,6 +16,8 @@ import WebinarGeneratorApp from './components/WebinarGenerator/WebinarGeneratorA
 import WebinarEditorApp from './components/WebinarEditor/WebinarEditorApp';
 import ReviewSliderApp from './components/ReviewSlider/ReviewSliderApp';
 import BulkReviewPage from './components/BulkReviews/BulkReviewPage';
+import ProfitGrowthApp from './components/ProfitGrowth/ProfitGrowthApp';
+import ProfitTableApp from './components/ProfitTable/ProfitTableApp';
 import Launchpad from './components/Launchpad';
 import './App.css';
 
@@ -41,6 +43,8 @@ function App() {
           <Route path="/webinar-editor" element={<WebinarEditorApp />} />
           <Route path="/review-slider" element={<ReviewSliderApp />} />
           <Route path="/bulk-reviews" element={<BulkReviewPage />} />
+          <Route path="/profit-growth" element={<ProfitGrowthApp />} />
+          <Route path="/profit-table" element={<ProfitTableApp />} />
         </Routes>
       </BrowserRouter>
     </GenerationProvider>
