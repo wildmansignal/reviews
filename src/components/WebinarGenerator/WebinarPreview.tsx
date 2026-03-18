@@ -1,5 +1,5 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight, Edit2, Check } from 'lucide-react';
 import './WebinarGen.css';
 
 interface WebinarPreviewProps {
@@ -7,6 +7,7 @@ interface WebinarPreviewProps {
     config: any;
     onNext: () => void;
     onPrev: () => void;
+    onEditSlide?: (field: string, value: any) => void;
 }
 
 const SCHEME_STYLES: Record<string, { bg: string; color: string; accent: string }> = {
@@ -16,10 +17,60 @@ const SCHEME_STYLES: Record<string, { bg: string; color: string; accent: string 
     'luxury-gold': { bg: 'linear-gradient(135deg, #000 0%, #111 100%)', color: '#fbbf24', accent: '#f59e0b' },
 };
 
-const WebinarPreview: React.FC<WebinarPreviewProps> = ({ slide, config, onNext, onPrev }) => {
+const EditableText: React.FC<{
+    value: string;
+    onSave: (v: string) => void;
+    style?: React.CSSProperties;
+    multiline?: boolean;
+}> = ({ value, onSave, style, multiline }) => {
+    const [editing, setEditing] = useState(false);
+    const [draft, setDraft] = useState(value);
+
+    const save = () => { onSave(draft); setEditing(false); };
+
+    if (editing) {
+        return (
+            <div style={{ position: 'relative', width: '100%' }}>
+                {multiline ? (
+                    <textarea
+                        autoFocus
+                        value={draft}
+                        onChange={e => setDraft(e.target.value)}
+                        style={{ ...style, width: '100%', background: 'rgba(0,0,0,0.5)', border: '2px solid #a78bfa', color: 'inherit', borderRadius: 6, padding: 8, resize: 'vertical', fontFamily: 'inherit' }}
+                        rows={4}
+                    />
+                ) : (
+                    <input
+                        autoFocus
+                        value={draft}
+                        onChange={e => setDraft(e.target.value)}
+                        style={{ ...style, width: '100%', background: 'rgba(0,0,0,0.5)', border: '2px solid #a78bfa', color: 'inherit', borderRadius: 6, padding: '6px 10px', fontFamily: 'inherit' }}
+                    />
+                )}
+                <button onClick={save} style={{ position: 'absolute', top: 4, right: 4, background: '#a78bfa', border: 'none', borderRadius: 4, padding: '4px 8px', cursor: 'pointer', color: '#000', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12 }}>
+                    <Check size={12} /> Save
+                </button>
+            </div>
+        );
+    }
+
+    return (
+        <div style={{ position: 'relative', cursor: 'text', ...style }}
+            onClick={() => { setDraft(value); setEditing(true); }}
+            title="Click to edit"
+        >
+            {value}
+            <Edit2 size={12} style={{ position: 'absolute', top: 2, right: -20, opacity: 0.4 }} />
+        </div>
+    );
+};
+
+const WebinarPreview: React.FC<WebinarPreviewProps> = ({ slide, config, onNext, onPrev, onEditSlide }) => {
     const scheme = SCHEME_STYLES[config.style?.colorScheme] ?? SCHEME_STYLES['modern-dark'];
     const isEmpty = !slide || slide.type === 'empty';
     const bullets: string[] = slide?.bullets ?? (slide?.content ? slide.content.split('\n').filter(Boolean) : []);
+
+    const edit = (field: string, value: any) => onEditSlide?.(field, value);
 
     return (
         <div className="wg-canvas">
@@ -42,16 +93,28 @@ const WebinarPreview: React.FC<WebinarPreviewProps> = ({ slide, config, onNext, 
                         </div>
                     ) : (
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                            <div style={{ fontSize: 36, fontWeight: 800, lineHeight: 1.2, marginBottom: 32, maxWidth: '85%' }}>
-                                {slide.title}
-                            </div>
+                            {/* Editable Title */}
+                            <EditableText
+                                value={slide.title}
+                                onSave={v => edit('title', v)}
+                                style={{ fontSize: 36, fontWeight: 800, lineHeight: '1.2', marginBottom: 32, maxWidth: '85%', display: 'block' }}
+                            />
 
+                            {/* Editable Bullets */}
                             {bullets.length > 0 && (
                                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14 }}>
                                     {bullets.map((b, idx) => (
                                         <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, fontSize: 18, lineHeight: 1.5 }}>
                                             <span style={{ width: 8, height: 8, borderRadius: '50%', background: scheme.accent, flexShrink: 0, marginTop: 8 }} />
-                                            {b}
+                                            <EditableText
+                                                value={b}
+                                                onSave={v => {
+                                                    const newBullets = [...bullets];
+                                                    newBullets[idx] = v;
+                                                    edit('bullets', newBullets);
+                                                }}
+                                                style={{ fontSize: 18, lineHeight: '1.5', flex: 1 }}
+                                            />
                                         </li>
                                     ))}
                                 </ul>
@@ -59,7 +122,7 @@ const WebinarPreview: React.FC<WebinarPreviewProps> = ({ slide, config, onNext, 
 
                             {slide.type === 'offer' && (
                                 <div style={{ marginTop: 32, display: 'inline-block', background: scheme.accent, color: '#000', padding: '12px 32px', borderRadius: 8, fontWeight: 800, fontSize: 20 }}>
-                                    Book Your Strategy Call →
+                                    Book Your Free Strategy Call →
                                 </div>
                             )}
                         </div>
@@ -67,16 +130,21 @@ const WebinarPreview: React.FC<WebinarPreviewProps> = ({ slide, config, onNext, 
 
                     {/* Footer */}
                     <div style={{ marginTop: 24, paddingTop: 16, borderTop: `1px solid ${scheme.accent}33`, fontSize: 11, opacity: 0.4, display: 'flex', justifyContent: 'space-between' }}>
-                        <span>{config.style?.footerText || '© 2026 • Confidential Blueprint'}</span>
+                        <span>{config.style?.footerText || '© 2026 Code On Fire University'}</span>
                         <span>Slide {slide?.slideNum ?? (slide?.id ?? 0) + 1}</span>
                     </div>
                 </div>
 
-                {/* ── Speaker Notes ── */}
-                {slide?.speakerNote && (
+                {/* ── Editable Speaker Notes ── */}
+                {slide?.speakerNote !== undefined && !isEmpty && (
                     <div className="wg-speaker-notes">
-                        <div className="wg-speaker-label">🎤 Speaker Notes</div>
-                        <div className="wg-speaker-text">{slide.speakerNote}</div>
+                        <div className="wg-speaker-label">🎤 Speaker Notes <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(click to edit)</span></div>
+                        <EditableText
+                            value={slide.speakerNote || ''}
+                            onSave={v => edit('speakerNote', v)}
+                            style={{ color: '#e2e8f0', lineHeight: '1.6', fontStyle: 'italic', fontSize: 13 }}
+                            multiline
+                        />
                     </div>
                 )}
 
@@ -88,7 +156,7 @@ const WebinarPreview: React.FC<WebinarPreviewProps> = ({ slide, config, onNext, 
                     />
                 </div>
 
-                {/* Nav arrows */}
+                {/* Nav */}
                 <button onClick={onPrev} style={{ position: 'absolute', left: 20, top: '45%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%', width: 40, height: 40, color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ChevronLeft size={24} />
                 </button>
