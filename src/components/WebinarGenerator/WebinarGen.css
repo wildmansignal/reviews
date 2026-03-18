@@ -357,3 +357,192 @@
     border-color: var(--wg-accent);
     background: rgba(99, 102, 241, 0.1);
 }
+
+/* ── Tab Bar ── */
+.wg-tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--wg-border);
+    background: #111827;
+    flex-shrink: 0;
+}
+
+.wg-tab {
+    flex: 1;
+    padding: 12px;
+    background: none;
+    border: none;
+    color: var(--wg-text-sec);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.wg-tab.active {
+    color: var(--wg-accent);
+    border-bottom-color: var(--wg-accent);
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.wg-tab:hover:not(.active) {
+    color: white;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── AI Panel ── */
+.wg-ai-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.wg-ai-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 20px 4px;
+    color: var(--wg-accent);
+}
+
+.wg-ai-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.wg-ai-sub {
+    font-size: 12px;
+    color: var(--wg-text-sec);
+    margin: 0 20px 16px;
+    line-height: 1.5;
+}
+
+.wg-hint {
+    font-size: 11px;
+    color: var(--wg-text-sec);
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+/* ── Status / Progress ── */
+.wg-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.wg-status.info {
+    background: rgba(99, 102, 241, 0.12);
+    color: #a78bfa;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.wg-status.success {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.wg-status.warn {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.wg-progress-track {
+    height: 4px;
+    background: #374151;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.wg-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #a78bfa);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* ── Generate Button ── */
+.wg-ai-generate-btn {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px;
+    border-radius: 10px;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.wg-ai-generate-btn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.wg-ai-generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ── Speaker Notes ── */
+.wg-speaker-notes {
+    background: #1a1a2e;
+    border-top: 2px solid #a78bfa44;
+    padding: 16px 24px;
+    font-size: 14px;
+    max-height: 120px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.wg-speaker-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #a78bfa;
+    margin-bottom: 8px;
+}
+
+.wg-speaker-text {
+    color: #e2e8f0;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* Spin animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 0.8s linear infinite;
+}
+
+/* Slide title/text for preview */
+.wg-slide-title {
+    font-size: 2.2em;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1em;
+}
+
+.wg-slide-text {
+    font-size: 1.1em;
+    line-height: 1.6;
+    opacity: 0.85;
+}
