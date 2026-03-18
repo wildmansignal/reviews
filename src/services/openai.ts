@@ -1,4 +1,6 @@
+import { getSeededAvatar } from '../utils/avatarUtils';
 // OpenAI service for generating reviews, names, and avatars
+
 
 const getApiKey = () => {
     const key = import.meta.env.VITE_OPENAI_API_KEY;
@@ -102,16 +104,9 @@ const REVIEW_TEMPLATES = [
     (income: string) => `Look I don't normally leave reviews but after hitting ${income} this month with Code On Fire I felt like I had to say something. Dan is the real thing. The system works. I wish I had found this 2 years ago honestly.`,
 ];
 
-// Get avatar — uses local face images from /public/avatars/ (200 AI-generated face images)
-export function getAvatarUrl(name: string, index: number): string {
-    // Use a hash of the name combined with index for deterministic but varied faces
-    let hash = 0;
-    const key = name + index;
-    for (let i = 0; i < key.length; i++) {
-        hash = Math.imul(31, hash) + key.charCodeAt(i) | 0;
-    }
-    const faceIndex = (Math.abs(hash) % 200) + 1;
-    return `/avatars/${String(faceIndex).padStart(6, '0')}.jpg`;
+// Get avatar — gender-aware, uses Human Faces Dataset via avatarUtils
+export function getAvatarUrl(name: string, _index: number): string {
+    return getSeededAvatar(name);
 }
 
 

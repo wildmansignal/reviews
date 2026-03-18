@@ -57,14 +57,17 @@ const FEMALE_NAMES = new Set([
     'cynthia', 'debra', 'diane', 'dorothy', 'emily', 'helen', 'jennifer', 'jessica', 'karen', 'kathleen',
     'laura', 'linda', 'lisa', 'maria', 'mary', 'melissa', 'michelle', 'patricia', 'rachel', 'rebecca',
     'ruth', 'sandra', 'sarah', 'sharon', 'shirley', 'stephanie', 'tamara', 'virginia', 'brittany', 'heather',
-    'megan', 'tiffany', 'amber', 'ashley', 'samantha', 'taylor', 'madison', 'emma', 'olivia', 'sophia',
+    'megan', 'tiffany', 'amber', 'samantha', 'taylor', 'madison', 'emma', 'olivia', 'sophia',
     'isabella', 'ava', 'mia', 'charlotte', 'abigail', 'harper', 'ella', 'evelyn', 'camila', 'luna',
     'penelope', 'scarlett', 'victoria', 'grace', 'chloe', 'riley', 'zoey', 'nora', 'lily', 'eleanor',
     'hannah', 'lillian', 'addison', 'aubrey', 'natalie', 'zoe', 'leah', 'hazel', 'violet', 'aurora',
-    'savannah', 'audrey', 'brooklyn', 'bella', 'claire', 'skylar', 'lucy', 'paisley', 'everly', 'anna',
-    'caroline', 'nova', 'genesis', 'emilia', 'kennedy', 'samantha', 'maya', 'willow', 'kinsley', 'naomi',
+    'savannah', 'audrey', 'brooklyn', 'bella', 'claire', 'skylar', 'lucy', 'paisley', 'everly',
+    'caroline', 'nova', 'genesis', 'emilia', 'kennedy', 'maya', 'willow', 'kinsley', 'naomi',
     'aaliyah', 'elena', 'kate', 'allison', 'alexa', 'ariana', 'layla', 'julia', 'destiny', 'jasmine',
-    'diana', 'nicole', 'stephanie', 'andrea', 'tanya', 'cassandra', 'brittney', 'kristin', 'dawn', 'crystal',
+    'diana', 'nicole', 'andrea', 'tanya', 'cassandra', 'brittney', 'kristin', 'dawn', 'crystal',
+    // from FIRST_NAMES in openai.ts
+    'courtney', 'kayla', 'alyssa', 'vanessa', 'shanice', 'latoya', 'isabel', 'keisha', 'alicia',
+    'lindsey', 'monique', 'brooke', 'lacey', 'danielle', 'chelsea', 'lauren', 'tiffany',
 ]);
 
 const MALE_NAMES = new Set([
@@ -101,18 +104,19 @@ function hashCode(str: string): number {
     return Math.abs(hash);
 }
 
-// ─── Fallback (no manifest) — index-based gender split ────────────────────
-
+// ─── Fallback (no manifest) — range-based gender split ───────────────────
+// Files 1–2500 = female pool, 2501–5000 = male pool (deterministic, consistent)
 function fallbackAvatar(seed: string, gender: 'male' | 'female' | 'unknown'): string {
-    // Split by parity: even numbered files ≈ female, odd ≈ male (rough approximation)
     const pad = (n: number) => String(n).padStart(6, '0');
+    const halfCount = Math.floor(REAL_COUNT / 2); // 2500
+    const slot = hashCode(seed) % halfCount;       // 0–2499
+    let idx: number;
     if (gender === 'female') {
-        const idx = (hashCode(seed) % Math.floor(REAL_COUNT / 2)) * 2 + 2; // even
-        return `${REAL_BASE}${pad(Math.min(idx, REAL_COUNT))}.jpg`;
+        idx = slot + 1;             // 1–2500  → female half
     } else {
-        const idx = (hashCode(seed) % Math.floor(REAL_COUNT / 2)) * 2 + 1; // odd
-        return `${REAL_BASE}${pad(Math.min(idx, REAL_COUNT))}.jpg`;
+        idx = slot + halfCount + 1; // 2501–5000 → male half
     }
+    return `${REAL_BASE}${pad(Math.min(idx, REAL_COUNT))}.jpg`;
 }
 
 // ─── Public API ────────────────────────────────────────────────────────────
