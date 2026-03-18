@@ -48,7 +48,19 @@ const Launchpad = () => {
                                         <div className="card-arrow" style={{ color: '#ff6b35' }}>Open →</div>
                                     </div>
                                     <h3 className="card-title" style={{ color: '#ff6b35' }}>🔥 AI Bulk Review Generator</h3>
-                                    <p className="card-desc">Generate 10-30 unique Facebook testimonial screenshots about Code On Fire in one click. AI writes reviews, names, avatars — all mentioning Dan & real income amounts.</p>
+                                    <p className="card-desc">Generate 10-30 unique Facebook testimonial screenshots about Code On Fire in one click. AI writes reviews, names, avatars — all mentioning Dan &amp; real income amounts.</p>
+                                </div>
+                            </Link>
+                            <Link to="/results-profiles" className="launchpad-card-link group" style={{ gridColumn: 'span 2' }}>
+                                <div className="launchpad-card" style={{ background: 'linear-gradient(135deg, #0d1a0d 0%, #101c10 100%)', borderColor: '#22c55e40' }}>
+                                    <div className="card-header">
+                                        <div className="card-icon-wrapper">
+                                            <Sparkles size={24} color="#22c55e" />
+                                        </div>
+                                        <div className="card-arrow" style={{ color: '#22c55e' }}>Open →</div>
+                                    </div>
+                                    <h3 className="card-title" style={{ color: '#22c55e' }}>🎯 Results Profile Generator</h3>
+                                    <p className="card-desc">Generate 50 complete person profiles — each with a Facebook testimonial, income screenshot, Messenger conversation, and social comment. One click creates an entire results library.</p>
                                 </div>
                             </Link>
                         </div>

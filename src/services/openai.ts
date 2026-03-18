@@ -495,3 +495,162 @@ Return ONLY valid JSON, no markdown:
     const raw = data.choices[0].message.content.trim().replace(/```json|```/g, '');
     return JSON.parse(raw);
 }
+
+// ─── Results Profile Generator ────────────────────────────────────────────
+
+export interface ResultsProfile {
+    name: string;
+    income: number;           // monthly in dollars
+    avatarUrl: string;
+    fbPost: string;
+    messengerMessages: Array<{ text: string; isMe: boolean }>;
+    socialComment: string;
+    socialPlatform: 'YouTube' | 'TikTok';
+    socialHandle: string;
+    fbLikes: number;
+    fbComments: number;
+    fbShares: number;
+    fbTimestamp: string;
+    bankBalance: string;
+    bankLabel: string;        // e.g. "Chase Business Checking"
+}
+
+export async function generateResultsProfile(
+    name: string,
+    income: number,
+    avatarUrl: string
+): Promise<ResultsProfile> {
+    const apiKey = getApiKey();
+    const incomeStr = `$${Math.round(income / 1000)}k`;
+    const firstName = name.split(' ')[0];
+    const platform = Math.random() > 0.5 ? 'YouTube' : 'TikTok';
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{
+                role: 'system',
+                content: `You generate realistic social proof content for Dan's "Code On Fire" online business program. The content is from real everyday people sharing their success. Keep everything authentic, casual, brief. No hashtags. Max 1 emoji total across the entire response. Dan is the coach/creator.`
+            }, {
+                role: 'user',
+                content: `Generate social proof content for ${name} who is now making ${incomeStr}/month thanks to Dan's Code On Fire program.
+
+Return ONLY this exact JSON (no markdown, no extra fields):
+{
+  "fbPost": "A Facebook testimonial post, 60-120 words. Casual, mentions their old situation, their income of ${incomeStr}/month, and thanks Dan by name.",
+  "messengerMessages": [
+    {"text": "Opening message from ${firstName} to Dan", "isMe": false},
+    {"text": "Dan's enthusiastic reply", "isMe": true},
+    {"text": "${firstName} shares the income result: ${incomeStr}", "isMe": false},
+    {"text": "Dan's reaction / congrats", "isMe": true},
+    {"text": "${firstName} thanks Dan", "isMe": false},
+    {"text": "Dan's closing encouragement", "isMe": true}
+  ],
+  "socialComment": "A ${platform} comment, 15-30 words, mentioning ${incomeStr}/month and Dan's program. Casual ${platform} style.",
+  "socialHandle": "realistic${platform === 'YouTube' ? 'YouTube' : 'TikTok'}handle_${Math.floor(Math.random() * 999)}",
+  "bankBalance": "$${(income * (8 + Math.random() * 6)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}",
+  "bankLabel": "Chase Business Checking"
+}`
+            }],
+            max_tokens: 600,
+            temperature: 0.88,
+        }),
+    });
+
+    const data = await response.json();
+    const raw = data.choices[0].message.content.trim().replace(/```json|```/g, '');
+    const parsed = JSON.parse(raw);
+
+    const stats = generateEngagementStats();
+    const balance = income * (8 + Math.random() * 6);
+    const bankLabels = ['Chase Business Checking', 'Bank of America Business', 'Wells Fargo Business', 'Stripe Balance', 'PayPal Business', 'Mercury Business'];
+
+    return {
+        name,
+        income,
+        avatarUrl,
+        fbPost: parsed.fbPost,
+        messengerMessages: parsed.messengerMessages,
+        socialComment: parsed.socialComment,
+        socialPlatform: platform,
+        socialHandle: parsed.socialHandle || `user${Math.floor(Math.random() * 9999)}`,
+        fbLikes: stats.likes,
+        fbComments: stats.comments,
+        fbShares: stats.shares,
+        fbTimestamp: generateRandomTimestamp(),
+        bankBalance: `$${Math.round(balance).toLocaleString()}.${String(Math.floor(Math.random() * 99)).padStart(2, '0')}`,
+        bankLabel: bankLabels[Math.floor(Math.random() * bankLabels.length)],
+    };
+}
+
+export async function generateAllProfiles(
+    count: number,
+    incomeMin: number,
+    incomeMax: number,
+    getAvatar: (name: string) => string,
+    onProgress?: (done: number, total: number) => void
+): Promise<ResultsProfile[]> {
+    const profiles: ResultsProfile[] = [];
+    const BATCH = 5;
+
+    // Build name list (shuffle both pools)
+    const allFirst = ['Jessica', 'Michael', 'Amanda', 'Brandon', 'Sarah', 'Chris', 'Melissa', 'Derek',
+        'Tiffany', 'Jason', 'Ashley', 'Tyler', 'Lauren', 'Justin', 'Nicole', 'Ryan', 'Brittany', 'Kevin',
+        'Heather', 'Nathan', 'Amber', 'Andrew', 'Megan', 'Travis', 'Courtney', 'Kyle', 'Crystal', 'Sean',
+        'Danielle', 'Cody', 'Kayla', 'Aaron', 'Samantha', 'Eric', 'Rachel', 'Adam', 'Chelsea', 'Josh',
+        'Alyssa', 'Marcus', 'Vanessa', 'Carlos', 'Maria', 'Miguel', 'Isabel', 'Robert', 'Patricia',
+        'James', 'Linda', 'Victor', 'Alicia', 'Blake', 'Lindsey', 'Wesley', 'Monique', 'Seth', 'Brooke'];
+    const allLast = ['Johnson', 'Williams', 'Smith', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore',
+        'Taylor', 'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia',
+        'Martinez', 'Robinson', 'Clark', 'Rodriguez', 'Lewis', 'Lee', 'Walker', 'Hall', 'Allen', 'Young',
+        'King', 'Wright', 'Lopez', 'Hill', 'Scott', 'Green', 'Adams', 'Baker', 'Nelson', 'Carter',
+        'Mitchell', 'Perez', 'Roberts', 'Turner', 'Phillips', 'Campbell', 'Parker', 'Evans', 'Edwards'];
+
+    const shuffled = [...allFirst].sort(() => Math.random() - 0.5);
+    const names = Array.from({ length: count }, (_, i) => {
+        const f = shuffled[i % shuffled.length];
+        const l = allLast[Math.floor(Math.random() * allLast.length)];
+        return `${f} ${l}`;
+    });
+
+    for (let i = 0; i < count; i += BATCH) {
+        const batch = names.slice(i, i + BATCH);
+        const results = await Promise.all(batch.map(async (name) => {
+            const income = Math.round((incomeMin + Math.random() * (incomeMax - incomeMin)) / 500) * 500;
+            const avatar = getAvatar(name);
+            try {
+                return await generateResultsProfile(name, income, avatar);
+            } catch {
+                // Fallback to template content
+                const incomeStr = `$${Math.round(income / 1000)}k`;
+                const stats = generateEngagementStats();
+                return {
+                    name, income, avatarUrl: avatar,
+                    fbPost: REVIEW_TEMPLATES[Math.floor(Math.random() * REVIEW_TEMPLATES.length)](incomeStr),
+                    messengerMessages: [
+                        { text: `Hey Dan! Just wanted to share something incredible with you.`, isMe: false },
+                        { text: `Tell me everything! What happened?`, isMe: true },
+                        { text: `I hit ${incomeStr} this month. I'm still in shock.`, isMe: false },
+                        { text: `That is AMAZING! I'm so proud of you!! 🎉`, isMe: true },
+                        { text: `Thank you for everything Dan. You changed my life.`, isMe: false },
+                        { text: `You did the work. Own it! Go celebrate!`, isMe: true },
+                    ],
+                    socialComment: `Can't believe I'm making ${incomeStr}/month now thanks to Dan's program. This is real.`,
+                    socialPlatform: 'YouTube' as const,
+                    socialHandle: `user${Math.floor(Math.random() * 9999)}`,
+                    fbLikes: stats.likes, fbComments: stats.comments, fbShares: stats.shares,
+                    fbTimestamp: generateRandomTimestamp(),
+                    bankBalance: `$${Math.round(income * 9).toLocaleString()}.00`,
+                    bankLabel: 'Chase Business Checking',
+                };
+            }
+        }));
+        profiles.push(...results);
+        if (onProgress) onProgress(Math.min(i + BATCH, count), count);
+    }
+
+    return profiles;
+}
+

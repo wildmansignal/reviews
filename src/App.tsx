@@ -18,6 +18,7 @@ import ReviewSliderApp from './components/ReviewSlider/ReviewSliderApp';
 import BulkReviewPage from './components/BulkReviews/BulkReviewPage';
 import ProfitGrowthApp from './components/ProfitGrowth/ProfitGrowthApp';
 import ProfitTableApp from './components/ProfitTable/ProfitTableApp';
+import ResultsProfilesApp from './components/ResultsProfiles/ResultsProfilesApp';
 import Launchpad from './components/Launchpad';
 import './App.css';
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/bulk-reviews" element={<BulkReviewPage />} />
           <Route path="/profit-growth" element={<ProfitGrowthApp />} />
           <Route path="/profit-table" element={<ProfitTableApp />} />
+          <Route path="/results-profiles" element={<ResultsProfilesApp />} />
         </Routes>
       </BrowserRouter>
     </GenerationProvider>
