@@ -12,6 +12,8 @@ const BulkReviewPage: React.FC = () => {
     const [total, setTotal] = useState(0);
     const [count, setCount] = useState(25);
     const [error, setError] = useState('');
+    const [incomeMin, setIncomeMin] = useState('10000');
+    const [incomeMax, setIncomeMax] = useState('150000');
 
     const handleGenerate = async () => {
         setIsGenerating(true);
@@ -21,10 +23,12 @@ const BulkReviewPage: React.FC = () => {
         setTotal(count);
 
         try {
+            const min = parseInt(incomeMin.replace(/[^0-9]/g, '')) || 10000;
+            const max = parseInt(incomeMax.replace(/[^0-9]/g, '')) || 150000;
             const results = await generateAIBatchReviews(count, (done, total) => {
                 setProgress(done);
                 setTotal(total);
-            });
+            }, min, max);
             setReviews(results);
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Generation failed');
@@ -62,6 +66,33 @@ const BulkReviewPage: React.FC = () => {
                                     {n}
                                 </button>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* Income Range */}
+                    <div className="bulk-income-range">
+                        <label>Income range in reviews:</label>
+                        <div className="income-range-inputs">
+                            <span>$</span>
+                            <input
+                                type="number"
+                                className="income-input"
+                                value={incomeMin}
+                                onChange={e => setIncomeMin(e.target.value)}
+                                placeholder="10000"
+                                min="1000"
+                            />
+                            <span className="income-dash">→</span>
+                            <span>$</span>
+                            <input
+                                type="number"
+                                className="income-input"
+                                value={incomeMax}
+                                onChange={e => setIncomeMax(e.target.value)}
+                                placeholder="150000"
+                                min="1000"
+                            />
+                            <span className="income-label">/ month</span>
                         </div>
                     </div>
 

@@ -60,15 +60,13 @@ export function generateRandomTimestamp(): string {
     return options[Math.floor(Math.random() * options.length)];
 }
 
-const INCOME_AMOUNTS = [
-    '$10,000', '$12,000', '$15,000', '$18,000', '$20,000', '$22,000', '$25,000',
-    '$28,000', '$30,000', '$35,000', '$40,000', '$45,000', '$50,000', '$55,000',
-    '$60,000', '$65,000', '$70,000', '$75,000', '$80,000', '$90,000', '$100,000',
-    '$110,000', '$120,000', '$130,000', '$150,000'
-];
 
-function getRandomIncome(): string {
-    return INCOME_AMOUNTS[Math.floor(Math.random() * INCOME_AMOUNTS.length)];
+function getRandomIncome(min = 10000, max = 150000): string {
+    // Round to nice numbers
+    const raw = Math.floor(Math.random() * (max - min + 1)) + min;
+    // Round to nearest $5k for amounts over $10k to look realistic
+    const rounded = raw >= 10000 ? Math.round(raw / 5000) * 5000 : Math.round(raw / 1000) * 1000;
+    return '$' + rounded.toLocaleString();
 }
 
 // Review templates — minimal emojis, conversational and real
@@ -143,9 +141,10 @@ export async function generateBatchReviews(count: number): Promise<GeneratedRevi
 }
 
 // Generate a single AI review via OpenAI
-export async function generateAIReview(name: string): Promise<string> {
+export async function generateAIReview(name: string, incomeMin = 10000, incomeMax = 150000): Promise<string> {
     const apiKey = getApiKey();
-    const income = getRandomIncome();
+    const income = getRandomIncome(incomeMin, incomeMax);
+
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -193,7 +192,9 @@ Rules:
 // Generate multiple AI reviews in parallel batches
 export async function generateAIBatchReviews(
     count: number,
-    onProgress?: (done: number, total: number) => void
+    onProgress?: (done: number, total: number) => void,
+    incomeMin = 10000,
+    incomeMax = 150000
 ): Promise<GeneratedReview[]> {
     const reviews: GeneratedReview[] = [];
     const BATCH_SIZE = 5;
@@ -209,10 +210,10 @@ export async function generateAIBatchReviews(
         const texts = await Promise.all(
             batch.map(async (b) => {
                 try {
-                    return await generateAIReview(b.name);
+                    return await generateAIReview(b.name, incomeMin, incomeMax);
                 } catch {
                     // Fallback to template if API fails
-                    const income = getRandomIncome();
+                    const income = getRandomIncome(incomeMin, incomeMax);
                     return REVIEW_TEMPLATES[Math.floor(Math.random() * REVIEW_TEMPLATES.length)](income);
                 }
             })
