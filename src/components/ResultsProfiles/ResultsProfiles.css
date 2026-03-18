@@ -277,15 +277,20 @@
     margin-bottom: 12px;
 }
 
-/* ─── FB Card ─── */
+/* ─── FB Card — WHITE background to match real Facebook ─── */
 .rp-fb {
-    background: #18191a;
-    border-color: #2d2d2d;
+    background: #ffffff;
+    border-color: #dddfe2;
+    color: #050505;
+}
+
+.rp-fb .rp-card-label {
+    color: #65676b;
 }
 
 .rp-fb-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     margin-bottom: 10px;
 }
@@ -295,107 +300,236 @@
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.rp-fb-header-info {
+    flex: 1;
+}
+
+.rp-fb-author-line {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    flex-wrap: wrap;
 }
 
 .rp-fb-name {
     font-weight: 700;
-    font-size: 14px;
+    color: #050505;
 }
 
-.rp-fb-meta {
-    font-size: 11px;
-    color: #8a8d91;
+.rp-fb-follow-dot {
+    color: #65676b;
+    margin: 0 2px;
 }
 
 .rp-fb-follow {
-    margin-left: auto;
-    color: #2d88ff;
+    color: #1877f2;
     font-weight: 700;
-    font-size: 13px;
     cursor: pointer;
 }
 
+.rp-fb-meta {
+    font-size: 13px;
+    color: #65676b;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.rp-fb-dot {
+    margin: 0 2px;
+}
+
+.rp-fb-header-actions {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+    align-items: center;
+}
+
 .rp-fb-text {
-    font-size: 14px;
-    line-height: 1.55;
-    color: #e4e6eb;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #050505;
     margin-bottom: 10px;
 }
 
+/* Reaction icons group */
 .rp-fb-stats {
-    display: flex;
-    font-size: 12px;
-    color: #8a8d91;
-    padding: 6px 0;
-    border-top: 1px solid #3a3b3c;
-    border-bottom: 1px solid #3a3b3c;
-    margin-bottom: 4px;
-}
-
-.rp-fb-actions {
-    display: flex;
-    justify-content: space-around;
-    padding: 4px 0;
-    font-size: 13px;
-    color: #8a8d91;
-    font-weight: 600;
-}
-
-/* ─── Income Card ─── */
-.rp-income {
-    background: #0d1117;
-    border-color: #21262d;
-}
-
-.rp-income-bank {
-    font-size: 12px;
-    color: #8b949e;
-    margin-bottom: 4px;
-}
-
-.rp-income-balance {
-    font-size: 32px;
-    font-weight: 800;
-    color: #f0f6fc;
-    letter-spacing: -1px;
-}
-
-.rp-income-sublabel {
-    font-size: 11px;
-    color: #6e7681;
-    margin-bottom: 14px;
-}
-
-.rp-income-monthly {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #161b22;
-    border-radius: 8px;
-    padding: 10px 14px;
+    font-size: 13px;
+    color: #65676b;
+    padding: 8px 0;
+    border-top: 1px solid #ced0d4;
+    border-bottom: 1px solid #ced0d4;
+    margin-bottom: 2px;
+}
+
+.rp-fb-reaction-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.rp-fb-like-circle {
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(to bottom, #29a5f4, #016ad5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 9px;
+    border: 1.5px solid white;
+    flex-shrink: 0;
+}
+
+.rp-fb-heart-circle {
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(to bottom, #fb5f68, #e02638);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 9px;
+    border: 1.5px solid white;
+    margin-left: -6px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.rp-fb-stats-text {
+    margin-left: 4px;
+}
+
+.rp-fb-action-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+    border-top: none;
+    margin: 0 -4px;
+}
+
+.rp-fb-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #65676b;
+    border-radius: 4px;
+}
+
+.rp-fb-action-btn:hover {
+    background: #f0f2f5;
+}
+
+/* ─── Stripe-style Income Card ─── */
+.rp-stripe {
+    background: #0a1929;
+    border-color: #132f4c;
+    color: #e3f2fd;
+}
+
+.rp-stripe .rp-card-label {
+    color: #4fc3f7;
+}
+
+.rp-stripe-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.rp-stripe-label {
+    font-size: 12px;
+    color: #90caf9;
+    margin-bottom: 4px;
+}
+
+.rp-stripe-balance {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.rp-stripe-badge {
+    background: #1b4332;
+    color: #6fcf97;
+    border: 1px solid #2d6a4f;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+.rp-stripe-divider {
+    height: 1px;
+    background: #132f4c;
     margin-bottom: 14px;
 }
 
-.rp-income-monthly-label {
-    font-size: 12px;
-    color: #8b949e;
-}
-
-.rp-income-monthly-val {
-    font-size: 18px;
-    font-weight: 800;
-    color: #3fb950;
-}
-
-.rp-income-bars {
+.rp-stripe-row {
     display: flex;
-    gap: 8px;
-    height: 80px;
-    align-items: flex-end;
-    margin-bottom: 8px;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
-.rp-income-bar-col {
+.rp-stripe-metric {
+    flex: 1;
+}
+
+.rp-stripe-metric-label {
+    font-size: 11px;
+    color: #90caf9;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rp-stripe-metric-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.rp-stripe-metric-sub {
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.rp-stripe-metric-sub.green {
+    color: #6fcf97;
+}
+
+.rp-stripe-chart {
+    display: flex;
+    gap: 6px;
+    height: 72px;
+    align-items: flex-end;
+}
+
+.rp-stripe-bar-col {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -404,33 +538,25 @@
     height: 100%;
 }
 
-.rp-income-bar-wrap {
+.rp-stripe-bar-track {
     flex: 1;
     width: 100%;
     display: flex;
     align-items: flex-end;
+    background: rgba(79, 195, 247, 0.08);
+    border-radius: 3px;
 }
 
-.rp-income-bar {
+.rp-stripe-bar {
     width: 100%;
-    background: linear-gradient(180deg, #3fb950, #238636);
+    background: linear-gradient(180deg, #4fc3f7, #0288d1);
     border-radius: 3px 3px 0 0;
     transition: height 0.4s;
 }
 
-.rp-income-bar-label {
-    font-size: 10px;
-    color: #6e7681;
-}
-
-.rp-income-footer {
-    text-align: right;
-}
-
-.rp-income-trend {
-    font-size: 12px;
-    color: #3fb950;
-    font-weight: 700;
+.rp-stripe-bar-label {
+    font-size: 9px;
+    color: #546e7a;
 }
 
 /* ─── Messenger Card ─── */

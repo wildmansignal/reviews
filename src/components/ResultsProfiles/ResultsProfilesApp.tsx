@@ -7,61 +7,112 @@ import './ResultsProfiles.css';
 const fmt = (n: number) => n >= 1000 ? `$${(n / 1000).toFixed(0)}k` : `$${n}`;
 const fmtFull = (n: number) => `$${n.toLocaleString()}`;
 
-// ── FB Post Card ───────────────────────────────────────────────────────────
+// ── Dan's avatar (always the same selfie) ─────────────────────────────────
+const DAN_AVATAR = '/my-avatar/profile.jpg';
+
+// ── FB Post Card — matches the PostEditor look exactly ────────────────────
 const FBCard: React.FC<{ p: ResultsProfile }> = ({ p }) => (
     <div className="rp-card rp-fb">
         <div className="rp-card-label">📘 Facebook Post</div>
+
+        {/* Header */}
         <div className="rp-fb-header">
             <img src={p.avatarUrl} className="rp-fb-avatar" alt={p.name} />
-            <div>
-                <div className="rp-fb-name">{p.name}</div>
-                <div className="rp-fb-meta">{p.fbTimestamp} · 🌎</div>
+            <div className="rp-fb-header-info">
+                <div className="rp-fb-author-line">
+                    <span className="rp-fb-name">{p.name}</span>
+                    <span className="rp-fb-follow-dot"> · </span>
+                    <span className="rp-fb-follow">Follow</span>
+                </div>
+                <div className="rp-fb-meta">
+                    <span>{p.fbTimestamp}</span>
+                    <span className="rp-fb-dot"> · </span>
+                    <span>🌐</span>
+                </div>
             </div>
-            <div className="rp-fb-follow">Follow</div>
+            <div className="rp-fb-header-actions">
+                <span style={{ fontSize: 18, color: '#65676b' }}>···</span>
+                <span style={{ fontSize: 16, color: '#65676b' }}>✕</span>
+            </div>
         </div>
+
+        {/* Post text */}
         <p className="rp-fb-text">{p.fbPost}</p>
+
+        {/* Stats bar */}
         <div className="rp-fb-stats">
-            <span>👍 {p.fbLikes}</span>
-            <span style={{ marginLeft: 'auto' }}>{p.fbComments} comments · {p.fbShares} shares</span>
+            <div className="rp-fb-reaction-group">
+                <div className="rp-fb-like-circle">👍</div>
+                <div className="rp-fb-heart-circle">❤️</div>
+                <span className="rp-fb-stats-text">{p.fbLikes}</span>
+            </div>
+            <span>{p.fbComments} comments · {p.fbShares} shares</span>
         </div>
-        <div className="rp-fb-actions">
-            <span>👍 Like</span>
-            <span>💬 Comment</span>
-            <span>↗️ Share</span>
+
+        {/* Action bar */}
+        <div className="rp-fb-action-bar">
+            <button className="rp-fb-action-btn">
+                <span>👍</span><span>Like</span>
+            </button>
+            <button className="rp-fb-action-btn">
+                <span>💬</span><span>Comment</span>
+            </button>
+            <button className="rp-fb-action-btn">
+                <span>↗️</span><span>Share</span>
+            </button>
         </div>
     </div>
 );
 
-// ── Income / Bank Card ─────────────────────────────────────────────────────
+// ── Income / Stripe-style Card ─────────────────────────────────────────────
 const IncomeCard: React.FC<{ p: ResultsProfile }> = ({ p }) => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const now = new Date();
     const bars = Array.from({ length: 6 }, (_, i) => {
-        const pct = 0.35 + (i / 5) * 0.5 + (Math.random() - 0.5) * 0.1;
-        return { month: months[(now.getMonth() - 5 + i + 12) % 12], pct: Math.min(0.95, Math.max(0.2, pct)) };
+        const pct = 0.25 + (i / 5) * 0.6 + (Math.random() - 0.5) * 0.08;
+        return { month: months[(now.getMonth() - 5 + i + 12) % 12], pct: Math.min(0.95, Math.max(0.15, pct)) };
     });
+    const trend = Math.floor(40 + Math.random() * 80);
     return (
-        <div className="rp-card rp-income">
-            <div className="rp-card-label">🏦 Income Screenshot</div>
-            <div className="rp-income-bank">{p.bankLabel}</div>
-            <div className="rp-income-balance">{p.bankBalance}</div>
-            <div className="rp-income-sublabel">Available balance</div>
-            <div className="rp-income-monthly">
-                <span className="rp-income-monthly-label">Monthly Income</span>
-                <span className="rp-income-monthly-val">{fmtFull(p.income)}</span>
+        <div className="rp-card rp-stripe">
+            <div className="rp-card-label">💳 {p.bankLabel}</div>
+
+            {/* Balance row */}
+            <div className="rp-stripe-top">
+                <div>
+                    <div className="rp-stripe-label">Available balance</div>
+                    <div className="rp-stripe-balance">{p.bankBalance}</div>
+                </div>
+                <div className="rp-stripe-badge">Active</div>
             </div>
-            <div className="rp-income-bars">
+
+            {/* Divider */}
+            <div className="rp-stripe-divider" />
+
+            {/* Gross volume row */}
+            <div className="rp-stripe-row">
+                <div className="rp-stripe-metric">
+                    <div className="rp-stripe-metric-label">Gross volume</div>
+                    <div className="rp-stripe-metric-val">{`$${Math.round(p.income * 1.08).toLocaleString()}`}</div>
+                    <div className="rp-stripe-metric-sub green">↑ {trend}% this month</div>
+                </div>
+                <div className="rp-stripe-metric">
+                    <div className="rp-stripe-metric-label">Net volume</div>
+                    <div className="rp-stripe-metric-val">{`$${p.income.toLocaleString()}`}</div>
+                    <div className="rp-stripe-metric-sub green">↑ {Math.floor(trend * 0.9)}%</div>
+                </div>
+            </div>
+
+            {/* Bar chart */}
+            <div className="rp-stripe-chart">
                 {bars.map(b => (
-                    <div key={b.month} className="rp-income-bar-col">
-                        <div className="rp-income-bar-wrap">
-                            <div className="rp-income-bar" style={{ height: `${b.pct * 100}%` }} />
+                    <div key={b.month} className="rp-stripe-bar-col">
+                        <div className="rp-stripe-bar-track">
+                            <div className="rp-stripe-bar" style={{ height: `${b.pct * 100}%` }} />
                         </div>
-                        <div className="rp-income-bar-label">{b.month}</div>
+                        <div className="rp-stripe-bar-label">{b.month}</div>
                     </div>
                 ))}
-            </div>
-            <div className="rp-income-footer">
-                <span className="rp-income-trend">↑ {Math.floor(40 + Math.random() * 80)}% vs last month</span>
             </div>
         </div>
     );
@@ -83,6 +134,7 @@ const MessengerCard: React.FC<{ p: ResultsProfile }> = ({ p }) => (
                 <div key={i} className={`rp-msg-row ${m.isMe ? 'me' : 'them'}`}>
                     {!m.isMe && <img src={p.avatarUrl} className="rp-msg-row-avatar" alt="" />}
                     <div className={`rp-bubble ${m.isMe ? 'me' : 'them'}`}>{m.text}</div>
+                    {m.isMe && <img src={DAN_AVATAR} className="rp-msg-row-avatar" alt="Dan" />}
                 </div>
             ))}
         </div>
@@ -115,6 +167,7 @@ const SocialCard: React.FC<{ p: ResultsProfile }> = ({ p }) => {
         </div>
     );
 };
+
 
 // ── Main App ───────────────────────────────────────────────────────────────
 const ResultsProfilesApp: React.FC = () => {
