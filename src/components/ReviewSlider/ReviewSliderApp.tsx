@@ -54,9 +54,6 @@ const ReviewCard = React.forwardRef<HTMLDivElement, ReviewCardProps>(({ review }
                 fontFamily: 'Arial, sans-serif',
                 boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
                 border: '1px solid #e8eaed',
-                position: 'absolute',
-                left: -9999,
-                top: 0,
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
@@ -190,21 +187,25 @@ const ReviewSliderApp = () => {
             setGeneratedReviews(reviews);
             setGenerateStatus('Capturing screenshots…');
 
-            // Wait a frame for React to render the hidden cards
-            await new Promise(r => setTimeout(r, 400));
+            // Wait for React to fully render the hidden cards
+            await new Promise(r => setTimeout(r, 1200));
 
             const zip = new JSZip();
             const folder = zip.folder('review-screenshots')!;
             const container = hiddenContainerRef.current;
             if (!container) throw new Error('Container not found');
 
-            const cards = container.querySelectorAll('[data-review-card]');
-            for (let i = 0; i < cards.length; i++) {
-                setGenerateStatus(`Screenshotting ${i + 1}/${cards.length}…`);
-                const canvas = await html2canvas(cards[i] as HTMLElement, {
+            // Target the inner review card divs (first child of each data-review-card wrapper)
+            const wrappers = container.querySelectorAll('[data-review-card]');
+            for (let i = 0; i < wrappers.length; i++) {
+                setGenerateStatus(`Screenshotting ${i + 1}/${wrappers.length}…`);
+                const cardEl = wrappers[i].firstElementChild as HTMLElement;
+                if (!cardEl) continue;
+                const canvas = await html2canvas(cardEl, {
                     scale: 2,
                     backgroundColor: '#ffffff',
                     logging: false,
+                    useCORS: true,
                 });
                 const blob = await new Promise<Blob>(resolve =>
                     canvas.toBlob(b => resolve(b!), 'image/png')
