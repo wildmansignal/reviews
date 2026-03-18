@@ -145,6 +145,24 @@ export async function generateAIReview(name: string, incomeMin = 10000, incomeMa
     const apiKey = getApiKey();
     const income = getRandomIncome(incomeMin, incomeMax);
 
+    // Randomly assign a post style so we get natural variety
+    const style = Math.random();
+    let lengthInstruction: string;
+    let toneInstruction: string;
+
+    if (style < 0.35) {
+        // Short & punchy — 1-3 sentences, very casual, modern slang
+        lengthInstruction = `Write ONLY 1-3 short sentences. Maximum 40 words total. Short and punchy like a real casual Facebook comment.`;
+        toneInstruction = `Use modern casual language naturally — things like: "ngl", "lowkey", "no cap", "literally", "fr", "wild", "insane", "changed my life fr", "not gonna lie", "I don't even know what to say", "y'all", "this is crazy". Sound like a real person texting.`;
+    } else if (style < 0.70) {
+        // Medium — 3-5 sentences, casual but a bit more detail
+        lengthInstruction = `Write 3-5 sentences, around 50-90 words. Casual and conversational.`;
+        toneInstruction = `Sound like a real person on Facebook — casual, genuine, maybe a tiny bit emotional but not over the top. Can use light slang naturally but don't force it.`;
+    } else {
+        // Longer — more personal story, but still grounded
+        lengthInstruction = `Write 5-8 sentences, around 90-150 words. Tell a short personal story.`;
+        toneInstruction = `Be authentic and personal — mention a specific detail like their old job, their family, how skeptical they were. Casual Facebook tone, not a sales pitch.`;
+    }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -157,26 +175,26 @@ export async function generateAIReview(name: string, incomeMin = 10000, incomeMa
             messages: [
                 {
                     role: 'system',
-                    content: `You write authentic-sounding Facebook testimonial posts from real everyday people.
+                    content: `You write authentic Facebook posts from real everyday people sharing wins.
 Rules:
-- Write casually, like a real person posting on Facebook to their friends
-- NO hashtags
-- Use at most ONE emoji in the entire post, or none at all — most posts should have zero emojis
-- Keep it 70–160 words
-- Sound genuinely excited but grounded, not salesy or over-the-top
+- ${lengthInstruction}
+- ${toneInstruction}
+- NO hashtags ever
+- At most ONE emoji in the whole post — many posts should have zero
 - Mention Dan by name and Code On Fire
-- Include the income amount: ${income}/month or ${income} a month
-- The person should mention a detail that makes it feel personal (e.g. their old job, their spouse, a timeframe, their skepticism at first)
-- Do NOT use exclamation marks more than once per post
-- No ALL CAPS words`
+- Include the income: ${income}/month or ${income} this month
+- Do NOT start with "Hey everyone" or "Hey friends" — vary the opening
+- Do NOT use exclamation marks more than once
+- No ALL CAPS
+- Do not write like a formal testimonial or advertisement`
                 },
                 {
                     role: 'user',
-                    content: `Write a Facebook testimonial post from ${name} about Dan's Code On Fire program. They made ${income} this month.`
+                    content: `Write a Facebook post from ${name} about Dan's Code On Fire program. They made ${income} this month.`
                 }
             ],
             max_tokens: 220,
-            temperature: 0.85,
+            temperature: 0.92,
         }),
     });
 
