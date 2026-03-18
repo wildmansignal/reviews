@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import MetricDisplay from './MetricDisplay';
 import InteractiveChart from './InteractiveChart';
 import FailedPaymentsCard from './FailedPaymentsCard';
@@ -10,7 +10,7 @@ import './OverviewCards.css';
 import './DashboardParams.css';
 
 const DashboardParams = () => {
-    const navigate = useNavigate();
+
     // Initial data matching the shape of the screenshot roughly
     const initialData = [500, 800, 450, 1218, 900, 1100, 1000];
     const [chartData, setChartData] = useState<number[]>(initialData);
@@ -89,9 +89,23 @@ const DashboardParams = () => {
                 <div className="header-actions">
                     <button
                         className="btn-ai-reviews"
-                        onClick={() => navigate('/bulk-reviews')}
+                        onClick={() => {
+                            const min = 10000;
+                            const max = 250000;
+                            const randomProfit = Math.floor(Math.random() * (max - min + 1)) + min;
+                            const today = randomProfit;
+                            const yesterday = Math.floor(randomProfit * (0.85 + Math.random() * 0.3));
+                            handleMetricChange(today);
+                            setYesterdayVolume(yesterday);
+                            setUsdBalance((randomProfit * 2.23).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                            setPayouts((randomProfit * 2.25).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                            const newData = Array.from({ length: 7 }, (_, i) =>
+                                i === 6 ? today : Math.floor(randomProfit * (0.6 + Math.random() * 0.8))
+                            );
+                            setChartData(newData);
+                        }}
                         style={{
-                            background: 'linear-gradient(135deg, #ff6b35, #e55a2a)',
+                            background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
                             color: 'white',
                             border: 'none',
                             padding: '8px 16px',
@@ -105,7 +119,7 @@ const DashboardParams = () => {
                             marginRight: 8
                         }}
                     >
-                        🔥 AI Generate Reviews
+                        🎲 Profit Randomizer
                     </button>
                     <button className="btn-secondary">Pay out funds</button>
                 </div>

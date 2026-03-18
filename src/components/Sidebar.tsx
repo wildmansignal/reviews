@@ -27,7 +27,7 @@ const Sidebar = () => {
         <aside className="sidebar">
             <div className="sidebar-header">
                 <div className="store-selector" style={{ marginBottom: 10 }}>
-                    <span className="store-name">Dan Plants Tinnitus...</span>
+                    <span className="store-name">Dan Plants</span>
                     <span className="arrow">▼</span>
                 </div>
             </div>
