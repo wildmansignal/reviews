@@ -18,6 +18,7 @@ interface BusinessControlPanelProps {
     paymentDate: string;
     setPaymentDate: (val: string) => void;
     onSavePayment: () => void;
+    onRegeneratePayments: () => void;
 }
 
 const BusinessControlPanel: React.FC<BusinessControlPanelProps> = ({
@@ -28,7 +29,8 @@ const BusinessControlPanel: React.FC<BusinessControlPanelProps> = ({
     paymentName, setPaymentName,
     paymentAmount, setPaymentAmount,
     paymentDate, setPaymentDate,
-    onSavePayment
+    onSavePayment,
+    onRegeneratePayments,
 }) => {
     const handleRandomize = () => {
         const gross = Math.floor(Math.random() * 990000) + 10000; // $10k - $1M
@@ -41,14 +43,22 @@ const BusinessControlPanel: React.FC<BusinessControlPanelProps> = ({
 
     return (
         <div className="bd-controls">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 6 }}>
                 <h3 style={{ color: 'white', margin: 0 }}>Dashboard Controls</h3>
-                <button
-                    onClick={handleRandomize}
-                    style={{ background: 'linear-gradient(135deg,#635bff,#4f46e5)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
-                >
-                    🎲 Randomize
-                </button>
+                <div style={{ display: 'flex', gap: 6 }}>
+                    <button
+                        onClick={handleRandomize}
+                        style={{ background: 'linear-gradient(135deg,#635bff,#4f46e5)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                    >
+                        🎲 Randomize
+                    </button>
+                    <button
+                        onClick={onRegeneratePayments}
+                        style={{ background: 'linear-gradient(135deg,#22c55e,#16a34a)', color: 'white', border: 'none', padding: '7px 14px', borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                    >
+                        🔄 New Payments
+                    </button>
+                </div>
             </div>
 
             <div style={{ marginBottom: 20 }}>

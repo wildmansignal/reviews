@@ -14,13 +14,24 @@ export interface PaymentItem {
 interface PaymentsScreenProps {
     payments: PaymentItem[];
     onSelectPayment: (id: string) => void;
+    scrollRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-const PaymentsScreen: React.FC<PaymentsScreenProps> = ({ payments, onSelectPayment }) => {
+const PaymentsScreen: React.FC<PaymentsScreenProps> = ({ payments, onSelectPayment, scrollRef }) => {
     return (
-        <div className="bd-content" style={{ marginTop: 20 }}>
-            {/* Filter Tabs Mock */}
-            <div style={{ display: 'flex', gap: 15, marginBottom: 20, borderBottom: '1px solid #2e3548', paddingBottom: 10 }}>
+        <div
+            ref={scrollRef}
+            className="bd-content"
+            style={{
+                marginTop: 0,
+                overflowY: 'scroll',
+                height: '100%',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+            } as React.CSSProperties}
+        >
+            {/* Filter Tabs */}
+            <div style={{ display: 'flex', gap: 15, margin: '16px 0 12px', borderBottom: '1px solid #2e3548', paddingBottom: 10 }}>
                 <span style={{ color: '#635bff', fontWeight: 600, borderBottom: '2px solid #635bff', paddingBottom: 10 }}>Payments</span>
                 <span style={{ color: '#aab7c4', fontWeight: 600 }}>Invoices</span>
                 <span style={{ color: '#aab7c4', fontWeight: 600 }}>Subscriptions</span>
@@ -41,13 +52,25 @@ const PaymentsScreen: React.FC<PaymentsScreenProps> = ({ payments, onSelectPayme
                         <div className="bd-payment-amount">${payment.amount} succeeded</div>
                         <div className="bd-payment-sub">Subscription update</div>
                         <div className="bd-payment-sub" style={{ color: 'white' }}>{payment.name}</div>
-                        <div className="bd-payment-sub">{payment.email}</div>
+                        {/* Blurred email */}
+                        <div
+                            className="bd-payment-sub"
+                            style={{
+                                filter: 'blur(4px)',
+                                userSelect: 'none',
+                                pointerEvents: 'none',
+                            }}
+                        >
+                            {payment.email}
+                        </div>
                         <div className="bd-payment-sub">{payment.date}</div>
                     </div>
 
                     <div className="bd-arrow-right">›</div>
                 </div>
             ))}
+            {/* Bottom padding so last item isn't clipped by nav */}
+            <div style={{ height: 80 }} />
         </div>
     );
 };
