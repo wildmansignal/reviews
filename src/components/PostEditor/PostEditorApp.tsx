@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import FacebookPost from './FacebookPost';
 import PostControlPanel from './PostControlPanel';
 import './PostEditor.css';
+import { MY_AVATAR } from '../../utils/avatarUtils';
 
 const PostEditorApp = () => {
     // State
     const [authorName, setAuthorName] = useState("Thefarmacyreal");
-    const [authorAvatar, setAuthorAvatar] = useState("https://placehold.co/40");
+    const [authorAvatar, setAuthorAvatar] = useState(MY_AVATAR);
     const [timestamp, setTimestamp] = useState("5h");
     const [text, setText] = useState("Having intercourse more than twice a week as a woman can boost immunity, improve heart health, reduce stress and anxiety, strengthen the pelvic floor and improve sleep!...");
     const [postImage, setPostImage] = useState("https://placehold.co/600x600");

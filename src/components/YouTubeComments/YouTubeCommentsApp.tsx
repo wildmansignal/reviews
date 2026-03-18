@@ -3,6 +3,7 @@ import { Headphones } from 'lucide-react';
 import YouTubeCommentItem from './YouTubeCommentItem';
 import YouTubeControlPanel from './YouTubeControlPanel';
 import './YouTubeComments.css';
+import { getSeededAvatar, MY_AVATAR } from '../../utils/avatarUtils';
 
 // Initial Data
 const INITIAL_COMMENTS = [
@@ -19,7 +20,7 @@ const INITIAL_COMMENTS = [
     {
         id: '2',
         handle: '@nikotrip',
-        avatar: 'https://cdn.pixabay.com/photo/2016/09/24/03/20/man-1690965_1280.png', // BW avatar
+        avatar: getSeededAvatar('nikotrip'),
         text: '4 years with tinnitus, hyperacusis and insomnia. Thanks for sharing',
         time: '2y ago',
         likes: '6',
@@ -29,7 +30,7 @@ const INITIAL_COMMENTS = [
     {
         id: '3',
         handle: '@itsmewayne428',
-        avatar: 'https://cdn.pixabay.com/photo/2017/02/23/13/05/avatar-2092113_1280.png', // Flower/Logo avatar
+        avatar: getSeededAvatar('itsmewayne428'),
         text: 'Fucking hero!',
         time: '3y ago',
         likes: '4',
@@ -42,8 +43,8 @@ const YouTubeCommentsApp = () => {
     // Media State
     const [comments, setComments] = useState(INITIAL_COMMENTS);
     const [selectedCommentId, setSelectedCommentId] = useState<string | null>(null);
-    const [myAvatar, setMyAvatar] = useState("https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_1280.png"); // Headphones avatar
-    const [creatorAvatar, setCreatorAvatar] = useState("https://cdn.pixabay.com/photo/2017/01/31/21/23/avatar-2027366_1280.png");
+    const [myAvatar, setMyAvatar] = useState(MY_AVATAR); // Dan Plants avatar
+    const [creatorAvatar, setCreatorAvatar] = useState(MY_AVATAR);
 
     // Handlers
     const handleUpdateComment = (id: string, field: string, value: any) => {
@@ -70,7 +71,7 @@ const YouTubeCommentsApp = () => {
         const newComments = aiComments.map((c: any, i: number) => ({
             id: (Date.now() + i).toString(),
             handle: c.handle,
-            avatar: `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(c.handle)}&backgroundColor=b6e3f4,d1d4f9`,
+            avatar: getSeededAvatar(c.handle),
             text: c.text,
             time: c.timeAgo,
             likes: c.likes,

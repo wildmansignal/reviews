@@ -4,6 +4,7 @@ import MessageBubble, { type MessageData } from './MessageBubble';
 import ChatHeader from './ChatHeader';
 import { useGenerationContext } from '../../contexts/GenerationContext';
 import './Messenger.css';
+import { getRandomAvatar } from '../../utils/avatarUtils';
 
 // Initial Mock Data
 const INITIAL_MESSAGES: MessageData[] = [
@@ -38,7 +39,7 @@ const MessengerApp = () => {
     // Control Panel State
     const [myMessage, setMyMessage] = useState("");
     const [theirMessage, setTheirMessage] = useState("");
-    const [themAvatar, setThemAvatar] = useState("https://placehold.co/28");
+    const [themAvatar, setThemAvatar] = useState(getRandomAvatar());
     const [headerName, setHeaderName] = useState("Sai Garcia");
     const [aiLoading, setAiLoading] = useState(false);
     const [aiError, setAiError] = useState('');

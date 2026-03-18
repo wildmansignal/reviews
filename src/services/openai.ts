@@ -104,22 +104,18 @@ const REVIEW_TEMPLATES = [
     (income: string) => `Look I don't normally leave reviews but after hitting ${income} this month with Code On Fire I felt like I had to say something. Dan is the real thing. The system works. I wish I had found this 2 years ago honestly.`,
 ];
 
-// Get avatar — use local folder first if available, else DiceBear
+// Get avatar — uses local face images from /public/avatars/ (200 AI-generated face images)
 export function getAvatarUrl(name: string, index: number): string {
-    // Try to use a local avatar from /avatars/ folder if images exist (user adds them)
-    // We rotate through potential filenames: avatar1.jpg through avatar20.jpg
-    const localCount = 20; // assume up to 20 local avatars
-    const localIndex = (index % localCount) + 1;
-
-    // We'll always fall back to DiceBear since we can't know what files exist at runtime
-    // The user can override avatars by using the upload button on individual posts
-    const seed = encodeURIComponent(name + index);
-    return `https://api.dicebear.com/7.x/personas/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,d4e6f1`;
-
-    // Note: to use local avatars, user should add images to /public/avatars/
-    // and they can be referenced as /avatars/avatar1.jpg etc.
-    void localIndex; // suppress unused warning
+    // Use a hash of the name combined with index for deterministic but varied faces
+    let hash = 0;
+    const key = name + index;
+    for (let i = 0; i < key.length; i++) {
+        hash = Math.imul(31, hash) + key.charCodeAt(i) | 0;
+    }
+    const faceIndex = (Math.abs(hash) % 200) + 1;
+    return `/avatars/${String(faceIndex).padStart(6, '0')}.jpg`;
 }
+
 
 // Generate reviews using local templates (fast, no API needed)
 export async function generateBatchReviews(count: number): Promise<GeneratedReview[]> {

@@ -3,13 +3,14 @@ import { Settings2, X, Image as ImageIcon, Smile, AtSign } from 'lucide-react';
 import TikTokCommentItem from './TikTokCommentItem';
 import TikTokControlPanel from './TikTokControlPanel';
 import './TikTokComments.css';
+import { getSeededAvatar, getRandomAvatar, MY_AVATAR } from '../../utils/avatarUtils';
 
 // Initial Data
 const INITIAL_COMMENTS = [
     {
         id: '1',
         username: 'GringoLocoInMexico',
-        avatar: 'https://cdn.pixabay.com/photo/2023/11/17/14/05/man-8394467_1280.jpg', // Placeholder masculine
+        avatar: getSeededAvatar('GringoLocoInMexico'),
         text: 'watching this from my beachfront property in Isla Aguada MX ❤️🔥',
         image: 'https://cdn.pixabay.com/photo/2016/03/04/19/36/beach-1236581_1280.jpg', // Beach sunset
         date: '2025-12-21',
@@ -20,7 +21,7 @@ const INITIAL_COMMENTS = [
     {
         id: '2',
         username: 'user69768081680044',
-        avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', // Default placeholder
+        avatar: getSeededAvatar('user69768081680044'),
         text: 'AMERICA IS A FALLING CIVILIZATION',
         image: null,
         date: '2025-12-8',
@@ -31,7 +32,7 @@ const INITIAL_COMMENTS = [
     {
         id: '3',
         username: 'Ghost',
-        avatar: 'https://cdn.pixabay.com/photo/2014/04/03/10/32/businessman-310819_1280.png',
+        avatar: getSeededAvatar('Ghost'),
         text: "America only works well if you've got a few million dollars.",
         image: null,
         date: '2025-12-10',
@@ -42,7 +43,7 @@ const INITIAL_COMMENTS = [
     {
         id: '4',
         username: 'Dan Plants',
-        avatar: 'https://cdn.pixabay.com/photo/2016/11/21/14/53/man-1845814_1280.jpg',
+        avatar: MY_AVATAR,
         text: 'Facts',
         image: null,
         date: '2025-12-10',
@@ -56,7 +57,7 @@ const TikTokCommentsApp = () => {
     // Global Header Stats
     const [headerComments, setHeaderComments] = useState("1,048");
     const [headerLikes, setHeaderLikes] = useState("16.3K");
-    const [myAvatar, setMyAvatar] = useState("https://cdn.pixabay.com/photo/2016/11/21/14/53/man-1845814_1280.jpg"); // Dan Plants avatar
+    const [myAvatar, setMyAvatar] = useState(MY_AVATAR); // Dan Plants avatar
 
     // Comments Data
     const [comments, setComments] = useState(INITIAL_COMMENTS);
@@ -72,7 +73,7 @@ const TikTokCommentsApp = () => {
         const newComment = {
             id: newId,
             username: 'New User',
-            avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            avatar: getRandomAvatar(),
             text: 'New comment text...',
             image: null,
             date: '2025-1-15',
@@ -88,7 +89,7 @@ const TikTokCommentsApp = () => {
         const newComments = aiComments.map((c: any, i: number) => ({
             id: (Date.now() + i).toString(),
             username: c.username,
-            avatar: `https://api.dicebear.com/7.x/personas/svg?seed=${encodeURIComponent(c.username)}&backgroundColor=b6e3f4,d1d4f9,ffd5dc`,
+            avatar: getSeededAvatar(c.username),
             text: c.text,
             image: null,
             date: '2025-12-' + (Math.floor(Math.random() * 28) + 1),
