@@ -14,6 +14,7 @@ const BulkReviewPage: React.FC = () => {
     const [error, setError] = useState('');
     const [incomeMin, setIncomeMin] = useState('10000');
     const [incomeMax, setIncomeMax] = useState('150000');
+    const [tinnitusMode, setTinnitusMode] = useState(false);
 
     const handleGenerate = async () => {
         setIsGenerating(true);
@@ -28,7 +29,7 @@ const BulkReviewPage: React.FC = () => {
             const results = await generateAIBatchReviews(count, (done, total) => {
                 setProgress(done);
                 setTotal(total);
-            }, min, max);
+            }, min, max, tinnitusMode);
             setReviews(results);
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Generation failed');
@@ -45,8 +46,8 @@ const BulkReviewPage: React.FC = () => {
                     <ArrowLeft size={18} /> Back
                 </Link>
                 <div className="bulk-header-center">
-                    <h1 className="bulk-title">🔥 AI Review Generator</h1>
-                    <p className="bulk-subtitle">Generate realistic Facebook testimonials about Code On Fire</p>
+                    <h1 className="bulk-title">{tinnitusMode ? '👂 Tinnitus Habituation Reviews' : '🔥 AI Review Generator'}</h1>
+                    <p className="bulk-subtitle">{tinnitusMode ? 'Generate tinnitus habituation success stories for Dan Plants\' program' : 'Generate realistic Facebook testimonials about Code On Fire'}</p>
                 </div>
                 <div style={{ width: 80 }} />
             </div>
@@ -54,6 +55,20 @@ const BulkReviewPage: React.FC = () => {
             {/* Controls */}
             <div className="bulk-controls-bar">
                 <div className="bulk-controls-inner">
+                    {/* Tinnitus Mode Toggle */}
+                    <div className="tinnitus-toggle-wrap">
+                        <span className="tinnitus-toggle-label">🔥 Code On Fire</span>
+                        <label className="toggle-switch" title="Switch to Tinnitus Habituation mode">
+                            <input
+                                type="checkbox"
+                                checked={tinnitusMode}
+                                onChange={e => { setTinnitusMode(e.target.checked); setReviews([]); }}
+                            />
+                            <span className="toggle-slider" />
+                        </label>
+                        <span className="tinnitus-toggle-label">👂 Tinnitus mode</span>
+                    </div>
+
                     <div className="bulk-count-control">
                         <label>Number of reviews to generate:</label>
                         <div className="count-selector">
@@ -69,32 +84,34 @@ const BulkReviewPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Income Range */}
-                    <div className="bulk-income-range">
-                        <label>Income range in reviews:</label>
-                        <div className="income-range-inputs">
-                            <span>$</span>
-                            <input
-                                type="number"
-                                className="income-input"
-                                value={incomeMin}
-                                onChange={e => setIncomeMin(e.target.value)}
-                                placeholder="10000"
-                                min="1000"
-                            />
-                            <span className="income-dash">→</span>
-                            <span>$</span>
-                            <input
-                                type="number"
-                                className="income-input"
-                                value={incomeMax}
-                                onChange={e => setIncomeMax(e.target.value)}
-                                placeholder="150000"
-                                min="1000"
-                            />
-                            <span className="income-label">/ month</span>
+                    {/* Income Range — hidden in tinnitus mode */}
+                    {!tinnitusMode && (
+                        <div className="bulk-income-range">
+                            <label>Income range in reviews:</label>
+                            <div className="income-range-inputs">
+                                <span>$</span>
+                                <input
+                                    type="number"
+                                    className="income-input"
+                                    value={incomeMin}
+                                    onChange={e => setIncomeMin(e.target.value)}
+                                    placeholder="10000"
+                                    min="1000"
+                                />
+                                <span className="income-dash">→</span>
+                                <span>$</span>
+                                <input
+                                    type="number"
+                                    className="income-input"
+                                    value={incomeMax}
+                                    onChange={e => setIncomeMax(e.target.value)}
+                                    placeholder="150000"
+                                    min="1000"
+                                />
+                                <span className="income-label">/ month</span>
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     <button
                         className="bulk-generate-btn"
@@ -109,7 +126,7 @@ const BulkReviewPage: React.FC = () => {
                         ) : (
                             <>
                                 <Zap size={18} />
-                                Generate {count} Reviews with AI
+                                Generate {count} {tinnitusMode ? 'Tinnitus' : ''} Reviews with AI
                             </>
                         )}
                     </button>
@@ -142,10 +159,19 @@ const BulkReviewPage: React.FC = () => {
 
             {!isGenerating && reviews.length === 0 && (
                 <div className="bulk-empty-state">
-                    <div className="empty-icon">🔥</div>
+                    <div className="empty-icon">{tinnitusMode ? '👂' : '🔥'}</div>
                     <h2>Ready to Generate</h2>
-                    <p>Click the button above to generate {count} AI-powered Facebook review screenshots about Code On Fire.</p>
-                    <p className="empty-hint">Each post will have a unique name, avatar, review text, and engagement numbers — all mentioning Dan and Code On Fire profits.</p>
+                    {tinnitusMode ? (
+                        <>
+                            <p>Click the button above to generate {count} AI-powered Facebook success stories about Dan Plants' tinnitus habituation program.</p>
+                            <p className="empty-hint">Each post will have a unique name, avatar, and authentic habituation success story — mentioning Dan Plants and his program by name.</p>
+                        </>
+                    ) : (
+                        <>
+                            <p>Click the button above to generate {count} AI-powered Facebook review screenshots about Code On Fire.</p>
+                            <p className="empty-hint">Each post will have a unique name, avatar, review text, and engagement numbers — all mentioning Dan and Code On Fire profits.</p>
+                        </>
+                    )}
                 </div>
             )}
         </div>

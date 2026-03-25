@@ -104,6 +104,39 @@ const REVIEW_TEMPLATES = [
     (income: string) => `Look I don't normally leave reviews but after hitting ${income} this month with Code On Fire I felt like I had to say something. Dan is the real thing. The system works. I wish I had found this 2 years ago honestly.`,
 ];
 
+// Tinnitus Habituation review templates — success stories for Dan Plants' program
+const TINNITUS_REVIEW_TEMPLATES = [
+    (_name: string) => `I had tinnitus for 3 years and honestly thought I'd never feel normal again. Found Dan Plants' habituation program and within about 8 weeks I stopped dreading the sound. It's still there but I genuinely don't care anymore. Life is so much better.`,
+
+    (_name: string) => `Dan's tinnitus habituation program changed everything for me. I used to wake up in a panic every morning. Now I barely notice the ringing. The way he explains the nervous system stuff finally made it click for me. Highly recommend to anyone struggling with this.`,
+
+    (_name: string) => `Not gonna lie I was skeptical when my audiologist mentioned habituation. But Dan's program walked me through it step by step and about 6 weeks in I had my first day where I forgot I even had tinnitus. That was huge for me.`,
+
+    (_name: string) => `I spent so much money on masking devices and supplements before finding Dan Plants. His habituation approach is the only thing that actually worked. 4 months in and my quality of life is genuinely back to normal.`,
+
+    (_name: string) => `My tinnitus started after a concert and I went into a really dark place. Dan's program taught me how to stop fighting the sound and just let it be there. Sounds simple but it's genuinely hard to do without guidance. I'm so grateful.`,
+
+    (_name: string) => `Dan Plants is the real deal. His tinnitus habituation program is not a cure but it's honestly better — you stop caring about the sound. I went from checking volume levels 50 times a day to just living my life. That shift is everything.`,
+
+    (_name: string) => `3 months into Dan's program and I'm sleeping through the night again. That alone was worth every penny. If you're suffering with tinnitus and feel like it's ruining your life, this program is a genuine lifeline.`,
+
+    (_name: string) => `What I appreciate about Dan is that he doesn't promise a cure. He teaches you to rewire your reaction to the sound and it actually works. 10 weeks in and my spike days don't scare me anymore. Huge win.`,
+
+    (_name: string) => `I was in fight or flight mode 24/7 because of my tinnitus. Dan's habituation program broke that cycle for me. The audio exercises and mindset work are unlike anything I found on YouTube or Reddit. This is next level.`,
+
+    (_name: string) => `My husband noticed the change before I did. He said I stopped talking about my ears every single day. That's when I realized Dan's program was actually working. Tinnitus is still there but I've got my life back.`,
+
+    (_name: string) => `Six weeks felt too short to expect results but I noticed my anxiety around the ringing was dropping. By week 10 I had a full day of zero distress. Dan's approach just makes biological sense and the support in the program is incredible.`,
+
+    (_name: string) => `I tried two other tinnitus programs before Dan Plants. Nothing clicked until his. The way he explains why habituation works and what's actually happening in your brain made all the difference. I finally trusted the process and it worked.`,
+
+    (_name: string) => `ngl I was desperate when I joined Dan's habituation program. Tinnitus had me in tears daily. 7 weeks later I'm genuinely okay. Not perfect but okay in a way I hadn't been in over a year. Dan is the real thing.`,
+
+    (_name: string) => `My ENT basically told me to just live with it. Dan Plants actually showed me HOW to live with it. Big difference. His program gave me the tools to retrain my brain and I honestly feel like I got my identity back.`,
+
+    (_name: string) => `Wife kept telling me to try Dan's tinnitus program. Finally did after about a year of suffering. Wish I hadn't waited. The habituation process is real and Dan explains it better than anyone. 3 months in and I feel like myself again.`,
+];
+
 // Get avatar — gender-aware, uses Human Faces Dataset via avatarUtils
 export function getAvatarUrl(name: string, _index: number): string {
     return getSeededAvatar(name);
@@ -136,9 +169,13 @@ export async function generateBatchReviews(count: number): Promise<GeneratedRevi
 }
 
 // Generate a single AI review via OpenAI
-export async function generateAIReview(name: string, incomeMin = 10000, incomeMax = 150000): Promise<string> {
+export async function generateAIReview(
+    name: string,
+    incomeMin = 10000,
+    incomeMax = 150000,
+    tinnitusMode = false
+): Promise<string> {
     const apiKey = getApiKey();
-    const income = getRandomIncome(incomeMin, incomeMax);
 
     // Randomly assign a post style so we get natural variety
     const style = Math.random();
@@ -146,17 +183,49 @@ export async function generateAIReview(name: string, incomeMin = 10000, incomeMa
     let toneInstruction: string;
 
     if (style < 0.35) {
-        // Short & punchy — 1-3 sentences, very casual, modern slang
         lengthInstruction = `Write ONLY 1-3 short sentences. Maximum 40 words total. Short and punchy like a real casual Facebook comment.`;
-        toneInstruction = `Use modern casual language naturally — things like: "ngl", "lowkey", "no cap", "literally", "fr", "wild", "insane", "changed my life fr", "not gonna lie", "I don't even know what to say", "y'all", "this is crazy". Sound like a real person texting.`;
+        toneInstruction = `Use modern casual language naturally — things like: "ngl", "lowkey", "no cap", "literally", "fr", "wild", "insane", "changed my life fr", "not gonna lie", "I don't even know what to say", "y'all". Sound like a real person texting.`;
     } else if (style < 0.70) {
-        // Medium — 3-5 sentences, casual but a bit more detail
         lengthInstruction = `Write 3-5 sentences, around 50-90 words. Casual and conversational.`;
         toneInstruction = `Sound like a real person on Facebook — casual, genuine, maybe a tiny bit emotional but not over the top. Can use light slang naturally but don't force it.`;
     } else {
-        // Longer — more personal story, but still grounded
         lengthInstruction = `Write 5-8 sentences, around 90-150 words. Tell a short personal story.`;
-        toneInstruction = `Be authentic and personal — mention a specific detail like their old job, their family, how skeptical they were. Casual Facebook tone, not a sales pitch.`;
+        toneInstruction = `Be authentic and personal — mention a specific detail like how long they suffered, their sleeping problems, how skeptical they were. Casual Facebook tone, not a sales pitch.`;
+    }
+
+    let systemContent: string;
+    let userContent: string;
+
+    if (tinnitusMode) {
+        systemContent = `You write authentic Facebook posts from real everyday people sharing their tinnitus habituation success stories.
+Rules:
+- ${lengthInstruction}
+- ${toneInstruction}
+- NO hashtags ever
+- At most ONE emoji in the whole post — many posts should have zero
+- Mention Dan Plants by name and his tinnitus habituation program
+- Be specific: mention how long they suffered, what changed, and how life improved
+- Do NOT promise a cure — habituation means the sound is still there but no longer distressing
+- Do NOT start with "Hey everyone" or "Hey friends" — vary the opening
+- Do NOT use exclamation marks more than once
+- No ALL CAPS
+- Do not write like a formal testimonial or advertisement`;
+        userContent = `Write a Facebook post from ${name} sharing their success with Dan Plants' tinnitus habituation program. They went from being severely distressed by tinnitus to achieving habituation and getting their quality of life back.`;
+    } else {
+        const income = getRandomIncome(incomeMin, incomeMax);
+        systemContent = `You write authentic Facebook posts from real everyday people sharing wins.
+Rules:
+- ${lengthInstruction}
+- ${toneInstruction}
+- NO hashtags ever
+- At most ONE emoji in the whole post — many posts should have zero
+- Mention Dan by name and Code On Fire
+- Include the income: ${income}/month or ${income} this month
+- Do NOT start with "Hey everyone" or "Hey friends" — vary the opening
+- Do NOT use exclamation marks more than once
+- No ALL CAPS
+- Do not write like a formal testimonial or advertisement`;
+        userContent = `Write a Facebook post from ${name} about Dan's Code On Fire program. They made ${income} this month.`;
     }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -168,25 +237,8 @@ export async function generateAIReview(name: string, incomeMin = 10000, incomeMa
         body: JSON.stringify({
             model: 'gpt-4o-mini',
             messages: [
-                {
-                    role: 'system',
-                    content: `You write authentic Facebook posts from real everyday people sharing wins.
-Rules:
-- ${lengthInstruction}
-- ${toneInstruction}
-- NO hashtags ever
-- At most ONE emoji in the whole post — many posts should have zero
-- Mention Dan by name and Code On Fire
-- Include the income: ${income}/month or ${income} this month
-- Do NOT start with "Hey everyone" or "Hey friends" — vary the opening
-- Do NOT use exclamation marks more than once
-- No ALL CAPS
-- Do not write like a formal testimonial or advertisement`
-                },
-                {
-                    role: 'user',
-                    content: `Write a Facebook post from ${name} about Dan's Code On Fire program. They made ${income} this month.`
-                }
+                { role: 'system', content: systemContent },
+                { role: 'user', content: userContent }
             ],
             max_tokens: 220,
             temperature: 0.92,
@@ -207,7 +259,8 @@ export async function generateAIBatchReviews(
     count: number,
     onProgress?: (done: number, total: number) => void,
     incomeMin = 10000,
-    incomeMax = 150000
+    incomeMax = 150000,
+    tinnitusMode = false
 ): Promise<GeneratedReview[]> {
     const reviews: GeneratedReview[] = [];
     const BATCH_SIZE = 5;
@@ -223,9 +276,12 @@ export async function generateAIBatchReviews(
         const texts = await Promise.all(
             batch.map(async (b) => {
                 try {
-                    return await generateAIReview(b.name, incomeMin, incomeMax);
+                    return await generateAIReview(b.name, incomeMin, incomeMax, tinnitusMode);
                 } catch {
                     // Fallback to template if API fails
+                    if (tinnitusMode) {
+                        return TINNITUS_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_REVIEW_TEMPLATES.length)](b.name);
+                    }
                     const income = getRandomIncome(incomeMin, incomeMax);
                     return REVIEW_TEMPLATES[Math.floor(Math.random() * REVIEW_TEMPLATES.length)](income);
                 }
