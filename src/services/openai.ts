@@ -512,6 +512,10 @@ Keep emails realistic, 2-4 sentences each. Customer has a genuine question or su
             temperature: 0.9,
         }),
     });
+    if (!response.ok) {
+        const err = await response.text();
+        throw new Error(`OpenAI error ${response.status}: ${err}`);
+    }
     const data = await response.json();
     const raw = data.choices[0].message.content.trim().replace(/```json|```/g, '');
     return JSON.parse(raw);
