@@ -477,10 +477,55 @@ export interface GeneratedGmailThread {
     subject: string;
 }
 
+// ─── Local Gmail Thread Fallbacks ─────────────────────────────────────────────
+const GMAIL_TEMPLATES_COF: GeneratedGmailThread[] = [
+    {
+        subject: 'Just hit my first $20k month — had to tell you',
+        messages: [
+            { senderName: 'Jessica Williams', content: 'Hey Dan, I just wanted to send a quick note because I\'m still in shock. I just checked my Stripe dashboard and I hit $20,400 this month. I started your Code On Fire program 4 months ago and couldn\'t close a single client. Now I have 6 retainer clients. I don\'t even know what to say.', isMe: false },
+            { senderName: 'Dan', content: 'Jessica! This is incredible — $20k in month 4 is genuinely impressive. Six retainers already? That is not luck, that is you executing consistently. I\'m so proud of you. What part of the training clicked the most for you?', isMe: true },
+            { senderName: 'Jessica Williams', content: 'Honestly the outreach framework. Once I stopped overthinking it and just followed the script, my response rate tripled. Thank you for building something that actually works. I tell literally everyone about this program.', isMe: false },
+            { senderName: 'Dan', content: 'That is the exact shift — go from tinkering to executing. You earned every dollar. Go celebrate! And keep going — $20k is just the beginning 🔥', isMe: true },
+        ],
+    },
+    {
+        subject: 'Question about scaling — and a huge thank you',
+        messages: [
+            { senderName: 'Marcus Thompson', content: 'Hi Dan, I\'ve been in Code On Fire for about 6 months now. I\'m consistently at $15k–18k/month but I\'m trying to break through to $30k. I have a quick question about how to structure my offer stack for higher-ticket clients. Also wanted to say this program changed my life.', isMe: false },
+            { senderName: 'Dan', content: 'Marcus, congrats on hitting that $15k–18k range consistently — that is genuinely great. For breaking through to $30k, it\'s usually not about getting more clients, it\'s about raising prices and adding a premium tier. Have you done a price audit recently?', isMe: true },
+            { senderName: 'Marcus Thompson', content: 'I haven\'t, no. I\'ve been scared to raise prices because I don\'t want to lose clients. But I\'ll try it. Thank you for being so responsive. You don\'t have to do this and it means a lot.', isMe: false },
+            { senderName: 'Dan', content: 'You\'ll be surprised — often the clients who stick are the better ones. Raise prices on new clients first. Let me know how it goes!', isMe: true },
+        ],
+    },
+];
+
+const GMAIL_TEMPLATES_TINNITUS: GeneratedGmailThread[] = [
+    {
+        subject: 'I think I finally habituated — thank you',
+        messages: [
+            { senderName: 'Sarah Mitchell', content: 'Hi Dan, I wanted to write to you because I\'m not sure I would have made it through without your program. I had severe tinnitus for 14 months. I was barely functioning. I started your habituation program in October and something shifted around week 10. I went three full days last week without thinking about my ears once. I don\'t know how to thank you.', isMe: false },
+            { senderName: 'Dan', content: 'Sarah, this is genuinely one of the best messages I receive. Three days without awareness — that is textbook habituation. That doesn\'t happen by accident. You did the work consistently even when it was hard. The nervous system responds to that. How are you sleeping now?', isMe: true },
+            { senderName: 'Sarah Mitchell', content: 'I\'m sleeping 7–8 hours most nights. Without medication. I haven\'t done that since before all this started. My husband said he has his wife back. I still can\'t believe how much better life is. The sound hasn\'t changed but my whole relationship with it has.', isMe: false },
+            { senderName: 'Dan', content: 'That is exactly it — "the sound hasn\'t changed but my relationship with it has." That sentence IS habituation. I\'m so happy for you Sarah. Thank you for trusting the process and for taking the time to write. This is why I built this program.', isMe: true },
+        ],
+    },
+    {
+        subject: 'Update from your program — 6 months in',
+        messages: [
+            { senderName: 'Ryan Evans', content: 'Dan, just hitting 6 months since I finished your tinnitus habituation program and wanted to give you an update. I was in a really dark place when I found you. ENT told me to "just live with it" and gave me nothing else. Your program gave me an actual roadmap. I\'m at maybe 5% of the distress I had when I started.', isMe: false },
+            { senderName: 'Dan', content: 'Ryan! 5% distress at 6 months out is exceptional. The "just live with it" advice from doctors is so frustrating because it\'s technically correct but completely useless without showing HOW. I\'m glad the roadmap helped. What ended up being the most useful piece for you?', isMe: true },
+            { senderName: 'Ryan Evans', content: 'Understanding the nervous system piece. Once I understood that my brain had categorized the sound as a threat and was going into fight-or-flight, I could approach it differently. The fear started to dissolve. I still have spikes occasionally but they don\'t scare me anymore. That shift is everything.', isMe: false },
+            { senderName: 'Dan', content: 'When the fear goes, the suffering goes. The sound can still be loud but it loses its grip. You\'ve got this long-term now. Thank you for the update — genuinely made my day.', isMe: true },
+        ],
+    },
+];
+
 export async function generateGmailThread(tinnitusMode = false): Promise<GeneratedGmailThread> {
-    const apiKey = getApiKey();
-    const prompt = tinnitusMode
-        ? `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation program and is sharing their success.
+    // Try the API first, fall back to local templates
+    try {
+        const apiKey = getApiKey();
+        const prompt = tinnitusMode
+            ? `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation program and is sharing their success.
 Return ONLY valid JSON, no markdown:
 {
   "subject": "Thread subject",
@@ -491,7 +536,7 @@ Return ONLY valid JSON, no markdown:
   ]
 }
 Keep emails realistic, 2-4 sentences each. The person describes how long they suffered, what shifted for them, and how life improved after completing the program. Dan is warm and encouraging. Do NOT promise a cure — habituation means the sound is still there but no longer distressing.`
-        : `Generate a realistic Gmail email thread between Dan (an online coach) and a customer/student of his Code On Fire program. The customer has a question or is sharing their success.
+            : `Generate a realistic Gmail email thread between Dan (an online coach) and a customer/student of his Code On Fire program. The customer has a question or is sharing their success.
 Return ONLY valid JSON, no markdown:
 {
   "subject": "Thread subject",
@@ -502,24 +547,27 @@ Return ONLY valid JSON, no markdown:
   ]
 }
 Keep emails realistic, 2-4 sentences each. Customer has a genuine question or success story.`;
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [{ role: 'user', content: prompt }],
-            max_tokens: 500,
-            temperature: 0.9,
-        }),
-    });
-    if (!response.ok) {
-        const err = await response.text();
-        throw new Error(`OpenAI error ${response.status}: ${err}`);
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: 500,
+                temperature: 0.9,
+            }),
+        });
+        if (!response.ok) throw new Error(`OpenAI error ${response.status}`);
+        const data = await response.json();
+        const raw = data.choices[0].message.content.trim().replace(/```json|```/g, '');
+        return JSON.parse(raw);
+    } catch {
+        // Fallback to local templates
+        const templates = tinnitusMode ? GMAIL_TEMPLATES_TINNITUS : GMAIL_TEMPLATES_COF;
+        return templates[Math.floor(Math.random() * templates.length)];
     }
-    const data = await response.json();
-    const raw = data.choices[0].message.content.trim().replace(/```json|```/g, '');
-    return JSON.parse(raw);
 }
+
 
 export interface GeneratedMessengerThread {
     messages: Array<{ text: string; isMe: boolean; }>;
