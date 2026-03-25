@@ -20,12 +20,13 @@ const YouTubeControlPanel: React.FC<YouTubeControlPanelProps> = ({
 }) => {
     const [aiLoading, setAiLoading] = useState(false);
     const [aiError, setAiError] = useState('');
+    const [tinnitusMode, setTinnitusMode] = useState(false);
 
     const handleAIGenerate = async () => {
         setAiLoading(true);
         setAiError('');
         try {
-            const result = await generateYouTubeComments();
+            const result = await generateYouTubeComments(tinnitusMode);
             if (onAIGenerate) onAIGenerate(result.comments);
         } catch (e: unknown) {
             setAiError(e instanceof Error ? e.message : 'AI generation failed');
@@ -61,6 +62,26 @@ const YouTubeControlPanel: React.FC<YouTubeControlPanelProps> = ({
                 </button>
             </div>
             {aiError && <div style={{ color: '#f87171', fontSize: 12, marginBottom: 8 }}>{aiError}</div>}
+
+            {/* Tinnitus Mode Toggle */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#1a1a1a', borderRadius: 8, padding: '7px 12px', marginBottom: 10 }}>
+                <span style={{ fontSize: 12, color: '#aaa', whiteSpace: 'nowrap' }}>🔥 Code On Fire</span>
+                <label style={{ position: 'relative', display: 'inline-block', width: 40, height: 22, cursor: 'pointer', flexShrink: 0 }}>
+                    <input type="checkbox" checked={tinnitusMode} onChange={e => setTinnitusMode(e.target.checked)} style={{ opacity: 0, width: 0, height: 0, position: 'absolute' }} />
+                    <span style={{
+                        position: 'absolute', inset: 0, borderRadius: 999,
+                        background: tinnitusMode ? 'linear-gradient(135deg,#0ea5e9,#06b6d4)' : '#374151',
+                        transition: 'background 0.25s'
+                    }}>
+                        <span style={{
+                            position: 'absolute', height: 16, width: 16, left: tinnitusMode ? 21 : 3, top: 3,
+                            background: 'white', borderRadius: '50%', transition: 'left 0.25s',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.4)'
+                        }} />
+                    </span>
+                </label>
+                <span style={{ fontSize: 12, color: '#aaa', whiteSpace: 'nowrap' }}>👂 Tinnitus</span>
+            </div>
 
             <div className="yt-control-group">
                 <label className="yt-label">Global Avatars</label>

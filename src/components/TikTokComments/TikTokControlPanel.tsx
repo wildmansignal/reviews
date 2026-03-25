@@ -29,12 +29,13 @@ const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
 }) => {
     const [aiLoading, setAiLoading] = useState(false);
     const [aiError, setAiError] = useState('');
+    const [tinnitusMode, setTinnitusMode] = useState(false);
 
     const handleAIGenerate = async () => {
         setAiLoading(true);
         setAiError('');
         try {
-            const result = await generateTikTokComments();
+            const result = await generateTikTokComments(tinnitusMode);
             if (onAIGenerate) {
                 onAIGenerate(result.comments, result.totalComments, result.totalLikes);
             }
@@ -71,6 +72,26 @@ const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
                 </button>
             </div>
             {aiError && <div style={{ color: '#f87171', fontSize: 12, marginBottom: 8 }}>{aiError}</div>}
+
+            {/* Tinnitus Mode Toggle */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#1c1c1e', borderRadius: 8, padding: '7px 12px', marginBottom: 10 }}>
+                <span style={{ fontSize: 12, color: '#8e8e93', whiteSpace: 'nowrap' }}>🔥 Code On Fire</span>
+                <label style={{ position: 'relative', display: 'inline-block', width: 40, height: 22, cursor: 'pointer', flexShrink: 0 }}>
+                    <input type="checkbox" checked={tinnitusMode} onChange={e => setTinnitusMode(e.target.checked)} style={{ opacity: 0, width: 0, height: 0, position: 'absolute' }} />
+                    <span style={{
+                        position: 'absolute', inset: 0, borderRadius: 999,
+                        background: tinnitusMode ? 'linear-gradient(135deg,#0ea5e9,#06b6d4)' : '#374151',
+                        transition: 'background 0.25s'
+                    }}>
+                        <span style={{
+                            position: 'absolute', height: 16, width: 16, left: tinnitusMode ? 21 : 3, top: 3,
+                            background: 'white', borderRadius: '50%', transition: 'left 0.25s',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.4)'
+                        }} />
+                    </span>
+                </label>
+                <span style={{ fontSize: 12, color: '#8e8e93', whiteSpace: 'nowrap' }}>👂 Tinnitus</span>
+            </div>
 
             {/* Global */}
             <div className="tt-control-group">

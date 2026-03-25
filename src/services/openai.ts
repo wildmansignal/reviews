@@ -392,16 +392,10 @@ export interface GeneratedTikTokComments {
     totalLikes: string;
 }
 
-export async function generateTikTokComments(): Promise<GeneratedTikTokComments> {
+export async function generateTikTokComments(tinnitusMode = false): Promise<GeneratedTikTokComments> {
     const apiKey = getApiKey();
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [{
-                role: 'user',
-                content: `Generate realistic TikTok comments for a video about making money online / Code On Fire by Dan. 
+    const prompt = tinnitusMode
+        ? `Generate realistic TikTok comments for a video by Dan Plants about tinnitus habituation and recovering your quality of life from tinnitus.
 Return ONLY valid JSON, no markdown:
 {
   "comments": [
@@ -411,8 +405,24 @@ Return ONLY valid JSON, no markdown:
   "totalComments": "X,XXX",
   "totalLikes": "XX.XK"
 }
-Make usernames look realistic (lowercase, numbers, underscores). Comments should be 5-20 words, casual TikTok style. 1-2 emojis max per comment. Likes between 10-500.`
-            }],
+Make usernames realistic (lowercase, numbers, underscores). Comments 5-20 words, casual TikTok style. People sharing their tinnitus habituation journey or thanking Dan. 1-2 emojis max. Likes 10-500.`
+        : `Generate realistic TikTok comments for a video about making money online / Code On Fire by Dan.
+Return ONLY valid JSON, no markdown:
+{
+  "comments": [
+    {"username": "tiktok_handle", "text": "comment text with 1-2 emojis max", "likes": "XX"},
+    ...4 more comments
+  ],
+  "totalComments": "X,XXX",
+  "totalLikes": "XX.XK"
+}
+Make usernames look realistic (lowercase, numbers, underscores). Comments should be 5-20 words, casual TikTok style. 1-2 emojis max per comment. Likes between 10-500.`;
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
             max_tokens: 400,
             temperature: 0.9,
         }),
@@ -426,16 +436,10 @@ export interface GeneratedYouTubeComments {
     comments: Array<{ handle: string; text: string; likes: string; timeAgo: string; }>;
 }
 
-export async function generateYouTubeComments(): Promise<GeneratedYouTubeComments> {
+export async function generateYouTubeComments(tinnitusMode = false): Promise<GeneratedYouTubeComments> {
     const apiKey = getApiKey();
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [{
-                role: 'user',
-                content: `Generate realistic YouTube comments for a video about Dan's Code On Fire program / making money online. People sharing their results.
+    const prompt = tinnitusMode
+        ? `Generate realistic YouTube comments for a video by Dan Plants about tinnitus habituation — people sharing their recovery journey and thanking Dan.
 Return ONLY valid JSON, no markdown:
 {
   "comments": [
@@ -443,8 +447,22 @@ Return ONLY valid JSON, no markdown:
     ...4 more
   ]
 }
-Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. Authentic, varied reactions.`
-            }],
+Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. People mention how Dan's program helped them habituate to tinnitus and get their life back. Authentic, emotional but grounded.`
+        : `Generate realistic YouTube comments for a video about Dan's Code On Fire program / making money online. People sharing their results.
+Return ONLY valid JSON, no markdown:
+{
+  "comments": [
+    {"handle": "@username123", "text": "comment text, no emojis or max 1", "likes": "XX", "timeAgo": "Xy ago"},
+    ...4 more
+  ]
+}
+Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. Authentic, varied reactions.`;
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
             max_tokens: 400,
             temperature: 0.9,
         }),
@@ -459,16 +477,10 @@ export interface GeneratedGmailThread {
     subject: string;
 }
 
-export async function generateGmailThread(): Promise<GeneratedGmailThread> {
+export async function generateGmailThread(tinnitusMode = false): Promise<GeneratedGmailThread> {
     const apiKey = getApiKey();
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [{
-                role: 'user',
-                content: `Generate a realistic Gmail email thread between Dan (an online coach) and a customer/student of his Code On Fire program. The customer has a question or is sharing their success.
+    const prompt = tinnitusMode
+        ? `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation program and is sharing their success.
 Return ONLY valid JSON, no markdown:
 {
   "subject": "Thread subject",
@@ -478,8 +490,24 @@ Return ONLY valid JSON, no markdown:
     ...2-3 more messages alternating
   ]
 }
-Keep emails realistic, 2-4 sentences each. Customer has a genuine question or success story.`
-            }],
+Keep emails realistic, 2-4 sentences each. The person describes how long they suffered, what shifted for them, and how life improved after completing the program. Dan is warm and encouraging. Do NOT promise a cure — habituation means the sound is still there but no longer distressing.`
+        : `Generate a realistic Gmail email thread between Dan (an online coach) and a customer/student of his Code On Fire program. The customer has a question or is sharing their success.
+Return ONLY valid JSON, no markdown:
+{
+  "subject": "Thread subject",
+  "messages": [
+    {"senderName": "Customer Name", "content": "email content", "isMe": false},
+    {"senderName": "Dan", "content": "Dan's reply", "isMe": true},
+    ...2-3 more messages alternating
+  ]
+}
+Keep emails realistic, 2-4 sentences each. Customer has a genuine question or success story.`;
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
             max_tokens: 500,
             temperature: 0.9,
         }),

@@ -84,6 +84,59 @@ function buildThread(_name: string, income: string, firstName: string): MessageD
     }));
 }
 
+// ── Tinnitus Habituation Thread Templates ──────────────────────────────────
+function buildTinnitusThread(_name: string, firstName: string): MessageData[] {
+    const templates = [
+        [
+            `Hi Dan! I've been wanting to message you for a while. I wasn't sure what to say honestly`,
+            `Hey ${firstName}! No worries at all. What's on your mind?`,
+            `I finished your habituation program last month. My tinnitus is still there but... I don't care about it anymore? Like I genuinely forget about it for hours now. That felt impossible 6 months ago`,
+            `That is exactly what habituation feels like. That shift is everything 🙌`,
+            `I remember the first time I drove to work and realized I hadn't thought about my ears once. I cried in the parking lot. I was at a really dark place when I started. Thank you for making this program, Dan`,
+            `${firstName} this just made my day. Genuinely. You did the hard work. That shift doesn't happen without commitment`,
+            `I tell everyone with tinnitus about you. My friend just started your program because of me. I hope they get the same result`,
+            `That means the world. Keep going. You earned this peace 💙`,
+        ],
+        [
+            `Dan I have to tell you something. I almost didn't join your program because I thought nothing could help`,
+            `I'm really glad you did. What happened ${firstName}?`,
+            `I had tinnitus for 2 years. Hyperacusis too. I was genuinely housebound at my worst. Your program gave me my life back. I went to a restaurant last week for the first time in 18 months`,
+            `${firstName}... a restaurant. That is HUGE. Don't minimize that`,
+            `My audiologist said habituation was possible but gave me no roadmap. You gave me the roadmap. Step by step. Week by week. I finally understood what was happening in my nervous system and that understanding changed everything`,
+            `That's exactly why I built it the way I did. The science matters. Once you understand it, the fear loses its grip`,
+            `The fear is what was killing me, not the sound. You helped me see that. Thank you Dan, seriously`,
+            `Thank you for trusting the process. This is why I do this 🙏`,
+        ],
+        [
+            `Hey! Quick update. I know you're busy but I had to share`,
+            `Always time for good news. What happened ${firstName}?`,
+            `I slept 7 hours last night. No sleep aids. I haven't done that since before my tinnitus started. I'm still in shock`,
+            `SEVEN HOURS. ${firstName} that is massive progress. Sleep is where the nervous system heals`,
+            `I followed your program almost exactly. Didn't try to find shortcuts. Just did the exercises, changed my relationship with the sound, stopped monitoring it. Somewhere around week 8 things just started shifting`,
+            `Week 8 is often the turning point. You stayed the course when it was hard. That's the whole thing`,
+            `You said in the training "the goal isn't silence, the goal is indifference." I finally get what that means. Thank you Dan`,
+            `You just got it. That's the whole program in one sentence 💙`,
+        ],
+        [
+            `Hi Dan! Sorry to randomly message you but you're basically the reason I got my life back`,
+            `Never apologize for that! Talk to me ${firstName} 😄`,
+            `I cancelled my appointment with a sound therapist today. Not because I gave up but because I don't need it. Your program worked. I habituated`,
+            `Okay I need to hear everything. What clicked?`,
+            `Honestly the part about the limbic system. Once I understood that my brain had just misfiled the sound as a threat, and that I could re-file it... something changed. The volume didn't change. My reaction did`,
+            `${firstName} that is the core insight. The sound doesn't have to get quieter. Your relationship with it has to change. You got it`,
+            `I tell people: your tinnitus program isn't about fixing your ears. It's about fixing your brain's response. That framing helps people open up to it`,
+            `That's a better description than I've ever written. Thank you for spreading the word 🙌`,
+        ],
+    ];
+
+    const variant = templates[Math.floor(Math.random() * templates.length)];
+    return variant.map((text, i) => ({
+        id: i + 1,
+        text,
+        sender: (i % 2 === 1 ? 'me' : 'them') as 'me' | 'them',
+    }));
+}
+
 // ── Income formatter ──────────────────────────────────────────────────────
 function formatIncome(value: number): string {
     if (value >= 1000) return `$${(value / 1000).toFixed(0)}k`;
@@ -105,6 +158,7 @@ const MessengerApp = () => {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [activeIdx, setActiveIdx] = useState(0);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [tinnitusMode, setTinnitusMode] = useState(false);
 
     // Range controls
     const [minIncome, setMinIncome] = useState(10000);
@@ -132,7 +186,9 @@ const MessengerApp = () => {
                 (minIncome + Math.random() * (maxIncome - minIncome)) / 500
             ) * 500;
             const firstName = name.split(' ')[0];
-            const messages = buildThread(name, formatIncome(income), firstName);
+            const messages = tinnitusMode
+                ? buildTinnitusThread(name, firstName)
+                : buildThread(name, formatIncome(income), firstName);
             return {
                 id: i,
                 name,
@@ -182,7 +238,28 @@ const MessengerApp = () => {
                 <div style={{ padding: '14px 16px 10px', borderBottom: '1px solid #2a2a2a' }}>
                     <div style={{ fontSize: 22, fontWeight: 700, color: 'white', marginBottom: 12 }}>💬 Chats</div>
 
-                    {/* Profit Range */}
+                    {/* Tinnitus Mode Toggle */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#1c1c1e', borderRadius: 8, padding: '7px 12px', marginBottom: 10 }}>
+                        <span style={{ fontSize: 12, color: '#8e8e93', whiteSpace: 'nowrap' }}>🔥 Code On Fire</span>
+                        <label style={{ position: 'relative', display: 'inline-block', width: 40, height: 22, cursor: 'pointer', flexShrink: 0 }}>
+                            <input type="checkbox" checked={tinnitusMode} onChange={e => { setTinnitusMode(e.target.checked); setConversations([]); }} style={{ opacity: 0, width: 0, height: 0, position: 'absolute' }} />
+                            <span style={{
+                                position: 'absolute', inset: 0, borderRadius: 999,
+                                background: tinnitusMode ? 'linear-gradient(135deg,#0ea5e9,#06b6d4)' : '#374151',
+                                transition: 'background 0.25s'
+                            }}>
+                                <span style={{
+                                    position: 'absolute', height: 16, width: 16, left: tinnitusMode ? 21 : 3, top: 3,
+                                    background: 'white', borderRadius: '50%', transition: 'left 0.25s',
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.4)'
+                                }} />
+                            </span>
+                        </label>
+                        <span style={{ fontSize: 12, color: '#8e8e93', whiteSpace: 'nowrap' }}>👂 Tinnitus</span>
+                    </div>
+
+                    {/* Profit Range — hidden in tinnitus mode */}
+                    {!tinnitusMode && (
                     <div style={{ background: '#1c1c1e', borderRadius: 10, padding: 12, marginBottom: 10 }}>
                         <div style={{ fontSize: 11, color: '#8e8e93', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8 }}>Profit Range</div>
                         <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
@@ -233,6 +310,30 @@ const MessengerApp = () => {
                             {isGenerating ? '⏳ Generating…' : '🎲 Generate Conversations'}
                         </button>
                     </div>
+                    )}
+
+                    {/* Tinnitus mode generate button */}
+                    {tinnitusMode && (
+                        <div style={{ background: '#1c1c1e', borderRadius: 10, padding: 12, marginBottom: 10 }}>
+                            <div style={{ fontSize: 11, color: '#8e8e93', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8 }}>Count: {count} conversations</div>
+                            <input
+                                type="range" min={5} max={25} value={count}
+                                onChange={e => setCount(Number(e.target.value))}
+                                style={{ width: '100%', accentColor: '#0ea5e9', marginBottom: 8 }}
+                            />
+                            <button
+                                onClick={handleGenerate}
+                                disabled={isGenerating}
+                                style={{
+                                    width: '100%', background: isGenerating ? '#333' : 'linear-gradient(135deg,#0ea5e9,#06b6d4)',
+                                    color: 'white', border: 'none', borderRadius: 8, padding: '9px 0',
+                                    fontSize: 13, fontWeight: 700, cursor: isGenerating ? 'not-allowed' : 'pointer',
+                                }}
+                            >
+                                {isGenerating ? '⏳ Generating…' : '👂 Generate Tinnitus Chats'}
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Conversation rows */}
