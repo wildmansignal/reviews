@@ -137,6 +137,39 @@ const TINNITUS_REVIEW_TEMPLATES = [
     (_name: string) => `Wife kept telling me to try Dan's tinnitus program. Finally did after about a year of suffering. Wish I hadn't waited. The habituation process is real and Dan explains it better than anyone. 3 months in and I feel like myself again.`,
 ];
 
+// Tinnitus Chat review templates — positive reviews about Dan's free tinnitus AI chat
+const TINNITUS_CHAT_REVIEW_TEMPLATES = [
+    () => `After talking to Dans chat, my tinnitus has reduced by like 20%. I don't know how to explain it but just having someone walk me through what's happening made a huge difference. Genuinely recommend it to anyone dealing with this.`,
+
+    () => `I feel hopeful, like I have a game plan after just a 5 minute conversation with Dans tinnitus chat. It asked the right questions and gave me actual steps I can follow. First time in months I don't feel completely lost.`,
+
+    () => `ngl I was skeptical about a tinnitus chatbot but Dan's chat actually understood what I was going through. It didn't just say "learn to live with it" — it gave me real strategies. My anxiety around the ringing has dropped significantly.`,
+
+    () => `Just had a conversation with Dan's free tinnitus chat and I'm genuinely shocked. It explained what's happening in my brain in a way no doctor ever has. Feel like I finally have direction instead of just panicking.`,
+
+    () => `Dan's tinnitus chat is incredible for something that's free. I spent 10 minutes talking to it and walked away feeling more informed and calm than after any ENT appointment I've had. Seriously underrated resource.`,
+
+    () => `Talked to Dan's tinnitus chat at 3am during a spike and it actually helped me calm down. It walked me through a breathing exercise and explained why the spike was happening. I fell asleep 20 minutes later. Game changer.`,
+
+    () => `My wife found Dan's free tinnitus chat and made me try it. I'm glad she did. The chat helped me understand that my reaction to the sound is what's making it worse. Simple concept but hearing it explained clearly changed my perspective.`,
+
+    () => `I've been dealing with tinnitus for 8 months and Dan's chat is honestly the best free resource I've found. It doesn't promise miracles but gives you a clear understanding of habituation and what you can actually do. Felt hopeful for the first time.`,
+
+    () => `Dan's tinnitus chat told me something no audiologist ever did — that my brain is treating the sound as a threat and that's why I can't ignore it. That one insight alone reduced my distress level. This chat is doing real good.`,
+
+    () => `had a quick chat with Dan's tinnitus AI and it literally mapped out a plan for me. Like here's what to do this week, here's what to focus on. No one has ever given me that kind of structure. And it's free which is wild.`,
+
+    () => `I recommended Dan's tinnitus chat to my support group and three people messaged me saying it helped them too. It's like having a knowledgeable friend who actually gets what you're going through. 10 out of 10.`,
+
+    () => `Spoke to Dan's chat about my tinnitus and it didn't just give generic advice. It asked about my sleep, my stress levels, how long I've had it. Then gave me personalized suggestions. Felt like a real consultation honestly.`,
+
+    () => `Dan's free tinnitus chat helped me more in 5 minutes than months of googling. It broke down habituation in plain English and gave me hope that this doesn't have to control my life. If you have tinnitus try it seriously.`,
+
+    () => `Was having a terrible tinnitus day and someone in a Facebook group told me to try Dan's chat. Best advice I've gotten. The chat was calm, informative, and actually made me feel like there's a path forward.`,
+
+    () => `lowkey Dan's tinnitus chat changed my whole outlook. I went in feeling defeated and came out with an actual understanding of what habituation means and why it works. Free resource doing more than most paid programs.`,
+];
+
 // Get avatar — gender-aware, uses Human Faces Dataset via avatarUtils
 export function getAvatarUrl(name: string, _index: number): string {
     return getSeededAvatar(name);
@@ -173,7 +206,7 @@ export async function generateAIReview(
     name: string,
     incomeMin = 10000,
     incomeMax = 150000,
-    tinnitusMode = false
+    mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'
 ): Promise<string> {
     const apiKey = getApiKey();
 
@@ -196,7 +229,24 @@ export async function generateAIReview(
     let systemContent: string;
     let userContent: string;
 
-    if (tinnitusMode) {
+    if (mode === 'tinnitus-chat') {
+        systemContent = `You write authentic Facebook posts from real everyday people sharing their positive experience with Dan Plants' free tinnitus AI chat.
+Rules:
+- ${lengthInstruction}
+- ${toneInstruction}
+- NO hashtags ever
+- At most ONE emoji in the whole post — many posts should have zero
+- Mention Dan's chat, Dan's tinnitus chat, or Dan's free tinnitus chat by name
+- The chat is a free AI chatbot that helps people understand tinnitus, gives them a game plan, calms their anxiety, explains habituation, and provides personalized suggestions
+- People should talk about how hopeful they feel, how their anxiety reduced, how they finally have a plan, how the chat explained things better than doctors
+- Some posts can mention a percentage reduction in distress or tinnitus awareness
+- Do NOT promise a cure — the chat helps with understanding, coping, and direction
+- Do NOT start with "Hey everyone" or "Hey friends" — vary the opening
+- Do NOT use exclamation marks more than once
+- No ALL CAPS
+- Do not write like a formal testimonial or advertisement`;
+        userContent = `Write a Facebook post from ${name} about their positive experience with Dan Plants' free tinnitus AI chat. They had a conversation and came away feeling hopeful, more informed, less anxious, or with a clear plan.`;
+    } else if (mode === 'tinnitus') {
         systemContent = `You write authentic Facebook posts from real everyday people sharing their tinnitus habituation success stories.
 Rules:
 - ${lengthInstruction}
@@ -260,7 +310,7 @@ export async function generateAIBatchReviews(
     onProgress?: (done: number, total: number) => void,
     incomeMin = 10000,
     incomeMax = 150000,
-    tinnitusMode = false
+    mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'
 ): Promise<GeneratedReview[]> {
     const reviews: GeneratedReview[] = [];
     const BATCH_SIZE = 5;
@@ -276,10 +326,13 @@ export async function generateAIBatchReviews(
         const texts = await Promise.all(
             batch.map(async (b) => {
                 try {
-                    return await generateAIReview(b.name, incomeMin, incomeMax, tinnitusMode);
+                    return await generateAIReview(b.name, incomeMin, incomeMax, mode);
                 } catch {
                     // Fallback to template if API fails
-                    if (tinnitusMode) {
+                    if (mode === 'tinnitus-chat') {
+                        return TINNITUS_CHAT_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_CHAT_REVIEW_TEMPLATES.length)]();
+                    }
+                    if (mode === 'tinnitus') {
                         return TINNITUS_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_REVIEW_TEMPLATES.length)](b.name);
                     }
                     const income = getRandomIncome(incomeMin, incomeMax);

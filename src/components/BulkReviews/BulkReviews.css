@@ -483,67 +483,50 @@
     font-style: italic;
 }
 
-/* ── Tinnitus Mode Toggle ─────────────────────────────────── */
-.tinnitus-toggle-wrap {
+/* ── 3-Way Mode Selector ─────────────────────────────────── */
+.mode-selector-wrap {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 4px;
     background: #1c1c2a;
     border: 1px solid #333;
     border-radius: 12px;
-    padding: 8px 16px;
+    padding: 4px;
     flex-shrink: 0;
 }
 
-.tinnitus-toggle-label {
+.mode-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
     font-size: 13px;
     font-weight: 600;
-    color: #9ca3af;
-    white-space: nowrap;
-}
-
-/* iOS-style toggle switch */
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 46px;
-    height: 26px;
     cursor: pointer;
-    flex-shrink: 0;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    font-family: inherit;
 }
 
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    position: absolute;
+.mode-btn:hover:not(.active) {
+    color: #d1d5db;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.toggle-slider {
-    position: absolute;
-    inset: 0;
-    background: #374151;
-    border-radius: 999px;
-    transition: background 0.25s;
+.mode-btn.active {
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.toggle-slider::before {
-    content: '';
-    position: absolute;
-    height: 20px;
-    width: 20px;
-    left: 3px;
-    top: 3px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.25s ease;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+.mode-btn.active.mode-fire {
+    background: linear-gradient(135deg, #ff6b35, #e55a2a);
 }
 
-.toggle-switch input:checked + .toggle-slider {
+.mode-btn.active.mode-tinnitus {
     background: linear-gradient(135deg, #0ea5e9, #06b6d4);
 }
 
-.toggle-switch input:checked + .toggle-slider::before {
-    transform: translateX(20px);
+.mode-btn.active.mode-chat {
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
 }

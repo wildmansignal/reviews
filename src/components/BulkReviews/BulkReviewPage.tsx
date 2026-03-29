@@ -4,6 +4,34 @@ import './BulkReviews.css';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Zap } from 'lucide-react';
 
+type ReviewMode = 'default' | 'tinnitus' | 'tinnitus-chat';
+
+const MODE_CONFIG: Record<ReviewMode, { icon: string; title: string; subtitle: string; emptyDesc: string; emptyHint: string; btnLabel: string }> = {
+    default: {
+        icon: '🔥',
+        title: '🔥 AI Review Generator',
+        subtitle: 'Generate realistic Facebook testimonials about Code On Fire',
+        emptyDesc: 'AI-powered Facebook review screenshots about Code On Fire.',
+        emptyHint: 'Each post will have a unique name, avatar, review text, and engagement numbers — all mentioning Dan and Code On Fire profits.',
+        btnLabel: '',
+    },
+    tinnitus: {
+        icon: '👂',
+        title: '👂 Tinnitus Habituation Reviews',
+        subtitle: 'Generate tinnitus habituation success stories for Dan Plants\' program',
+        emptyDesc: 'AI-powered Facebook success stories about Dan Plants\' tinnitus habituation program.',
+        emptyHint: 'Each post will have a unique name, avatar, and authentic habituation success story — mentioning Dan Plants and his program by name.',
+        btnLabel: 'Tinnitus',
+    },
+    'tinnitus-chat': {
+        icon: '💬',
+        title: '💬 Tinnitus Chat Reviews',
+        subtitle: 'Generate positive reviews about Dan\'s free tinnitus AI chat',
+        emptyDesc: 'AI-powered Facebook reviews about Dan\'s free tinnitus chat.',
+        emptyHint: 'Each post will share a positive experience with Dan\'s free tinnitus AI chat — how it gave them hope, a game plan, and reduced their anxiety.',
+        btnLabel: 'Chat',
+    },
+};
 
 const BulkReviewPage: React.FC = () => {
     const [reviews, setReviews] = useState<GeneratedReview[]>([]);
@@ -14,7 +42,9 @@ const BulkReviewPage: React.FC = () => {
     const [error, setError] = useState('');
     const [incomeMin, setIncomeMin] = useState('10000');
     const [incomeMax, setIncomeMax] = useState('150000');
-    const [tinnitusMode, setTinnitusMode] = useState(false);
+    const [mode, setMode] = useState<ReviewMode>('default');
+
+    const cfg = MODE_CONFIG[mode];
 
     const handleGenerate = async () => {
         setIsGenerating(true);
@@ -29,13 +59,18 @@ const BulkReviewPage: React.FC = () => {
             const results = await generateAIBatchReviews(count, (done, total) => {
                 setProgress(done);
                 setTotal(total);
-            }, min, max, tinnitusMode);
+            }, min, max, mode);
             setReviews(results);
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Generation failed');
         } finally {
             setIsGenerating(false);
         }
+    };
+
+    const switchMode = (newMode: ReviewMode) => {
+        setMode(newMode);
+        setReviews([]);
     };
 
     return (
@@ -46,8 +81,8 @@ const BulkReviewPage: React.FC = () => {
                     <ArrowLeft size={18} /> Back
                 </Link>
                 <div className="bulk-header-center">
-                    <h1 className="bulk-title">{tinnitusMode ? '👂 Tinnitus Habituation Reviews' : '🔥 AI Review Generator'}</h1>
-                    <p className="bulk-subtitle">{tinnitusMode ? 'Generate tinnitus habituation success stories for Dan Plants\' program' : 'Generate realistic Facebook testimonials about Code On Fire'}</p>
+                    <h1 className="bulk-title">{cfg.title}</h1>
+                    <p className="bulk-subtitle">{cfg.subtitle}</p>
                 </div>
                 <div style={{ width: 80 }} />
             </div>
@@ -55,18 +90,26 @@ const BulkReviewPage: React.FC = () => {
             {/* Controls */}
             <div className="bulk-controls-bar">
                 <div className="bulk-controls-inner">
-                    {/* Tinnitus Mode Toggle */}
-                    <div className="tinnitus-toggle-wrap">
-                        <span className="tinnitus-toggle-label">🔥 Code On Fire</span>
-                        <label className="toggle-switch" title="Switch to Tinnitus Habituation mode">
-                            <input
-                                type="checkbox"
-                                checked={tinnitusMode}
-                                onChange={e => { setTinnitusMode(e.target.checked); setReviews([]); }}
-                            />
-                            <span className="toggle-slider" />
-                        </label>
-                        <span className="tinnitus-toggle-label">👂 Tinnitus mode</span>
+                    {/* 3-Way Mode Selector */}
+                    <div className="mode-selector-wrap">
+                        <button
+                            className={`mode-btn ${mode === 'default' ? 'active mode-fire' : ''}`}
+                            onClick={() => switchMode('default')}
+                        >
+                            🔥 Code On Fire
+                        </button>
+                        <button
+                            className={`mode-btn ${mode === 'tinnitus' ? 'active mode-tinnitus' : ''}`}
+                            onClick={() => switchMode('tinnitus')}
+                        >
+                            👂 Tinnitus
+                        </button>
+                        <button
+                            className={`mode-btn ${mode === 'tinnitus-chat' ? 'active mode-chat' : ''}`}
+                            onClick={() => switchMode('tinnitus-chat')}
+                        >
+                            💬 Tinnitus Chat
+                        </button>
                     </div>
 
                     <div className="bulk-count-control">
@@ -84,8 +127,8 @@ const BulkReviewPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Income Range — hidden in tinnitus mode */}
-                    {!tinnitusMode && (
+                    {/* Income Range — only shown in default mode */}
+                    {mode === 'default' && (
                         <div className="bulk-income-range">
                             <label>Income range in reviews:</label>
                             <div className="income-range-inputs">
@@ -126,7 +169,7 @@ const BulkReviewPage: React.FC = () => {
                         ) : (
                             <>
                                 <Zap size={18} />
-                                Generate {count} {tinnitusMode ? 'Tinnitus' : ''} Reviews with AI
+                                Generate {count} {cfg.btnLabel ? cfg.btnLabel + ' ' : ''}Reviews with AI
                             </>
                         )}
                     </button>
@@ -159,19 +202,10 @@ const BulkReviewPage: React.FC = () => {
 
             {!isGenerating && reviews.length === 0 && (
                 <div className="bulk-empty-state">
-                    <div className="empty-icon">{tinnitusMode ? '👂' : '🔥'}</div>
+                    <div className="empty-icon">{cfg.icon}</div>
                     <h2>Ready to Generate</h2>
-                    {tinnitusMode ? (
-                        <>
-                            <p>Click the button above to generate {count} AI-powered Facebook success stories about Dan Plants' tinnitus habituation program.</p>
-                            <p className="empty-hint">Each post will have a unique name, avatar, and authentic habituation success story — mentioning Dan Plants and his program by name.</p>
-                        </>
-                    ) : (
-                        <>
-                            <p>Click the button above to generate {count} AI-powered Facebook review screenshots about Code On Fire.</p>
-                            <p className="empty-hint">Each post will have a unique name, avatar, review text, and engagement numbers — all mentioning Dan and Code On Fire profits.</p>
-                        </>
-                    )}
+                    <p>Click the button above to generate {count} {cfg.emptyDesc}</p>
+                    <p className="empty-hint">{cfg.emptyHint}</p>
                 </div>
             )}
         </div>
