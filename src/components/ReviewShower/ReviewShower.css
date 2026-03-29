@@ -8,7 +8,7 @@
 
 /* ── Setup View ───────────────────────────────────────────── */
 .shower-setup {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 3rem 2rem;
 }
@@ -33,31 +33,134 @@
     font-size: 14px;
 }
 
-.shower-textarea {
-    width: 100%;
-    min-height: 300px;
-    background: #111118;
-    border: 1px solid #2a2a3a;
-    border-radius: 16px;
-    color: #e5e7eb;
+.shower-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #9ca3af;
+    text-decoration: none;
     font-size: 14px;
-    line-height: 1.7;
-    padding: 20px;
-    resize: vertical;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
 }
 
-.shower-textarea:focus {
+.shower-back-btn:hover {
+    color: white;
+}
+
+/* ── Upload Area ──────────────────────────────────────────── */
+.shower-upload-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.shower-upload-btn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.shower-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.shower-clear-btn {
+    background: #1e1e2e;
+    color: #9ca3af;
+    border: 1px solid #333;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.shower-clear-btn:hover {
+    color: #ef4444;
     border-color: #ef4444;
 }
 
-.shower-textarea::placeholder {
-    color: #4b5563;
+/* ── Thumbnail Grid ───────────────────────────────────────── */
+.shower-thumbs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 2rem;
 }
 
+.shower-thumb-wrap {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #222;
+    transition: border-color 0.2s;
+    aspect-ratio: 3 / 4;
+}
+
+.shower-thumb-wrap:hover {
+    border-color: #ef4444;
+}
+
+.shower-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.shower-thumb-number {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.shower-thumb-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(239, 68, 68, 0.85);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.shower-thumb-wrap:hover .shower-thumb-remove {
+    opacity: 1;
+}
+
+/* ── Controls ─────────────────────────────────────────────── */
 .shower-controls {
     display: flex;
     align-items: center;
@@ -113,100 +216,63 @@
     margin-top: 12px;
 }
 
-.shower-back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #9ca3af;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    transition: color 0.2s;
-}
-
-.shower-back-btn:hover {
-    color: white;
-}
-
 /* ── Presentation View ────────────────────────────────────── */
 .shower-presentation {
     position: fixed;
     inset: 0;
     background: #050508;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     overflow: hidden;
 }
 
-.shower-review-container {
+.shower-img-container {
     position: relative;
-    width: 80%;
-    max-width: 900px;
-    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 3rem;
+    box-sizing: border-box;
 }
 
-.shower-review-text {
-    font-size: 28px;
-    font-weight: 500;
-    line-height: 1.8;
-    color: #e5e7eb;
-    opacity: 0;
-    animation: showerFadeIn 1s ease forwards;
+.shower-img {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 16px;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+    transform-origin: center center;
 }
 
-.shower-review-text.zooming {
-    animation: showerZoomIn 6s ease forwards;
+.shower-img-fadein {
+    animation: imgFadeIn 1s ease forwards;
 }
 
-.shower-review-text.fading-out {
-    animation: showerFadeOut 0.8s ease forwards;
+.shower-img-zoom {
+    animation: imgZoom 6s ease forwards;
 }
 
-.shower-sale-word {
-    position: relative;
-    font-weight: 800;
-    color: white;
+.shower-img-fadeout {
+    animation: imgFadeOut 0.8s ease forwards;
 }
 
-.shower-sale-word::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #ef4444, #f97316);
-    border-radius: 2px;
-    transition: none;
+@keyframes imgFadeIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
 }
 
-.shower-sale-word.underline-active::after {
-    animation: sweepUnderline 0.6s ease forwards;
-}
-
-@keyframes sweepUnderline {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-@keyframes showerFadeIn {
-    from { opacity: 0; transform: scale(0.95) translateY(20px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@keyframes showerZoomIn {
+@keyframes imgZoom {
     0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.18); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 1; }
 }
 
-@keyframes showerFadeOut {
-    from { opacity: 1; transform: scale(1.18); }
-    to { opacity: 0; transform: scale(1.22) translateY(-10px); }
+@keyframes imgFadeOut {
+    from { opacity: 1; transform: scale(1.2); }
+    to { opacity: 0; transform: scale(1.25); }
 }
 
 /* ── Presentation Controls ────────────────────────────────── */

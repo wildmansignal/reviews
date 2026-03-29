@@ -1,131 +1,81 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Play, Pause, SkipForward, X } from 'lucide-react';
+import { ArrowLeft, Play, Pause, SkipForward, X, Upload, Trash2 } from 'lucide-react';
 import './ReviewShower.css';
 
-// ── Sales phrases to highlight & zoom into ──────────────────────────────────
-const SALES_PHRASES = [
-    'free', 'FREE', 'Free',
-    'AI chat', 'ai chat', 'AI Chat', 'tinnitus chat', 'Tinnitus Chat', "Dan's chat", 'dans chat',
-    'saved my life', 'changed my life', 'life-changing', 'game changer', 'game plan',
-    'reduction', 'reduced', 'went down', 'decreased', 'improvement',
-    'hopeful', 'hope', 'anxiety', 'fear', 'panic', 'relief',
-    'habituation', 'habituated', 'results', 'working', 'it works', 'actually works',
-    'sleep better', 'sleeping again', 'quality of life',
-];
-
-const buildPattern = () => {
-    const sorted = [...SALES_PHRASES].sort((a, b) => b.length - a.length);
-    const escaped = sorted.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    return new RegExp(`(\\$[\\d,]+(?:\\.\\d+)?|\\d+%\\s*[Rr]eduction[\\w\\s]*|${escaped.join('|')})`, 'gi');
-};
-
-interface SalesPart {
-    text: string;
-    isSales: boolean;
-}
-
-const splitIntoSalesParts = (text: string): SalesPart[] => {
-    const pattern = buildPattern();
-    const parts = text.split(pattern);
-    return parts.filter(p => p.length > 0).map(part => {
-        pattern.lastIndex = 0;
-        const isSales = pattern.test(part);
-        pattern.lastIndex = 0;
-        return { text: part, isSales };
-    });
-};
-
-// ── Component ────────────────────────────────────────────────────────────────
 const ReviewShowerApp: React.FC = () => {
-    const [rawText, setRawText] = useState('');
-    const [reviews, setReviews] = useState<string[]>([]);
+    const [images, setImages] = useState<string[]>([]);
     const [isPresenting, setIsPresenting] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [phase, setPhase] = useState<'fade-in' | 'zoom' | 'fade-out'>('fade-in');
-    const [activeUnderlines, setActiveUnderlines] = useState<Set<number>>(new Set());
-    const [speed, setSpeed] = useState(5); // seconds per review
+    const [speed, setSpeed] = useState(6); // seconds per image
     const [isPaused, setIsPaused] = useState(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Parse reviews from raw text (split by double newline or numbered lines)
-    const parseReviews = useCallback(() => {
-        const lines = rawText
-            .split(/\n{2,}|\n(?=\d+[\.\)]\s)/)
-            .map(r => r.replace(/^\d+[\.\)]\s*/, '').trim())
-            .filter(r => r.length > 10);
-        return lines;
-    }, [rawText]);
+    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            const newImages = Array.from(e.target.files).map(f => URL.createObjectURL(f));
+            setImages(prev => [...prev, ...newImages]);
+        }
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+
+    const removeImage = (idx: number) => {
+        setImages(prev => {
+            URL.revokeObjectURL(prev[idx]);
+            return prev.filter((_, i) => i !== idx);
+        });
+    };
+
+    const clearAll = () => {
+        images.forEach(url => URL.revokeObjectURL(url));
+        setImages([]);
+    };
 
     const startPresentation = () => {
-        const parsed = parseReviews();
-        if (parsed.length === 0) return;
-        setReviews(parsed);
+        if (images.length === 0) return;
         setCurrentIndex(0);
         setPhase('fade-in');
-        setActiveUnderlines(new Set());
         setIsPresenting(true);
         setIsPaused(false);
     };
 
-    const stopPresentation = () => {
+    const stopPresentation = useCallback(() => {
         setIsPresenting(false);
         setIsPaused(false);
         if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    }, []);
 
     const skipToNext = useCallback(() => {
         if (timerRef.current) clearTimeout(timerRef.current);
-        if (currentIndex < reviews.length - 1) {
+        if (currentIndex < images.length - 1) {
             setPhase('fade-out');
             setTimeout(() => {
                 setCurrentIndex(prev => prev + 1);
                 setPhase('fade-in');
-                setActiveUnderlines(new Set());
             }, 800);
         } else {
             stopPresentation();
         }
-    }, [currentIndex, reviews.length]);
+    }, [currentIndex, images.length, stopPresentation]);
 
-    // Animation timeline for each review
+    // Animation timeline
     useEffect(() => {
         if (!isPresenting || isPaused) return;
         if (timerRef.current) clearTimeout(timerRef.current);
 
-        const totalMs = speed * 1000;
-        const parts = splitIntoSalesParts(reviews[currentIndex] || '');
-        const salesIndices = parts.reduce<number[]>((acc, p, i) => p.isSales ? [...acc, i] : acc, []);
+        const zoomDuration = speed * 1000;
 
         if (phase === 'fade-in') {
-            // After fade-in (1s), start zoom
             timerRef.current = setTimeout(() => setPhase('zoom'), 1000);
         } else if (phase === 'zoom') {
-            // Stagger underline reveals across the zoom duration
-            const underlineDelay = salesIndices.length > 0
-                ? Math.min((totalMs - 2000) / salesIndices.length, 1200)
-                : totalMs - 2000;
-
-            salesIndices.forEach((sIdx, order) => {
-                const delay = 500 + order * underlineDelay;
-                const t = setTimeout(() => {
-                    setActiveUnderlines(prev => new Set(prev).add(sIdx));
-                }, delay);
-                // Store cleanup in a separate effect
-                timerRef.current = t;
-            });
-
-            // After zoom duration, fade out
-            timerRef.current = setTimeout(() => {
-                setPhase('fade-out');
-            }, totalMs - 1000);
+            timerRef.current = setTimeout(() => setPhase('fade-out'), zoomDuration);
         } else if (phase === 'fade-out') {
-            // After fade-out, go to next
             timerRef.current = setTimeout(() => {
-                if (currentIndex < reviews.length - 1) {
+                if (currentIndex < images.length - 1) {
                     setCurrentIndex(prev => prev + 1);
                     setPhase('fade-in');
-                    setActiveUnderlines(new Set());
                 } else {
                     stopPresentation();
                 }
@@ -135,9 +85,9 @@ const ReviewShowerApp: React.FC = () => {
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [isPresenting, isPaused, phase, currentIndex, speed, reviews]);
+    }, [isPresenting, isPaused, phase, currentIndex, speed, images.length, stopPresentation]);
 
-    // Keyboard shortcuts
+    // Keyboard
     useEffect(() => {
         if (!isPresenting) return;
         const handler = (e: KeyboardEvent) => {
@@ -147,47 +97,36 @@ const ReviewShowerApp: React.FC = () => {
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, [isPresenting, skipToNext]);
+    }, [isPresenting, skipToNext, stopPresentation]);
 
-    // ── Render current review with sales highlights ──────────────
-    const renderCurrentReview = () => {
-        const text = reviews[currentIndex] || '';
-        const parts = splitIntoSalesParts(text);
-
-        const animClass = phase === 'fade-in' ? '' : phase === 'zoom' ? 'zooming' : 'fading-out';
-
-        return (
-            <div className={`shower-review-text ${animClass}`}>
-                {parts.map((part, i) => {
-                    if (part.isSales) {
-                        const isActive = activeUnderlines.has(i);
-                        return (
-                            <span key={i} className={`shower-sale-word ${isActive ? 'underline-active' : ''}`}>
-                                {part.text}
-                            </span>
-                        );
-                    }
-                    return <span key={i}>{part.text}</span>;
-                })}
-            </div>
-        );
-    };
+    // Cleanup URLs
+    useEffect(() => {
+        return () => { images.forEach(url => URL.revokeObjectURL(url)); };
+    }, []);
 
     // ── Fullscreen Presentation ──────────────────────────────────
-    if (isPresenting && reviews.length > 0) {
+    if (isPresenting && images.length > 0) {
+        const animClass = phase === 'fade-in' ? 'shower-img-fadein' : phase === 'zoom' ? 'shower-img-zoom' : 'shower-img-fadeout';
+
         return (
             <div className="shower-presentation">
-                <div className="shower-progress-bar" style={{ width: `${((currentIndex + 1) / reviews.length) * 100}%` }} />
+                <div className="shower-progress-bar" style={{ width: `${((currentIndex + 1) / images.length) * 100}%` }} />
 
-                <div className="shower-review-container">
-                    {renderCurrentReview()}
+                <div className="shower-img-container">
+                    <img
+                        key={currentIndex}
+                        src={images[currentIndex]}
+                        alt={`Review ${currentIndex + 1}`}
+                        className={`shower-img ${animClass}`}
+                        style={{ animationDuration: phase === 'zoom' ? `${speed}s` : undefined }}
+                    />
                 </div>
 
                 <div className="shower-pres-controls">
                     <button className="shower-pres-btn" onClick={() => setIsPaused(p => !p)} title={isPaused ? 'Resume' : 'Pause'}>
                         {isPaused ? <Play size={20} /> : <Pause size={20} />}
                     </button>
-                    <span className="shower-progress-text">{currentIndex + 1} / {reviews.length}</span>
+                    <span className="shower-progress-text">{currentIndex + 1} / {images.length}</span>
                     <button className="shower-pres-btn" onClick={skipToNext} title="Next">
                         <SkipForward size={20} />
                     </button>
@@ -209,19 +148,40 @@ const ReviewShowerApp: React.FC = () => {
 
                 <div className="shower-setup-header">
                     <h1>🔥 Review Shower</h1>
-                    <p>Paste your reviews below. Each one will be presented cinematically with zoom + highlighted sales phrases.</p>
+                    <p>Upload review screenshots. Each will be shown fullscreen with a cinematic zoom effect.</p>
                 </div>
 
-                <textarea
-                    className="shower-textarea"
-                    value={rawText}
-                    onChange={e => setRawText(e.target.value)}
-                    placeholder={`Paste your reviews here, separated by blank lines...\n\nAfter talking to Dan's chat, my tinnitus has reduced by like 20%. I feel hopeful, like I have a game plan.\n\nThis FREE AI chat saved my life. I was in a panic and it calmed me down in 5 minutes. The results speak for themselves.\n\nI can't believe this is free. Dan's tinnitus chat gave me more hope than any doctor. My anxiety is way down and I'm sleeping again.`}
-                />
+                <div className="shower-upload-area">
+                    <label className="shower-upload-btn">
+                        <Upload size={18} />
+                        Upload Screenshots
+                        <input ref={fileInputRef} type="file" multiple accept="image/*" onChange={handleUpload} style={{ display: 'none' }} />
+                    </label>
+
+                    {images.length > 0 && (
+                        <button className="shower-clear-btn" onClick={clearAll}>
+                            <Trash2 size={16} /> Clear All ({images.length})
+                        </button>
+                    )}
+                </div>
+
+                {images.length > 0 && (
+                    <div className="shower-thumbs-grid">
+                        {images.map((img, i) => (
+                            <div key={i} className="shower-thumb-wrap">
+                                <img src={img} alt={`Review ${i + 1}`} className="shower-thumb" />
+                                <div className="shower-thumb-number">{i + 1}</div>
+                                <button className="shower-thumb-remove" onClick={() => removeImage(i)} title="Remove">
+                                    <X size={14} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 <div className="shower-controls">
-                    <button className="shower-play-btn" onClick={startPresentation} disabled={rawText.trim().length < 20}>
-                        <Play size={18} /> Start Shower
+                    <button className="shower-play-btn" onClick={startPresentation} disabled={images.length === 0}>
+                        <Play size={18} /> Start Shower ({images.length} reviews)
                     </button>
 
                     <div className="shower-speed-control">
@@ -232,8 +192,7 @@ const ReviewShowerApp: React.FC = () => {
                 </div>
 
                 <div className="shower-hint">
-                    Tip: Separate reviews with blank lines. Key phrases like <strong style={{ color: '#ef4444' }}>FREE</strong>, <strong style={{ color: '#ef4444' }}>AI chat</strong>, <strong style={{ color: '#ef4444' }}>reduction</strong>, and <strong style={{ color: '#ef4444' }}>results</strong> will be auto-highlighted and underlined during presentation.
-                    <br />Keyboard: <strong>Space</strong> = pause/resume, <strong>→</strong> = skip, <strong>Esc</strong> = exit.
+                    Keyboard: <strong>Space</strong> = pause/resume, <strong>→</strong> = skip, <strong>Esc</strong> = exit
                 </div>
             </div>
         </div>
