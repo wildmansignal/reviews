@@ -20,7 +20,7 @@ const GmailControlPanel: React.FC<GmailControlPanelProps> = ({
         setAiLoading(true);
         setAiError('');
         try {
-            const result = await generateGmailThread(tinnitusMode);
+            const result = await generateGmailThread(tinnitusMode ? 'tinnitus' : 'default');
             if (onAIGenerate) onAIGenerate(result.messages, result.subject);
         } catch (e: unknown) {
             setAiError(e instanceof Error ? e.message : 'AI generation failed');

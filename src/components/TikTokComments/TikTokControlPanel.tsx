@@ -35,7 +35,7 @@ const TikTokControlPanel: React.FC<TikTokControlPanelProps> = ({
         setAiLoading(true);
         setAiError('');
         try {
-            const result = await generateTikTokComments(tinnitusMode);
+            const result = await generateTikTokComments(tinnitusMode ? 'tinnitus' : 'default');
             if (onAIGenerate) {
                 onAIGenerate(result.comments, result.totalComments, result.totalLikes);
             }

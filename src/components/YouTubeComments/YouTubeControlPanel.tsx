@@ -26,7 +26,7 @@ const YouTubeControlPanel: React.FC<YouTubeControlPanelProps> = ({
         setAiLoading(true);
         setAiError('');
         try {
-            const result = await generateYouTubeComments(tinnitusMode);
+            const result = await generateYouTubeComments(tinnitusMode ? 'tinnitus' : 'default');
             if (onAIGenerate) onAIGenerate(result.comments);
         } catch (e: unknown) {
             setAiError(e instanceof Error ? e.message : 'AI generation failed');

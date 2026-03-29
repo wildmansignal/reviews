@@ -445,10 +445,11 @@ export interface GeneratedTikTokComments {
     totalLikes: string;
 }
 
-export async function generateTikTokComments(tinnitusMode = false): Promise<GeneratedTikTokComments> {
+export async function generateTikTokComments(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedTikTokComments> {
     const apiKey = getApiKey();
-    const prompt = tinnitusMode
-        ? `Generate realistic TikTok comments for a video by Dan Plants about tinnitus habituation and recovering your quality of life from tinnitus.
+    let prompt: string;
+    if (mode === 'tinnitus-chat') {
+        prompt = `Generate realistic TikTok comments for a video by Dan Plants about his free tinnitus AI chat that helps people understand and cope with tinnitus.
 Return ONLY valid JSON, no markdown:
 {
   "comments": [
@@ -458,8 +459,21 @@ Return ONLY valid JSON, no markdown:
   "totalComments": "X,XXX",
   "totalLikes": "XX.XK"
 }
-Make usernames realistic (lowercase, numbers, underscores). Comments 5-20 words, casual TikTok style. People sharing their tinnitus habituation journey or thanking Dan. 1-2 emojis max. Likes 10-500.`
-        : `Generate realistic TikTok comments for a video about making money online / Code On Fire by Dan.
+Make usernames realistic (lowercase, numbers, underscores). Comments 5-20 words, casual TikTok style. People sharing how Dan's free tinnitus chat helped them, gave them a game plan, reduced their anxiety. 1-2 emojis max. Likes 10-500.`;
+    } else if (mode === 'tinnitus') {
+        prompt = `Generate realistic TikTok comments for a video by Dan Plants about tinnitus habituation and recovering your quality of life from tinnitus.
+Return ONLY valid JSON, no markdown:
+{
+  "comments": [
+    {"username": "tiktok_handle", "text": "comment text with 1-2 emojis max", "likes": "XX"},
+    ...4 more comments
+  ],
+  "totalComments": "X,XXX",
+  "totalLikes": "XX.XK"
+}
+Make usernames realistic (lowercase, numbers, underscores). Comments 5-20 words, casual TikTok style. People sharing their tinnitus habituation journey or thanking Dan. 1-2 emojis max. Likes 10-500.`;
+    } else {
+        prompt = `Generate realistic TikTok comments for a video about making money online / Code On Fire by Dan.
 Return ONLY valid JSON, no markdown:
 {
   "comments": [
@@ -470,6 +484,7 @@ Return ONLY valid JSON, no markdown:
   "totalLikes": "XX.XK"
 }
 Make usernames look realistic (lowercase, numbers, underscores). Comments should be 5-20 words, casual TikTok style. 1-2 emojis max per comment. Likes between 10-500.`;
+    }
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
@@ -489,10 +504,11 @@ export interface GeneratedYouTubeComments {
     comments: Array<{ handle: string; text: string; likes: string; timeAgo: string; }>;
 }
 
-export async function generateYouTubeComments(tinnitusMode = false): Promise<GeneratedYouTubeComments> {
+export async function generateYouTubeComments(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedYouTubeComments> {
     const apiKey = getApiKey();
-    const prompt = tinnitusMode
-        ? `Generate realistic YouTube comments for a video by Dan Plants about tinnitus habituation — people sharing their recovery journey and thanking Dan.
+    let prompt: string;
+    if (mode === 'tinnitus-chat') {
+        prompt = `Generate realistic YouTube comments for a video by Dan Plants about his free tinnitus AI chat that helps people understand and cope with tinnitus.
 Return ONLY valid JSON, no markdown:
 {
   "comments": [
@@ -500,8 +516,19 @@ Return ONLY valid JSON, no markdown:
     ...4 more
   ]
 }
-Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. People mention how Dan's program helped them habituate to tinnitus and get their life back. Authentic, emotional but grounded.`
-        : `Generate realistic YouTube comments for a video about Dan's Code On Fire program / making money online. People sharing their results.
+Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. People sharing how Dan's free tinnitus chat helped them feel hopeful, gave them a plan, reduced anxiety. Authentic and grounded.`;
+    } else if (mode === 'tinnitus') {
+        prompt = `Generate realistic YouTube comments for a video by Dan Plants about tinnitus habituation — people sharing their recovery journey and thanking Dan.
+Return ONLY valid JSON, no markdown:
+{
+  "comments": [
+    {"handle": "@username123", "text": "comment text, no emojis or max 1", "likes": "XX", "timeAgo": "Xy ago"},
+    ...4 more
+  ]
+}
+Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. People mention how Dan's program helped them habituate to tinnitus and get their life back. Authentic, emotional but grounded.`;
+    } else {
+        prompt = `Generate realistic YouTube comments for a video about Dan's Code On Fire program / making money online. People sharing their results.
 Return ONLY valid JSON, no markdown:
 {
   "comments": [
@@ -510,6 +537,7 @@ Return ONLY valid JSON, no markdown:
   ]
 }
 Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. Authentic, varied reactions.`;
+    }
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
@@ -552,6 +580,27 @@ const GMAIL_TEMPLATES_COF: GeneratedGmailThread[] = [
     },
 ];
 
+const GMAIL_TEMPLATES_TINNITUS_CHAT: GeneratedGmailThread[] = [
+    {
+        subject: 'Your tinnitus chat helped me more than my doctor',
+        messages: [
+            { senderName: 'Lauren Carter', content: 'Hi Dan, I just wanted to send you a note about your free tinnitus chat. I used it last night during a really bad spike and it actually calmed me down. It explained what was happening in my nervous system and gave me a breathing exercise. I felt better within 20 minutes. No doctor has ever given me that kind of practical help.', isMe: false },
+            { senderName: 'Dan', content: 'Lauren, thank you so much for sharing this. That\'s exactly what the chat is designed to do — meet you where you are and give you immediate, practical support. How are you feeling today?', isMe: true },
+            { senderName: 'Lauren Carter', content: 'So much better. I went back and talked to it again this morning and it helped me build a weekly plan. I feel like I actually have direction for the first time since this started. Thank you for making this free.', isMe: false },
+            { senderName: 'Dan', content: 'That means the world. The chat is there anytime you need it. You\'re already on the right path just by seeking understanding instead of fighting the sound.', isMe: true },
+        ],
+    },
+    {
+        subject: 'Thank you for the free tinnitus chat',
+        messages: [
+            { senderName: 'Marcus Green', content: 'Dan, I found your tinnitus chat through a Reddit thread and I have to say it\'s the most helpful free resource I\'ve come across. It asked about my situation, how long I\'ve had tinnitus, what my anxiety levels are like, and then gave me a personalized plan. I felt hopeful for the first time in months.', isMe: false },
+            { senderName: 'Dan', content: 'Marcus, really glad it helped! The chat is built to give people personalized guidance because everyone\'s tinnitus journey is different. What resonated most with you?', isMe: true },
+            { senderName: 'Marcus Green', content: 'The part about how my brain is treating the sound as a threat. Once I understood that, my whole relationship with tinnitus shifted. I\'m still early but I feel like I have a game plan now.', isMe: false },
+            { senderName: 'Dan', content: 'That insight is the foundation of everything. Once you understand the mechanism, the fear loses its power. Keep going — you\'re on the right track.', isMe: true },
+        ],
+    },
+];
+
 const GMAIL_TEMPLATES_TINNITUS: GeneratedGmailThread[] = [
     {
         subject: 'I think I finally habituated — thank you',
@@ -573,12 +622,25 @@ const GMAIL_TEMPLATES_TINNITUS: GeneratedGmailThread[] = [
     },
 ];
 
-export async function generateGmailThread(tinnitusMode = false): Promise<GeneratedGmailThread> {
+export async function generateGmailThread(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedGmailThread> {
     // Try the API first, fall back to local templates
     try {
         const apiKey = getApiKey();
-        const prompt = tinnitusMode
-            ? `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation program and is sharing their success.
+        let prompt: string;
+        if (mode === 'tinnitus-chat') {
+            prompt = `Generate a realistic Gmail email thread between Dan Plants and someone who used his free tinnitus AI chat and is sharing how much it helped them.
+Return ONLY valid JSON, no markdown:
+{
+  "subject": "Thread subject",
+  "messages": [
+    {"senderName": "Person Name", "content": "email content", "isMe": false},
+    {"senderName": "Dan", "content": "Dan's reply", "isMe": true},
+    ...2-3 more messages alternating
+  ]
+}
+Keep emails realistic, 2-4 sentences each. The person describes how Dan's free tinnitus chat gave them hope, a game plan, reduced their anxiety, or explained things better than their doctor. Dan is warm and grateful. Do NOT promise a cure.`;
+        } else if (mode === 'tinnitus') {
+            prompt = `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation program and is sharing their success.
 Return ONLY valid JSON, no markdown:
 {
   "subject": "Thread subject",
@@ -588,8 +650,9 @@ Return ONLY valid JSON, no markdown:
     ...2-3 more messages alternating
   ]
 }
-Keep emails realistic, 2-4 sentences each. The person describes how long they suffered, what shifted for them, and how life improved after completing the program. Dan is warm and encouraging. Do NOT promise a cure — habituation means the sound is still there but no longer distressing.`
-            : `Generate a realistic Gmail email thread between Dan (an online coach) and a customer/student of his Code On Fire program. The customer has a question or is sharing their success.
+Keep emails realistic, 2-4 sentences each. The person describes how long they suffered, what shifted for them, and how life improved after completing the program. Dan is warm and encouraging. Do NOT promise a cure — habituation means the sound is still there but no longer distressing.`;
+        } else {
+            prompt = `Generate a realistic Gmail email thread between Dan (an online coach) and a customer/student of his Code On Fire program. The customer has a question or is sharing their success.
 Return ONLY valid JSON, no markdown:
 {
   "subject": "Thread subject",
@@ -600,6 +663,7 @@ Return ONLY valid JSON, no markdown:
   ]
 }
 Keep emails realistic, 2-4 sentences each. Customer has a genuine question or success story.`;
+        }
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
@@ -616,7 +680,7 @@ Keep emails realistic, 2-4 sentences each. Customer has a genuine question or su
         return JSON.parse(raw);
     } catch {
         // Fallback to local templates
-        const templates = tinnitusMode ? GMAIL_TEMPLATES_TINNITUS : GMAIL_TEMPLATES_COF;
+        const templates = mode === 'tinnitus-chat' ? GMAIL_TEMPLATES_TINNITUS_CHAT : mode === 'tinnitus' ? GMAIL_TEMPLATES_TINNITUS : GMAIL_TEMPLATES_COF;
         return templates[Math.floor(Math.random() * templates.length)];
     }
 }
@@ -627,16 +691,11 @@ export interface GeneratedMessengerThread {
     contactName: string;
 }
 
-export async function generateMessengerThread(): Promise<GeneratedMessengerThread> {
+export async function generateMessengerThread(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedMessengerThread> {
     const apiKey = getApiKey();
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-        body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [{
-                role: 'user',
-                content: `Generate a realistic Facebook Messenger conversation between Dan (an online business coach / Code On Fire creator) and a student who is excited about their results.
+    let prompt: string;
+    if (mode === 'tinnitus-chat') {
+        prompt = `Generate a realistic Facebook Messenger conversation between Dan Plants and someone who just used his free tinnitus AI chat and is messaging him about how much it helped.
 Return ONLY valid JSON, no markdown:
 {
   "contactName": "Full Name",
@@ -646,8 +705,38 @@ Return ONLY valid JSON, no markdown:
     ...5-7 more messages alternating
   ]
 }
-Messages should be short, 1-2 sentences, casual. Student shares results or asks about implementation. Dan is helpful, encouraging.`
-            }],
+Messages should be short, 1-2 sentences, casual. Person shares how the chat gave them hope, a plan, reduced their anxiety, or explained tinnitus better than doctors. Dan is grateful and encouraging.`;
+    } else if (mode === 'tinnitus') {
+        prompt = `Generate a realistic Facebook Messenger conversation between Dan Plants (tinnitus habituation coach) and someone who completed his tinnitus habituation program and is sharing their success.
+Return ONLY valid JSON, no markdown:
+{
+  "contactName": "Full Name",
+  "messages": [
+    {"text": "message text", "isMe": false},
+    {"text": "Dan's reply", "isMe": true},
+    ...5-7 more messages alternating
+  ]
+}
+Messages should be short, 1-2 sentences, casual. Person shares how they habituated, sleep better, don't fear the sound anymore. Dan is warm and encouraging. Do NOT promise a cure.`;
+    } else {
+        prompt = `Generate a realistic Facebook Messenger conversation between Dan (an online business coach / Code On Fire creator) and a student who is excited about their results.
+Return ONLY valid JSON, no markdown:
+{
+  "contactName": "Full Name",
+  "messages": [
+    {"text": "message text", "isMe": false},
+    {"text": "Dan's reply", "isMe": true},
+    ...5-7 more messages alternating
+  ]
+}
+Messages should be short, 1-2 sentences, casual. Student shares results or asks about implementation. Dan is helpful, encouraging.`;
+    }
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
             max_tokens: 400,
             temperature: 0.9,
         }),
@@ -856,3 +945,129 @@ export async function generateAllProfiles(
     return profiles;
 }
 
+
+// ─── Mixed Bulk Content Generator ─────────────────────────────────────────────
+
+export type ContentType = 'facebook' | 'gmail' | 'messenger' | 'tiktok' | 'youtube';
+
+export interface MixedContentItem {
+    type: ContentType;
+    // Facebook fields
+    fbReview?: GeneratedReview;
+    // Gmail fields
+    gmailThread?: GeneratedGmailThread;
+    // Messenger fields
+    messengerThread?: GeneratedMessengerThread;
+    // TikTok fields
+    tiktokComment?: { username: string; text: string; likes: string; avatar: string; };
+    // YouTube fields
+    youtubeComment?: { handle: string; text: string; likes: string; timeAgo: string; };
+}
+
+export async function generateMixedBulkContent(
+    count: number,
+    mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default',
+    incomeMin = 10000,
+    incomeMax = 150000,
+    onProgress?: (done: number, total: number) => void
+): Promise<MixedContentItem[]> {
+    const items: MixedContentItem[] = [];
+    const BATCH_SIZE = 5;
+    const types: ContentType[] = ['facebook', 'gmail', 'messenger', 'tiktok', 'youtube'];
+
+    // Pre-assign types randomly for each slot
+    const assignments: ContentType[] = Array.from({ length: count }, () =>
+        types[Math.floor(Math.random() * types.length)]
+    );
+
+    for (let i = 0; i < count; i += BATCH_SIZE) {
+        const batchAssignments = assignments.slice(i, i + BATCH_SIZE);
+
+        const batchResults = await Promise.all(
+            batchAssignments.map(async (type): Promise<MixedContentItem> => {
+                try {
+                    switch (type) {
+                        case 'facebook': {
+                            const name = generateRandomName();
+                            const text = await generateAIReview(name, incomeMin, incomeMax, mode);
+                            const stats = generateEngagementStats();
+                            return {
+                                type: 'facebook',
+                                fbReview: {
+                                    name,
+                                    avatarUrl: getAvatarUrl(name, 0),
+                                    review: text,
+                                    likes: stats.likes,
+                                    comments: stats.comments,
+                                    shares: stats.shares,
+                                    timestamp: generateRandomTimestamp(),
+                                },
+                            };
+                        }
+                        case 'gmail': {
+                            const thread = await generateGmailThread(mode);
+                            return { type: 'gmail', gmailThread: thread };
+                        }
+                        case 'messenger': {
+                            const thread = await generateMessengerThread(mode);
+                            return { type: 'messenger', messengerThread: thread };
+                        }
+                        case 'tiktok': {
+                            const data = await generateTikTokComments(mode);
+                            const comment = data.comments[Math.floor(Math.random() * data.comments.length)];
+                            const name = generateRandomName();
+                            return {
+                                type: 'tiktok',
+                                tiktokComment: {
+                                    username: comment.username,
+                                    text: comment.text,
+                                    likes: comment.likes,
+                                    avatar: getAvatarUrl(name, 0),
+                                },
+                            };
+                        }
+                        case 'youtube': {
+                            const data = await generateYouTubeComments(mode);
+                            const comment = data.comments[Math.floor(Math.random() * data.comments.length)];
+                            return {
+                                type: 'youtube',
+                                youtubeComment: {
+                                    handle: comment.handle,
+                                    text: comment.text,
+                                    likes: comment.likes,
+                                    timeAgo: comment.timeAgo,
+                                },
+                            };
+                        }
+                    }
+                } catch {
+                    // Fallback to a facebook post on error
+                    const name = generateRandomName();
+                    const stats = generateEngagementStats();
+                    const fallbackText = mode === 'tinnitus-chat'
+                        ? TINNITUS_CHAT_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_CHAT_REVIEW_TEMPLATES.length)]()
+                        : mode === 'tinnitus'
+                            ? TINNITUS_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_REVIEW_TEMPLATES.length)](name)
+                            : REVIEW_TEMPLATES[Math.floor(Math.random() * REVIEW_TEMPLATES.length)](getRandomIncome(incomeMin, incomeMax));
+                    return {
+                        type: 'facebook',
+                        fbReview: {
+                            name,
+                            avatarUrl: getAvatarUrl(name, 0),
+                            review: fallbackText,
+                            likes: stats.likes,
+                            comments: stats.comments,
+                            shares: stats.shares,
+                            timestamp: generateRandomTimestamp(),
+                        },
+                    };
+                }
+            })
+        );
+
+        items.push(...batchResults);
+        if (onProgress) onProgress(Math.min(i + BATCH_SIZE, count), count);
+    }
+
+    return items;
+}

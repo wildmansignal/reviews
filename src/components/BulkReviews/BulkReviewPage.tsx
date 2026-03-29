@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { generateAIBatchReviews, type GeneratedReview } from '../../services/openai';
+import { generateMixedBulkContent, type MixedContentItem } from '../../services/openai';
 import './BulkReviews.css';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Zap } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Zap, ThumbsDown, Mail, Star } from 'lucide-react';
 
 type ReviewMode = 'default' | 'tinnitus' | 'tinnitus-chat';
 
@@ -10,31 +10,39 @@ const MODE_CONFIG: Record<ReviewMode, { icon: string; title: string; subtitle: s
     default: {
         icon: '🔥',
         title: '🔥 AI Review Generator',
-        subtitle: 'Generate realistic Facebook testimonials about Code On Fire',
-        emptyDesc: 'AI-powered Facebook review screenshots about Code On Fire.',
-        emptyHint: 'Each post will have a unique name, avatar, review text, and engagement numbers — all mentioning Dan and Code On Fire profits.',
+        subtitle: 'Generate a mix of Facebook, Gmail, Messenger, TikTok & YouTube content about Code On Fire',
+        emptyDesc: 'AI-powered mixed social proof about Code On Fire.',
+        emptyHint: 'Each item will be a random mix of Facebook posts, Gmail threads, Messenger conversations, TikTok comments, and YouTube comments.',
         btnLabel: '',
     },
     tinnitus: {
         icon: '👂',
         title: '👂 Tinnitus Habituation Reviews',
-        subtitle: 'Generate tinnitus habituation success stories for Dan Plants\' program',
-        emptyDesc: 'AI-powered Facebook success stories about Dan Plants\' tinnitus habituation program.',
-        emptyHint: 'Each post will have a unique name, avatar, and authentic habituation success story — mentioning Dan Plants and his program by name.',
+        subtitle: 'Generate mixed content about Dan Plants\' tinnitus habituation program',
+        emptyDesc: 'AI-powered mixed social proof about Dan Plants\' tinnitus habituation program.',
+        emptyHint: 'Each item will be a random mix of Facebook posts, Gmail threads, Messenger conversations, TikTok comments, and YouTube comments.',
         btnLabel: 'Tinnitus',
     },
     'tinnitus-chat': {
         icon: '💬',
         title: '💬 Tinnitus Chat Reviews',
-        subtitle: 'Generate positive reviews about Dan\'s free tinnitus AI chat',
-        emptyDesc: 'AI-powered Facebook reviews about Dan\'s free tinnitus chat.',
-        emptyHint: 'Each post will share a positive experience with Dan\'s free tinnitus AI chat — how it gave them hope, a game plan, and reduced their anxiety.',
+        subtitle: 'Generate mixed content about Dan\'s free tinnitus AI chat',
+        emptyDesc: 'AI-powered mixed social proof about Dan\'s free tinnitus chat.',
+        emptyHint: 'Each item will be a random mix of Facebook posts, Gmail threads, Messenger conversations, TikTok comments, and YouTube comments.',
         btnLabel: 'Chat',
     },
 };
 
+const TYPE_BADGE: Record<string, { label: string; color: string }> = {
+    facebook: { label: '📱 Facebook', color: '#1877f2' },
+    gmail: { label: '📧 Gmail', color: '#ea4335' },
+    messenger: { label: '💬 Messenger', color: '#0084ff' },
+    tiktok: { label: '🎵 TikTok', color: '#fe2c55' },
+    youtube: { label: '▶️ YouTube', color: '#ff0000' },
+};
+
 const BulkReviewPage: React.FC = () => {
-    const [reviews, setReviews] = useState<GeneratedReview[]>([]);
+    const [items, setItems] = useState<MixedContentItem[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [progress, setProgress] = useState(0);
     const [total, setTotal] = useState(0);
@@ -50,17 +58,17 @@ const BulkReviewPage: React.FC = () => {
         setIsGenerating(true);
         setError('');
         setProgress(0);
-        setReviews([]);
+        setItems([]);
         setTotal(count);
 
         try {
             const min = parseInt(incomeMin.replace(/[^0-9]/g, '')) || 10000;
             const max = parseInt(incomeMax.replace(/[^0-9]/g, '')) || 150000;
-            const results = await generateAIBatchReviews(count, (done, total) => {
+            const results = await generateMixedBulkContent(count, mode, min, max, (done, total) => {
                 setProgress(done);
                 setTotal(total);
-            }, min, max, mode);
-            setReviews(results);
+            });
+            setItems(results);
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Generation failed');
         } finally {
@@ -70,7 +78,7 @@ const BulkReviewPage: React.FC = () => {
 
     const switchMode = (newMode: ReviewMode) => {
         setMode(newMode);
-        setReviews([]);
+        setItems([]);
     };
 
     return (
@@ -92,115 +100,67 @@ const BulkReviewPage: React.FC = () => {
                 <div className="bulk-controls-inner">
                     {/* 3-Way Mode Selector */}
                     <div className="mode-selector-wrap">
-                        <button
-                            className={`mode-btn ${mode === 'default' ? 'active mode-fire' : ''}`}
-                            onClick={() => switchMode('default')}
-                        >
-                            🔥 Code On Fire
-                        </button>
-                        <button
-                            className={`mode-btn ${mode === 'tinnitus' ? 'active mode-tinnitus' : ''}`}
-                            onClick={() => switchMode('tinnitus')}
-                        >
-                            👂 Tinnitus
-                        </button>
-                        <button
-                            className={`mode-btn ${mode === 'tinnitus-chat' ? 'active mode-chat' : ''}`}
-                            onClick={() => switchMode('tinnitus-chat')}
-                        >
-                            💬 Tinnitus Chat
-                        </button>
+                        <button className={`mode-btn ${mode === 'default' ? 'active mode-fire' : ''}`} onClick={() => switchMode('default')}>🔥 Code On Fire</button>
+                        <button className={`mode-btn ${mode === 'tinnitus' ? 'active mode-tinnitus' : ''}`} onClick={() => switchMode('tinnitus')}>👂 Tinnitus</button>
+                        <button className={`mode-btn ${mode === 'tinnitus-chat' ? 'active mode-chat' : ''}`} onClick={() => switchMode('tinnitus-chat')}>💬 Tinnitus Chat</button>
                     </div>
 
                     <div className="bulk-count-control">
-                        <label>Number of reviews to generate:</label>
+                        <label>Number of items to generate:</label>
                         <div className="count-selector">
                             {[10, 15, 20, 25, 30].map(n => (
-                                <button
-                                    key={n}
-                                    className={`count-btn ${count === n ? 'active' : ''}`}
-                                    onClick={() => setCount(n)}
-                                >
-                                    {n}
-                                </button>
+                                <button key={n} className={`count-btn ${count === n ? 'active' : ''}`} onClick={() => setCount(n)}>{n}</button>
                             ))}
                         </div>
                     </div>
 
-                    {/* Income Range — only shown in default mode */}
                     {mode === 'default' && (
                         <div className="bulk-income-range">
-                            <label>Income range in reviews:</label>
+                            <label>Income range:</label>
                             <div className="income-range-inputs">
                                 <span>$</span>
-                                <input
-                                    type="number"
-                                    className="income-input"
-                                    value={incomeMin}
-                                    onChange={e => setIncomeMin(e.target.value)}
-                                    placeholder="10000"
-                                    min="1000"
-                                />
+                                <input type="number" className="income-input" value={incomeMin} onChange={e => setIncomeMin(e.target.value)} placeholder="10000" min="1000" />
                                 <span className="income-dash">→</span>
                                 <span>$</span>
-                                <input
-                                    type="number"
-                                    className="income-input"
-                                    value={incomeMax}
-                                    onChange={e => setIncomeMax(e.target.value)}
-                                    placeholder="150000"
-                                    min="1000"
-                                />
+                                <input type="number" className="income-input" value={incomeMax} onChange={e => setIncomeMax(e.target.value)} placeholder="150000" min="1000" />
                                 <span className="income-label">/ month</span>
                             </div>
                         </div>
                     )}
 
-                    <button
-                        className="bulk-generate-btn"
-                        onClick={handleGenerate}
-                        disabled={isGenerating}
-                    >
+                    <button className="bulk-generate-btn" onClick={handleGenerate} disabled={isGenerating}>
                         {isGenerating ? (
-                            <>
-                                <div className="spin-ring" />
-                                Generating... ({progress}/{total})
-                            </>
+                            <><div className="spin-ring" /> Generating... ({progress}/{total})</>
                         ) : (
-                            <>
-                                <Zap size={18} />
-                                Generate {count} {cfg.btnLabel ? cfg.btnLabel + ' ' : ''}Reviews with AI
-                            </>
+                            <><Zap size={18} /> Generate {count} {cfg.btnLabel ? cfg.btnLabel + ' ' : ''}Mixed Reviews</>
                         )}
                     </button>
                 </div>
 
                 {isGenerating && (
                     <div className="progress-bar-track">
-                        <div
-                            className="progress-bar-fill"
-                            style={{ width: total > 0 ? `${(progress / total) * 100}%` : '0%' }}
-                        />
+                        <div className="progress-bar-fill" style={{ width: total > 0 ? `${(progress / total) * 100}%` : '0%' }} />
                     </div>
                 )}
                 {error && <div className="bulk-error">{error}</div>}
             </div>
 
-            {/* Grid of Facebook Posts */}
-            {reviews.length > 0 && (
+            {/* Mixed Content Grid */}
+            {items.length > 0 && (
                 <div className="bulk-reviews-grid">
-                    {reviews.map((review, idx) => (
+                    {items.map((item, idx) => (
                         <div key={idx} className="bulk-review-wrapper">
                             <div className="bulk-review-number">#{idx + 1}</div>
-                            <div className="fb-post-card">
-                                <FBPostCard review={review} />
+                            <div className="bulk-type-badge" style={{ borderColor: TYPE_BADGE[item.type].color, color: TYPE_BADGE[item.type].color }}>
+                                {TYPE_BADGE[item.type].label}
                             </div>
+                            <MixedCard item={item} />
                         </div>
                     ))}
                 </div>
             )}
 
-            {!isGenerating && reviews.length === 0 && (
+            {!isGenerating && items.length === 0 && (
                 <div className="bulk-empty-state">
                     <div className="empty-icon">{cfg.icon}</div>
                     <h2>Ready to Generate</h2>
@@ -212,24 +172,36 @@ const BulkReviewPage: React.FC = () => {
     );
 };
 
-// Individual Facebook Post Card
-const FBPostCard: React.FC<{ review: GeneratedReview }> = ({ review }) => {
+
+// ─── Mixed Card Renderer ──────────────────────────────────────────────────────
+const MixedCard: React.FC<{ item: MixedContentItem }> = ({ item }) => {
+    switch (item.type) {
+        case 'facebook':
+            return item.fbReview ? <FBPostCard review={item.fbReview} /> : null;
+        case 'gmail':
+            return item.gmailThread ? <GmailCard thread={item.gmailThread} /> : null;
+        case 'messenger':
+            return item.messengerThread ? <MessengerCard thread={item.messengerThread} /> : null;
+        case 'tiktok':
+            return item.tiktokComment ? <TikTokCard comment={item.tiktokComment} /> : null;
+        case 'youtube':
+            return item.youtubeComment ? <YouTubeCard comment={item.youtubeComment} /> : null;
+        default:
+            return null;
+    }
+};
+
+
+// ─── Facebook Post Card ───────────────────────────────────────────────────────
+const FBPostCard: React.FC<{ review: { name: string; avatarUrl: string; review: string; likes: number; comments: number; shares: number; timestamp: string } }> = ({ review }) => {
     const [expanded, setExpanded] = useState(false);
     const shouldTruncate = review.review.length > 220;
     const displayText = expanded || !shouldTruncate ? review.review : review.review.slice(0, 220) + '...';
 
     return (
         <div className="fb-card-frame">
-            {/* Header */}
             <div className="fbc-header">
-                <img
-                    src={review.avatarUrl}
-                    alt={review.name}
-                    className="fbc-avatar"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(review.name)}&background=random&size=80`;
-                    }}
-                />
+                <img src={review.avatarUrl} alt={review.name} className="fbc-avatar" onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(review.name)}&background=random&size=80`; }} />
                 <div className="fbc-header-info">
                     <div className="fbc-author-row">
                         <span className="fbc-name">{review.name}</span>
@@ -247,46 +219,132 @@ const FBPostCard: React.FC<{ review: GeneratedReview }> = ({ review }) => {
                     <X size={20} color="#65676b" />
                 </div>
             </div>
-
-            {/* Content */}
             <div className="fbc-content">
                 {displayText}
-                {shouldTruncate && !expanded && (
-                    <span className="fbc-see-more" onClick={() => setExpanded(true)}> See more</span>
-                )}
+                {shouldTruncate && !expanded && <span className="fbc-see-more" onClick={() => setExpanded(true)}> See more</span>}
             </div>
-
-            {/* Stats Bar */}
             <div className="fbc-stats-bar">
                 <div className="fbc-like-group">
-                    <div className="fbc-like-circle">
-                        <ThumbsUp size={9} fill="white" strokeWidth={0} />
-                    </div>
-                    <div className="fbc-heart-circle">
-                        <Heart size={9} fill="white" strokeWidth={0} />
-                    </div>
+                    <div className="fbc-like-circle"><ThumbsUp size={9} fill="white" strokeWidth={0} /></div>
+                    <div className="fbc-heart-circle"><Heart size={9} fill="white" strokeWidth={0} /></div>
                     <span className="fbc-stats-text">{review.likes.toLocaleString()}</span>
                 </div>
-                <div className="fbc-stats-text">
-                    {review.comments} comments · {review.shares} shares
-                </div>
+                <div className="fbc-stats-text">{review.comments} comments · {review.shares} shares</div>
             </div>
-
-            {/* Action Bar */}
             <div className="fbc-action-bar">
-                <button className="fbc-action-btn">
-                    <ThumbsUp size={16} /> Like
-                </button>
-                <button className="fbc-action-btn">
-                    <MessageCircle size={16} /> Comment
-                </button>
-                <button className="fbc-action-btn">
-                    <Share2 size={16} /> Share
-                </button>
+                <button className="fbc-action-btn"><ThumbsUp size={16} /> Like</button>
+                <button className="fbc-action-btn"><MessageCircle size={16} /> Comment</button>
+                <button className="fbc-action-btn"><Share2 size={16} /> Share</button>
             </div>
         </div>
     );
 };
+
+
+// ─── Gmail Card ───────────────────────────────────────────────────────────────
+const GmailCard: React.FC<{ thread: { subject: string; messages: Array<{ senderName: string; content: string; isMe: boolean }> } }> = ({ thread }) => {
+    return (
+        <div className="gmail-card-frame">
+            <div className="gmail-card-header">
+                <Mail size={16} color="#ea4335" />
+                <span className="gmail-card-subject">{thread.subject}</span>
+                <Star size={14} color="#ccc" />
+            </div>
+            <div className="gmail-card-messages">
+                {thread.messages.slice(0, 4).map((msg, i) => (
+                    <div key={i} className={`gmail-card-msg ${msg.isMe ? 'is-me' : ''}`}>
+                        <div className="gmail-card-msg-header">
+                            <span className="gmail-card-sender">{msg.senderName}</span>
+                            {msg.isMe && <span className="gmail-card-me-badge">me</span>}
+                        </div>
+                        <div className="gmail-card-msg-body">{msg.content.length > 140 ? msg.content.slice(0, 140) + '...' : msg.content}</div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+
+// ─── Messenger Card ───────────────────────────────────────────────────────────
+const MessengerCard: React.FC<{ thread: { contactName: string; messages: Array<{ text: string; isMe: boolean }> } }> = ({ thread }) => {
+    return (
+        <div className="messenger-card-frame">
+            <div className="messenger-card-header">
+                <div className="messenger-card-avatar">{thread.contactName.charAt(0)}</div>
+                <div>
+                    <div className="messenger-card-name">{thread.contactName}</div>
+                    <div className="messenger-card-status">Active now</div>
+                </div>
+            </div>
+            <div className="messenger-card-messages">
+                {thread.messages.slice(0, 6).map((msg, i) => (
+                    <div key={i} className={`messenger-card-bubble ${msg.isMe ? 'me' : 'them'}`}>
+                        {msg.text.length > 120 ? msg.text.slice(0, 120) + '...' : msg.text}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+
+// ─── TikTok Card ──────────────────────────────────────────────────────────────
+const TikTokCard: React.FC<{ comment: { username: string; text: string; likes: string; avatar: string } }> = ({ comment }) => {
+    return (
+        <div className="tiktok-card-frame">
+            <div className="tiktok-card-header">
+                <span className="tiktok-card-logo">TikTok</span>
+                <span className="tiktok-card-section">Comments</span>
+            </div>
+            <div className="tiktok-card-body">
+                <img src={comment.avatar} alt="" className="tiktok-card-avatar" onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.username)}&background=random&size=40`; }} />
+                <div className="tiktok-card-content">
+                    <div className="tiktok-card-username">{comment.username}</div>
+                    <div className="tiktok-card-text">{comment.text}</div>
+                    <div className="tiktok-card-meta">
+                        <span>2d ago</span>
+                        <span>Reply</span>
+                    </div>
+                </div>
+                <div className="tiktok-card-likes">
+                    <Heart size={16} color="#8a8b91" />
+                    <span>{comment.likes}</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+// ─── YouTube Card ─────────────────────────────────────────────────────────────
+const YouTubeCard: React.FC<{ comment: { handle: string; text: string; likes: string; timeAgo: string } }> = ({ comment }) => {
+    return (
+        <div className="youtube-card-frame">
+            <div className="youtube-card-header">
+                <span className="youtube-card-logo">YouTube</span>
+                <span className="youtube-card-section">Comments</span>
+            </div>
+            <div className="youtube-card-body">
+                <div className="youtube-card-avatar">{comment.handle.substring(1, 2).toUpperCase()}</div>
+                <div className="youtube-card-content">
+                    <div className="youtube-card-handle-row">
+                        <span className="youtube-card-handle">{comment.handle}</span>
+                        <span className="youtube-card-time">• {comment.timeAgo}</span>
+                    </div>
+                    <div className="youtube-card-text">{comment.text}</div>
+                    <div className="youtube-card-actions">
+                        <ThumbsUp size={14} color="#aaa" />
+                        <span className="youtube-card-likes">{comment.likes}</span>
+                        <ThumbsDown size={14} color="#aaa" />
+                        <span className="youtube-card-reply">Reply</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 export { FBPostCard };
 export default BulkReviewPage;

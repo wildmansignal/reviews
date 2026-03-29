@@ -530,3 +530,326 @@
 .mode-btn.active.mode-chat {
     background: linear-gradient(135deg, #8b5cf6, #a78bfa);
 }
+
+/* ── Type Badge ─────────────────────────────────────────── */
+.bulk-type-badge {
+    position: absolute;
+    top: -10px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1.5px solid;
+    background: #0d0d0f;
+    z-index: 11;
+    letter-spacing: 0.3px;
+}
+
+/* ── Gmail Card ─────────────────────────────────────────── */
+.gmail-card-frame {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    font-family: Roboto, Arial, sans-serif;
+    color: #202124;
+    transition: transform 0.2s;
+}
+.gmail-card-frame:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+.gmail-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e8eaed;
+    background: #f8f9fa;
+}
+.gmail-card-subject {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    color: #202124;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.gmail-card-messages {
+    padding: 8px 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.gmail-card-msg {
+    padding: 0;
+}
+.gmail-card-msg.is-me {
+    opacity: 0.85;
+}
+.gmail-card-msg-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+.gmail-card-sender {
+    font-size: 13px;
+    font-weight: 700;
+    color: #202124;
+}
+.gmail-card-me-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: #5f6368;
+    background: #e8eaed;
+    border-radius: 4px;
+    padding: 1px 5px;
+}
+.gmail-card-msg-body {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #5f6368;
+}
+
+/* ── Messenger Card ─────────────────────────────────────── */
+.messenger-card-frame {
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: white;
+    transition: transform 0.2s;
+}
+.messenger-card-frame:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+.messenger-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #222;
+}
+.messenger-card-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0084ff, #0052cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+.messenger-card-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+}
+.messenger-card-status {
+    font-size: 11px;
+    color: #8e8e93;
+}
+.messenger-card-messages {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.messenger-card-bubble {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+.messenger-card-bubble.them {
+    background: #262626;
+    color: white;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+}
+.messenger-card-bubble.me {
+    background: #0084ff;
+    color: white;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+}
+
+/* ── TikTok Card ────────────────────────────────────────── */
+.tiktok-card-frame {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #161823;
+    transition: transform 0.2s;
+}
+.tiktok-card-frame:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+.tiktok-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f1f1;
+}
+.tiktok-card-logo {
+    font-size: 14px;
+    font-weight: 800;
+    color: #161823;
+    letter-spacing: -0.3px;
+}
+.tiktok-card-section {
+    font-size: 12px;
+    color: #8a8b91;
+    font-weight: 600;
+}
+.tiktok-card-body {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+}
+.tiktok-card-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.tiktok-card-content {
+    flex: 1;
+}
+.tiktok-card-username {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+.tiktok-card-text {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+.tiktok-card-meta {
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    color: #8a8b91;
+}
+.tiktok-card-meta span:last-child {
+    font-weight: 600;
+}
+.tiktok-card-likes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding-top: 4px;
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #8a8b91;
+}
+
+/* ── YouTube Card ───────────────────────────────────────── */
+.youtube-card-frame {
+    background: #0f0f0f;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    font-family: Roboto, Arial, sans-serif;
+    color: #f1f1f1;
+    transition: transform 0.2s;
+}
+.youtube-card-frame:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+.youtube-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid #272727;
+}
+.youtube-card-logo {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f1f1;
+}
+.youtube-card-section {
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 500;
+}
+.youtube-card-body {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+}
+.youtube-card-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #3e3e3e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: #ddd;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+.youtube-card-content {
+    flex: 1;
+}
+.youtube-card-handle-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+}
+.youtube-card-handle {
+    font-size: 13px;
+    color: #aaa;
+    font-weight: 500;
+}
+.youtube-card-time {
+    font-size: 12px;
+    color: #aaa;
+}
+.youtube-card-text {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #f1f1f1;
+    margin-bottom: 8px;
+}
+.youtube-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.youtube-card-likes {
+    font-size: 12px;
+    color: #aaa;
+}
+.youtube-card-reply {
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 500;
+    margin-left: 8px;
+}
