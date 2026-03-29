@@ -531,6 +531,80 @@
     background: linear-gradient(135deg, #8b5cf6, #a78bfa);
 }
 
+/* ── Blur Names ─────────────────────────────────────────── */
+.blur-name {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}
+
+.blur-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1c1c2a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 6px 14px;
+    flex-shrink: 0;
+}
+
+.blur-toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.blur-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.blur-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #374151;
+    border-radius: 999px;
+    transition: background 0.25s;
+}
+
+.blur-toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s ease;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.blur-toggle input:checked + .blur-toggle-slider {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+
+.blur-toggle input:checked + .blur-toggle-slider::before {
+    transform: translateX(18px);
+}
+
+.blur-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
 /* ── Type Badge ─────────────────────────────────────────── */
 .bulk-type-badge {
     position: absolute;

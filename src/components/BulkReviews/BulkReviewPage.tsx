@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { generateMixedBulkContent, type MixedContentItem } from '../../services/openai';
 import './BulkReviews.css';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Zap, ThumbsDown, Mail, Star } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Zap, ThumbsDown, Mail, Star, Eye, EyeOff } from 'lucide-react';
 
 type ReviewMode = 'default' | 'tinnitus' | 'tinnitus-chat';
 
@@ -51,6 +51,7 @@ const BulkReviewPage: React.FC = () => {
     const [incomeMin, setIncomeMin] = useState('10000');
     const [incomeMax, setIncomeMax] = useState('150000');
     const [mode, setMode] = useState<ReviewMode>('default');
+    const [blurNames, setBlurNames] = useState(false);
 
     const cfg = MODE_CONFIG[mode];
 
@@ -105,6 +106,18 @@ const BulkReviewPage: React.FC = () => {
                         <button className={`mode-btn ${mode === 'tinnitus-chat' ? 'active mode-chat' : ''}`} onClick={() => switchMode('tinnitus-chat')}>💬 Tinnitus Chat</button>
                     </div>
 
+                    {/* Blur Names Toggle */}
+                    <div className="blur-toggle-wrap">
+                        <label className="blur-toggle">
+                            <input type="checkbox" checked={blurNames} onChange={e => setBlurNames(e.target.checked)} />
+                            <span className="blur-toggle-slider" />
+                        </label>
+                        <span className="blur-toggle-label">
+                            {blurNames ? <EyeOff size={14} /> : <Eye size={14} />}
+                            {blurNames ? 'Names Blurred' : 'Blur Names'}
+                        </span>
+                    </div>
+
                     <div className="bulk-count-control">
                         <label>Number of items to generate:</label>
                         <div className="count-selector">
@@ -154,7 +167,7 @@ const BulkReviewPage: React.FC = () => {
                             <div className="bulk-type-badge" style={{ borderColor: TYPE_BADGE[item.type].color, color: TYPE_BADGE[item.type].color }}>
                                 {TYPE_BADGE[item.type].label}
                             </div>
-                            <MixedCard item={item} />
+                            <MixedCard item={item} blurNames={blurNames} />
                         </div>
                     ))}
                 </div>
@@ -174,18 +187,18 @@ const BulkReviewPage: React.FC = () => {
 
 
 // ─── Mixed Card Renderer ──────────────────────────────────────────────────────
-const MixedCard: React.FC<{ item: MixedContentItem }> = ({ item }) => {
+const MixedCard: React.FC<{ item: MixedContentItem; blurNames: boolean }> = ({ item, blurNames }) => {
     switch (item.type) {
         case 'facebook':
-            return item.fbReview ? <FBPostCard review={item.fbReview} /> : null;
+            return item.fbReview ? <FBPostCard review={item.fbReview} blurNames={blurNames} /> : null;
         case 'gmail':
-            return item.gmailThread ? <GmailCard thread={item.gmailThread} /> : null;
+            return item.gmailThread ? <GmailCard thread={item.gmailThread} blurNames={blurNames} /> : null;
         case 'messenger':
-            return item.messengerThread ? <MessengerCard thread={item.messengerThread} /> : null;
+            return item.messengerThread ? <MessengerCard thread={item.messengerThread} blurNames={blurNames} /> : null;
         case 'tiktok':
-            return item.tiktokComment ? <TikTokCard comment={item.tiktokComment} /> : null;
+            return item.tiktokComment ? <TikTokCard comment={item.tiktokComment} blurNames={blurNames} /> : null;
         case 'youtube':
-            return item.youtubeComment ? <YouTubeCard comment={item.youtubeComment} /> : null;
+            return item.youtubeComment ? <YouTubeCard comment={item.youtubeComment} blurNames={blurNames} /> : null;
         default:
             return null;
     }
@@ -193,10 +206,11 @@ const MixedCard: React.FC<{ item: MixedContentItem }> = ({ item }) => {
 
 
 // ─── Facebook Post Card ───────────────────────────────────────────────────────
-const FBPostCard: React.FC<{ review: { name: string; avatarUrl: string; review: string; likes: number; comments: number; shares: number; timestamp: string } }> = ({ review }) => {
+const FBPostCard: React.FC<{ review: { name: string; avatarUrl: string; review: string; likes: number; comments: number; shares: number; timestamp: string }; blurNames?: boolean }> = ({ review, blurNames }) => {
     const [expanded, setExpanded] = useState(false);
     const shouldTruncate = review.review.length > 220;
     const displayText = expanded || !shouldTruncate ? review.review : review.review.slice(0, 220) + '...';
+    const nc = blurNames ? 'blur-name' : '';
 
     return (
         <div className="fb-card-frame">
@@ -204,7 +218,7 @@ const FBPostCard: React.FC<{ review: { name: string; avatarUrl: string; review: 
                 <img src={review.avatarUrl} alt={review.name} className="fbc-avatar" onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(review.name)}&background=random&size=80`; }} />
                 <div className="fbc-header-info">
                     <div className="fbc-author-row">
-                        <span className="fbc-name">{review.name}</span>
+                        <span className={`fbc-name ${nc}`}>{review.name}</span>
                         <span className="fbc-dot">·</span>
                         <span className="fbc-follow">Follow</span>
                     </div>
@@ -242,7 +256,8 @@ const FBPostCard: React.FC<{ review: { name: string; avatarUrl: string; review: 
 
 
 // ─── Gmail Card ───────────────────────────────────────────────────────────────
-const GmailCard: React.FC<{ thread: { subject: string; messages: Array<{ senderName: string; content: string; isMe: boolean }> } }> = ({ thread }) => {
+const GmailCard: React.FC<{ thread: { subject: string; messages: Array<{ senderName: string; content: string; isMe: boolean }> }; blurNames?: boolean }> = ({ thread, blurNames }) => {
+    const nc = blurNames ? 'blur-name' : '';
     return (
         <div className="gmail-card-frame">
             <div className="gmail-card-header">
@@ -254,7 +269,7 @@ const GmailCard: React.FC<{ thread: { subject: string; messages: Array<{ senderN
                 {thread.messages.slice(0, 4).map((msg, i) => (
                     <div key={i} className={`gmail-card-msg ${msg.isMe ? 'is-me' : ''}`}>
                         <div className="gmail-card-msg-header">
-                            <span className="gmail-card-sender">{msg.senderName}</span>
+                            <span className={`gmail-card-sender ${!msg.isMe ? nc : ''}`}>{msg.senderName}</span>
                             {msg.isMe && <span className="gmail-card-me-badge">me</span>}
                         </div>
                         <div className="gmail-card-msg-body">{msg.content.length > 140 ? msg.content.slice(0, 140) + '...' : msg.content}</div>
@@ -267,13 +282,14 @@ const GmailCard: React.FC<{ thread: { subject: string; messages: Array<{ senderN
 
 
 // ─── Messenger Card ───────────────────────────────────────────────────────────
-const MessengerCard: React.FC<{ thread: { contactName: string; messages: Array<{ text: string; isMe: boolean }> } }> = ({ thread }) => {
+const MessengerCard: React.FC<{ thread: { contactName: string; messages: Array<{ text: string; isMe: boolean }> }; blurNames?: boolean }> = ({ thread, blurNames }) => {
+    const nc = blurNames ? 'blur-name' : '';
     return (
         <div className="messenger-card-frame">
             <div className="messenger-card-header">
                 <div className="messenger-card-avatar">{thread.contactName.charAt(0)}</div>
                 <div>
-                    <div className="messenger-card-name">{thread.contactName}</div>
+                    <div className={`messenger-card-name ${nc}`}>{thread.contactName}</div>
                     <div className="messenger-card-status">Active now</div>
                 </div>
             </div>
@@ -290,7 +306,8 @@ const MessengerCard: React.FC<{ thread: { contactName: string; messages: Array<{
 
 
 // ─── TikTok Card ──────────────────────────────────────────────────────────────
-const TikTokCard: React.FC<{ comment: { username: string; text: string; likes: string; avatar: string } }> = ({ comment }) => {
+const TikTokCard: React.FC<{ comment: { username: string; text: string; likes: string; avatar: string }; blurNames?: boolean }> = ({ comment, blurNames }) => {
+    const nc = blurNames ? 'blur-name' : '';
     return (
         <div className="tiktok-card-frame">
             <div className="tiktok-card-header">
@@ -300,7 +317,7 @@ const TikTokCard: React.FC<{ comment: { username: string; text: string; likes: s
             <div className="tiktok-card-body">
                 <img src={comment.avatar} alt="" className="tiktok-card-avatar" onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.username)}&background=random&size=40`; }} />
                 <div className="tiktok-card-content">
-                    <div className="tiktok-card-username">{comment.username}</div>
+                    <div className={`tiktok-card-username ${nc}`}>{comment.username}</div>
                     <div className="tiktok-card-text">{comment.text}</div>
                     <div className="tiktok-card-meta">
                         <span>2d ago</span>
@@ -318,7 +335,8 @@ const TikTokCard: React.FC<{ comment: { username: string; text: string; likes: s
 
 
 // ─── YouTube Card ─────────────────────────────────────────────────────────────
-const YouTubeCard: React.FC<{ comment: { handle: string; text: string; likes: string; timeAgo: string } }> = ({ comment }) => {
+const YouTubeCard: React.FC<{ comment: { handle: string; text: string; likes: string; timeAgo: string }; blurNames?: boolean }> = ({ comment, blurNames }) => {
+    const nc = blurNames ? 'blur-name' : '';
     return (
         <div className="youtube-card-frame">
             <div className="youtube-card-header">
@@ -329,7 +347,7 @@ const YouTubeCard: React.FC<{ comment: { handle: string; text: string; likes: st
                 <div className="youtube-card-avatar">{comment.handle.substring(1, 2).toUpperCase()}</div>
                 <div className="youtube-card-content">
                     <div className="youtube-card-handle-row">
-                        <span className="youtube-card-handle">{comment.handle}</span>
+                        <span className={`youtube-card-handle ${nc}`}>{comment.handle}</span>
                         <span className="youtube-card-time">• {comment.timeAgo}</span>
                     </div>
                     <div className="youtube-card-text">{comment.text}</div>
