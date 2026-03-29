@@ -6,6 +6,36 @@ import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Z
 
 type ReviewMode = 'default' | 'tinnitus' | 'tinnitus-chat';
 
+// ─── Sales Phrase Highlighter ─────────────────────────────────────────────────
+const SALES_PHRASES = [
+    'free', 'FREE', 'Free',
+    'AI chat', 'ai chat', 'AI Chat', 'tinnitus chat', 'Tinnitus Chat', 'Dan\'s chat', 'dans chat',
+    'saved my life', 'changed my life', 'life-changing', 'game changer', 'game plan',
+    'reduction', 'reduced', 'went down', 'decreased', 'improvement',
+    'hopeful', 'hope', 'anxiety', 'fear', 'panic', 'relief',
+    'habituation', 'habituated', 'results', 'working', 'it works', 'actually works',
+    'sleep better', 'sleeping again', 'quality of life',
+];
+
+const highlightSalesLines = (text: string): React.ReactNode => {
+    if (!text) return text;
+    // Build regex from phrases, longest first to avoid partial matches
+    const sorted = [...SALES_PHRASES].sort((a, b) => b.length - a.length);
+    const escaped = sorted.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    // Also match dollar amounts like $4,997 or $397
+    const pattern = new RegExp(`(\\$[\\d,]+(?:\\.\\d+)?|\\d+%\\s*[Rr]eduction[\\w\\s]*|${escaped.join('|')})`, 'gi');
+    const parts = text.split(pattern);
+    return parts.map((part, i) => {
+        if (pattern.test(part)) {
+            pattern.lastIndex = 0; // reset regex state
+            return <span key={i} className="sales-highlight">{part}</span>;
+        }
+        // Reset lastIndex for next test too
+        pattern.lastIndex = 0;
+        return part;
+    });
+};
+
 const MODE_CONFIG: Record<ReviewMode, { icon: string; title: string; subtitle: string; emptyDesc: string; emptyHint: string; btnLabel: string }> = {
     default: {
         icon: '🔥',
@@ -234,7 +264,7 @@ const FBPostCard: React.FC<{ review: { name: string; avatarUrl: string; review: 
                 </div>
             </div>
             <div className="fbc-content">
-                {displayText}
+                {highlightSalesLines(displayText)}
                 {shouldTruncate && !expanded && <span className="fbc-see-more" onClick={() => setExpanded(true)}> See more</span>}
             </div>
             <div className="fbc-stats-bar">
@@ -272,7 +302,7 @@ const GmailCard: React.FC<{ thread: { subject: string; messages: Array<{ senderN
                             <span className={`gmail-card-sender ${!msg.isMe ? nc : ''}`}>{msg.senderName}</span>
                             {msg.isMe && <span className="gmail-card-me-badge">me</span>}
                         </div>
-                        <div className="gmail-card-msg-body">{msg.content.length > 140 ? msg.content.slice(0, 140) + '...' : msg.content}</div>
+                        <div className="gmail-card-msg-body">{highlightSalesLines(msg.content.length > 140 ? msg.content.slice(0, 140) + '...' : msg.content)}</div>
                     </div>
                 ))}
             </div>
@@ -296,7 +326,7 @@ const MessengerCard: React.FC<{ thread: { contactName: string; messages: Array<{
             <div className="messenger-card-messages">
                 {thread.messages.slice(0, 6).map((msg, i) => (
                     <div key={i} className={`messenger-card-bubble ${msg.isMe ? 'me' : 'them'}`}>
-                        {msg.text.length > 120 ? msg.text.slice(0, 120) + '...' : msg.text}
+                        {highlightSalesLines(msg.text.length > 120 ? msg.text.slice(0, 120) + '...' : msg.text)}
                     </div>
                 ))}
             </div>
@@ -318,7 +348,7 @@ const TikTokCard: React.FC<{ comment: { username: string; text: string; likes: s
                 <img src={comment.avatar} alt="" className="tiktok-card-avatar" onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.username)}&background=random&size=40`; }} />
                 <div className="tiktok-card-content">
                     <div className={`tiktok-card-username ${nc}`}>{comment.username}</div>
-                    <div className="tiktok-card-text">{comment.text}</div>
+                    <div className="tiktok-card-text">{highlightSalesLines(comment.text)}</div>
                     <div className="tiktok-card-meta">
                         <span>2d ago</span>
                         <span>Reply</span>
@@ -350,7 +380,7 @@ const YouTubeCard: React.FC<{ comment: { handle: string; text: string; likes: st
                         <span className={`youtube-card-handle ${nc}`}>{comment.handle}</span>
                         <span className="youtube-card-time">• {comment.timeAgo}</span>
                     </div>
-                    <div className="youtube-card-text">{comment.text}</div>
+                    <div className="youtube-card-text">{highlightSalesLines(comment.text)}</div>
                     <div className="youtube-card-actions">
                         <ThumbsUp size={14} color="#aaa" />
                         <span className="youtube-card-likes">{comment.likes}</span>

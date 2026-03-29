@@ -15,6 +15,7 @@ import HabituationApp from './components/HabituationMock/HabituationApp';
 import WebinarGeneratorApp from './components/WebinarGenerator/WebinarGeneratorApp';
 import WebinarEditorApp from './components/WebinarEditor/WebinarEditorApp';
 import ReviewSliderApp from './components/ReviewSlider/ReviewSliderApp';
+import ReviewShowerApp from './components/ReviewShower/ReviewShowerApp';
 import BulkReviewPage from './components/BulkReviews/BulkReviewPage';
 import ProfitGrowthApp from './components/ProfitGrowth/ProfitGrowthApp';
 import ProfitTableApp from './components/ProfitTable/ProfitTableApp';
@@ -43,6 +44,7 @@ function App() {
           <Route path="/webinar-generator" element={<WebinarGeneratorApp />} />
           <Route path="/webinar-editor" element={<WebinarEditorApp />} />
           <Route path="/review-slider" element={<ReviewSliderApp />} />
+          <Route path="/review-shower" element={<ReviewShowerApp />} />
           <Route path="/bulk-reviews" element={<BulkReviewPage />} />
           <Route path="/profit-growth" element={<ProfitGrowthApp />} />
           <Route path="/profit-table" element={<ProfitTableApp />} />

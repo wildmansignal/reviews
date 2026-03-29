@@ -16,7 +16,8 @@ import {
     Settings,
     Zap,
     Smartphone,
-    Sparkles
+    Sparkles,
+    Eye
 } from 'lucide-react';
 import './Launchpad.css';
 
@@ -170,6 +171,12 @@ const Launchpad = () => {
                                 title="Review Slider"
                                 desc="Auto-scroll review screenshots in a phone frame."
                                 icon={<Smartphone size={24} color="#a855f7" />}
+                            />
+                            <Card
+                                to="/review-shower"
+                                title="Review Shower"
+                                desc="Cinematic review presentation with zoom & highlighted sales phrases."
+                                icon={<Eye size={24} color="#ef4444" />}
                             />
                         </div>
                     </section>

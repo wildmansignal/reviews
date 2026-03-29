@@ -1,0 +1,263 @@
+/* ── Review Shower ─────────────────────────────────────────── */
+.review-shower-page {
+    min-height: 100vh;
+    background: #0a0a0f;
+    color: white;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ── Setup View ───────────────────────────────────────────── */
+.shower-setup {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.shower-setup-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.shower-setup-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ef4444, #f97316, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.shower-setup-header p {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.shower-textarea {
+    width: 100%;
+    min-height: 300px;
+    background: #111118;
+    border: 1px solid #2a2a3a;
+    border-radius: 16px;
+    color: #e5e7eb;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 20px;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.shower-textarea:focus {
+    border-color: #ef4444;
+}
+
+.shower-textarea::placeholder {
+    color: #4b5563;
+}
+
+.shower-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.shower-play-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.shower-play-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+.shower-play-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.shower-speed-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+.shower-speed-control input[type="range"] {
+    width: 100px;
+    accent-color: #ef4444;
+    cursor: pointer;
+}
+
+.shower-hint {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+.shower-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+}
+
+.shower-back-btn:hover {
+    color: white;
+}
+
+/* ── Presentation View ────────────────────────────────────── */
+.shower-presentation {
+    position: fixed;
+    inset: 0;
+    background: #050508;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.shower-review-container {
+    position: relative;
+    width: 80%;
+    max-width: 900px;
+    text-align: center;
+    padding: 3rem;
+}
+
+.shower-review-text {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.8;
+    color: #e5e7eb;
+    opacity: 0;
+    animation: showerFadeIn 1s ease forwards;
+}
+
+.shower-review-text.zooming {
+    animation: showerZoomIn 6s ease forwards;
+}
+
+.shower-review-text.fading-out {
+    animation: showerFadeOut 0.8s ease forwards;
+}
+
+.shower-sale-word {
+    position: relative;
+    font-weight: 800;
+    color: white;
+}
+
+.shower-sale-word::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ef4444, #f97316);
+    border-radius: 2px;
+    transition: none;
+}
+
+.shower-sale-word.underline-active::after {
+    animation: sweepUnderline 0.6s ease forwards;
+}
+
+@keyframes sweepUnderline {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes showerFadeIn {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes showerZoomIn {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.18); opacity: 1; }
+}
+
+@keyframes showerFadeOut {
+    from { opacity: 1; transform: scale(1.18); }
+    to { opacity: 0; transform: scale(1.22) translateY(-10px); }
+}
+
+/* ── Presentation Controls ────────────────────────────────── */
+.shower-pres-controls {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(20, 20, 30, 0.85);
+    backdrop-filter: blur(12px);
+    padding: 10px 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 10000;
+}
+
+.shower-pres-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: color 0.2s, background 0.2s;
+}
+
+.shower-pres-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.shower-progress-text {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+}
+
+.shower-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ef4444, #f97316);
+    z-index: 10001;
+    transition: width 0.3s ease;
+}

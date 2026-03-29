@@ -539,6 +539,15 @@
     transition: filter 0.3s ease;
 }
 
+/* ── Sales Highlight ────────────────────────────────────── */
+.sales-highlight {
+    text-decoration: underline;
+    text-decoration-color: #ef4444;
+    text-decoration-thickness: 2.5px;
+    text-underline-offset: 3px;
+    font-weight: 700;
+}
+
 .blur-toggle-wrap {
     display: flex;
     align-items: center;
