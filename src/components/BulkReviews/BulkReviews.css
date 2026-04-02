@@ -531,6 +531,10 @@
     background: linear-gradient(135deg, #8b5cf6, #a78bfa);
 }
 
+.mode-btn.active.mode-coaching {
+    background: linear-gradient(135deg, #059669, #10b981);
+}
+
 /* ── Blur Names ─────────────────────────────────────────── */
 .blur-name {
     filter: blur(5px);

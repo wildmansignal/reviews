@@ -4,7 +4,7 @@ import './BulkReviews.css';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ThumbsUp, MessageCircle, Share2, Heart, MoreHorizontal, X, Zap, ThumbsDown, Mail, Star, Eye, EyeOff } from 'lucide-react';
 
-type ReviewMode = 'default' | 'tinnitus' | 'tinnitus-chat';
+type ReviewMode = 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching';
 
 // ─── Sales Phrase Highlighter ─────────────────────────────────────────────────
 const SALES_PHRASES = [
@@ -60,6 +60,14 @@ const MODE_CONFIG: Record<ReviewMode, { icon: string; title: string; subtitle: s
         emptyDesc: 'AI-powered mixed social proof about Dan\'s free tinnitus chat.',
         emptyHint: 'Each item will be a random mix of Facebook posts, Gmail threads, Messenger conversations, TikTok comments, and YouTube comments.',
         btnLabel: 'Chat',
+    },
+    'tinnitus-coaching': {
+        icon: '🎧',
+        title: '🎧 Coaching Session Reviews',
+        subtitle: 'Generate mixed content about Dan\'s 1-on-1 tinnitus coaching sessions',
+        emptyDesc: 'AI-powered mixed social proof about Dan\'s personalized tinnitus coaching sessions.',
+        emptyHint: 'Each item will be a random mix of Facebook posts, Gmail threads, Messenger conversations, TikTok comments, and YouTube comments.',
+        btnLabel: 'Coaching',
     },
 };
 
@@ -129,11 +137,12 @@ const BulkReviewPage: React.FC = () => {
             {/* Controls */}
             <div className="bulk-controls-bar">
                 <div className="bulk-controls-inner">
-                    {/* 3-Way Mode Selector */}
+                    {/* 4-Way Mode Selector */}
                     <div className="mode-selector-wrap">
                         <button className={`mode-btn ${mode === 'default' ? 'active mode-fire' : ''}`} onClick={() => switchMode('default')}>🔥 Code On Fire</button>
                         <button className={`mode-btn ${mode === 'tinnitus' ? 'active mode-tinnitus' : ''}`} onClick={() => switchMode('tinnitus')}>👂 Tinnitus</button>
                         <button className={`mode-btn ${mode === 'tinnitus-chat' ? 'active mode-chat' : ''}`} onClick={() => switchMode('tinnitus-chat')}>💬 Tinnitus Chat</button>
+                        <button className={`mode-btn ${mode === 'tinnitus-coaching' ? 'active mode-coaching' : ''}`} onClick={() => switchMode('tinnitus-coaching')}>🎧 1-on-1 Coaching</button>
                     </div>
 
                     {/* Blur Names Toggle */}

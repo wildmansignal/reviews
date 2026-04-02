@@ -137,6 +137,39 @@ const TINNITUS_REVIEW_TEMPLATES = [
     (_name: string) => `Wife kept telling me to try Dan's tinnitus program. Finally did after about a year of suffering. Wish I hadn't waited. The habituation process is real and Dan explains it better than anyone. 3 months in and I feel like myself again.`,
 ];
 
+// Tinnitus Coaching Session review templates — positive reviews about Dan's 1-on-1 coaching sessions
+const TINNITUS_COACHING_REVIEW_TEMPLATES = [
+    () => `I did one of Dan Plants' 1-on-1 tinnitus coaching sessions last week and it genuinely moved the needle for me. He looked at my specific situation and gave me a personalized plan I never could have built on my own. Best investment I've made on this journey.`,
+
+    () => `After months of struggling with tinnitus I finally booked a coaching session with Dan Plants. Within an hour he helped me understand exactly why my brain was stuck in threat mode and what to do about it. I left feeling more hopeful than I have in months.`,
+
+    () => `Dan's 1-on-1 coaching session was a turning point for me. He didn't give me generic advice — he actually listened to my whole history and then built a roadmap specific to my situation. Two weeks later my anxiety around the sound has dropped significantly.`,
+
+    () => `ngl I was hesitant to book a coaching session because I wasn't sure it would be different from the usual stuff. But Dan Plants is on another level. He identified patterns in my situation I hadn't even noticed and gave me targeted exercises. My spike days are shorter now.`,
+
+    () => `Just finished a private coaching call with Dan Plants and wow. He explained what my nervous system is doing in a way that finally made sense. I've read so much about habituation but never had it applied to MY situation like this. Game changer.`,
+
+    () => `I've been through group programs and watched hours of tinnitus content online. Nothing compared to sitting down with Dan one-on-one for an hour. He zeroed in on my specific triggers and gave me a week-by-week plan. Worth every dollar.`,
+
+    () => `Booked a 1-on-1 session with Dan after a bad tinnitus spike month. He helped me rebuild my approach from scratch and figure out where I was getting in my own way. Two sessions later I feel like I have my life back on track.`,
+
+    () => `Dan Plants' coaching sessions are something else. He doesn't just repeat what's in his program — he works with what you bring to the call. I learned more in 60 minutes with him than in weeks of researching on my own. My sleep is already improving.`,
+
+    () => `My doctor told me there was nothing to do for tinnitus. Dan Plants spent an hour with me on a 1-on-1 call and showed me exactly what to do. The difference is incredible. He's the most knowledgeable person I've found on this topic by far.`,
+
+    () => `I cried at the end of my coaching session with Dan because for the first time someone actually got it. He didn't just validate my suffering — he gave me a real plan. Three weeks later I'm sleeping better and the dread is mostly gone.`,
+
+    () => `Dan's 1-on-1 coaching cut through months of confusion in one hour. He has this gift for explaining exactly what the brain is doing and then telling you the specific thing you need to do about it. I felt clear and calm after the session in a way I hadn't felt in a long time.`,
+
+    () => `Shared my tinnitus coaching session with my sister who also suffers and she's booking one now. Dan Plants is just a different level of support. Personal, targeted, and he actually follows up. Not just another program — genuine coaching.`,
+
+    () => `Was skeptical that a coaching session could help when I'd already tried so many things. Dan proved me wrong. He identified that my rumination habits were keeping my nervous system on high alert and we built a strategy around that. Things have shifted noticeably since.`,
+
+    () => `Dan's 1-on-1 tinnitus coaching is the thing I wish I had found on day one. He helps you understand your specific pattern, not just tinnitus in general. That personalized approach is what makes the difference when everything else has felt generic and unhelpful.`,
+
+    () => `had a coaching session with Dan Plants and the guy just knows his stuff. He asked the right questions, identified my problem areas quickly, and gave me a clear set of things to focus on. Within two weeks I am noticeably less reactive to the sound. That's huge for me.`,
+];
+
 // Tinnitus Chat review templates — positive reviews about Dan's free tinnitus AI chat
 const TINNITUS_CHAT_REVIEW_TEMPLATES = [
     () => `After talking to Dans chat, my tinnitus has reduced by like 20%. I don't know how to explain it but just having someone walk me through what's happening made a huge difference. Genuinely recommend it to anyone dealing with this.`,
@@ -206,7 +239,7 @@ export async function generateAIReview(
     name: string,
     incomeMin = 10000,
     incomeMax = 150000,
-    mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'
+    mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default'
 ): Promise<string> {
     const apiKey = getApiKey();
 
@@ -229,7 +262,24 @@ export async function generateAIReview(
     let systemContent: string;
     let userContent: string;
 
-    if (mode === 'tinnitus-chat') {
+    if (mode === 'tinnitus-coaching') {
+        systemContent = `You write authentic Facebook posts from real everyday people sharing their positive experience with Dan Plants' 1-on-1 tinnitus coaching sessions.
+Rules:
+- ${lengthInstruction}
+- ${toneInstruction}
+- NO hashtags ever
+- At most ONE emoji in the whole post — many posts should have zero
+- Mention Dan Plants by name and describe it as a coaching session, 1-on-1 call, or private coaching
+- The sessions are personal, targeted, one-hour calls where Dan builds a specific habituation plan for the individual
+- People should talk about how personalized the help was, how much clarity they got, how their anxiety/distress dropped, how their sleep improved, how their spike days got shorter, or how they finally felt heard
+- Some posts can mention how it was different from generic advice online or from doctors who just say "live with it"
+- Do NOT promise a cure — coaching helps with understanding, personalized strategy, and nervous system regulation
+- Do NOT start with "Hey everyone" or "Hey friends" — vary the opening
+- Do NOT use exclamation marks more than once
+- No ALL CAPS
+- Do not write like a formal testimonial or advertisement`;
+        userContent = `Write a Facebook post from ${name} about their positive experience with Dan Plants' 1-on-1 tinnitus coaching session. They got a personalized plan and came away feeling clearer, more hopeful, less anxious, or with measurably better days.`;
+    } else if (mode === 'tinnitus-chat') {
         systemContent = `You write authentic Facebook posts from real everyday people sharing their positive experience with Dan Plants' free tinnitus AI chat.
 Rules:
 - ${lengthInstruction}
@@ -310,7 +360,7 @@ export async function generateAIBatchReviews(
     onProgress?: (done: number, total: number) => void,
     incomeMin = 10000,
     incomeMax = 150000,
-    mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'
+    mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default'
 ): Promise<GeneratedReview[]> {
     const reviews: GeneratedReview[] = [];
     const BATCH_SIZE = 5;
@@ -329,6 +379,9 @@ export async function generateAIBatchReviews(
                     return await generateAIReview(b.name, incomeMin, incomeMax, mode);
                 } catch {
                     // Fallback to template if API fails
+                    if (mode === 'tinnitus-coaching') {
+                        return TINNITUS_COACHING_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_COACHING_REVIEW_TEMPLATES.length)]();
+                    }
                     if (mode === 'tinnitus-chat') {
                         return TINNITUS_CHAT_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_CHAT_REVIEW_TEMPLATES.length)]();
                     }
@@ -445,10 +498,22 @@ export interface GeneratedTikTokComments {
     totalLikes: string;
 }
 
-export async function generateTikTokComments(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedTikTokComments> {
+export async function generateTikTokComments(mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default'): Promise<GeneratedTikTokComments> {
     const apiKey = getApiKey();
     let prompt: string;
-    if (mode === 'tinnitus-chat') {
+    if (mode === 'tinnitus-coaching') {
+        prompt = `Generate realistic TikTok comments for a video by Dan Plants about his 1-on-1 tinnitus coaching sessions that help people build a personalized habituation plan.
+Return ONLY valid JSON, no markdown:
+{
+  "comments": [
+    {"username": "tiktok_handle", "text": "comment text with 1-2 emojis max", "likes": "XX"},
+    ...4 more comments
+  ],
+  "totalComments": "X,XXX",
+  "totalLikes": "XX.XK"
+}
+Make usernames realistic (lowercase, numbers, underscores). Comments 5-20 words, casual TikTok style. People sharing how Dan's personal coaching helped them, gave them a specific plan, reduced anxiety, improved sleep. 1-2 emojis max. Likes 10-500.`;
+    } else if (mode === 'tinnitus-chat') {
         prompt = `Generate realistic TikTok comments for a video by Dan Plants about his free tinnitus AI chat that helps people understand and cope with tinnitus.
 Return ONLY valid JSON, no markdown:
 {
@@ -504,10 +569,20 @@ export interface GeneratedYouTubeComments {
     comments: Array<{ handle: string; text: string; likes: string; timeAgo: string; }>;
 }
 
-export async function generateYouTubeComments(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedYouTubeComments> {
+export async function generateYouTubeComments(mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default'): Promise<GeneratedYouTubeComments> {
     const apiKey = getApiKey();
     let prompt: string;
-    if (mode === 'tinnitus-chat') {
+    if (mode === 'tinnitus-coaching') {
+        prompt = `Generate realistic YouTube comments for a video by Dan Plants about 1-on-1 tinnitus coaching — people sharing their personal experience after a coaching session.
+Return ONLY valid JSON, no markdown:
+{
+  "comments": [
+    {"handle": "@username123", "text": "comment text, no emojis or max 1", "likes": "XX", "timeAgo": "Xy ago"},
+    ...4 more
+  ]
+}
+Handles start with @. Likes between 3-50. TimeAgo like "3y ago", "1y ago", "8mo ago". Comments 15-40 words. People mention how Dan's personalized coaching session gave them a breakthrough, a specific plan, or relief from anxiety. Authentic and grounded.`;
+    } else if (mode === 'tinnitus-chat') {
         prompt = `Generate realistic YouTube comments for a video by Dan Plants about his free tinnitus AI chat that helps people understand and cope with tinnitus.
 Return ONLY valid JSON, no markdown:
 {
@@ -622,12 +697,45 @@ const GMAIL_TEMPLATES_TINNITUS: GeneratedGmailThread[] = [
     },
 ];
 
-export async function generateGmailThread(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedGmailThread> {
+const GMAIL_TEMPLATES_TINNITUS_COACHING: GeneratedGmailThread[] = [
+    {
+        subject: 'That coaching session completely changed my approach',
+        messages: [
+            { senderName: 'Amanda Torres', content: 'Hi Dan, I just wanted to reach out after our 1-on-1 session yesterday. I went in feeling hopeless and came out with an actual plan specific to my situation. Nobody has ever applied this stuff to MY case before — it was always generic advice. Last night was the first quiet night I\'ve had in weeks.', isMe: false },
+            { senderName: 'Dan', content: 'Amanda, hearing this made my morning. That\'s exactly what the 1-on-1 is for — generic content can only take you so far. What do you think was the biggest shift from the session?', isMe: true },
+            { senderName: 'Amanda Torres', content: 'Understanding that my hypervigilance was making everything worse, not the tinnitus itself. You identified that in the first 10 minutes. I\'ve been fighting the wrong thing this whole time. Now I know what to actually work on.', isMe: false },
+            { senderName: 'Dan', content: 'That insight is the whole ballgame. Once you stop fighting the sound and start working on the nervous system response, things move fast. Keep me posted — I\'m rooting for you.', isMe: true },
+        ],
+    },
+    {
+        subject: 'Two weeks after our session — wanted to update you',
+        messages: [
+            { senderName: 'Kevin Marshall', content: 'Dan, it\'s been two weeks since our coaching call and I wanted to give you an update. My bad days are fewer. I\'m sleeping better. And the plan you gave me — I\'ve been sticking to it. I was skeptical that one session could do much but I was wrong. The personalized approach is completely different from anything else I\'ve tried.', isMe: false },
+            { senderName: 'Dan', content: 'Kevin! Two weeks of consistent work and already seeing results — that is exactly how it\'s supposed to go. Better sleep is often the first domino. What\'s been the easiest part of the plan to stick with?', isMe: true },
+            { senderName: 'Kevin Marshall', content: 'The morning routine you outlined. Having something specific to do when I wake up instead of just lying there dreading the sound has been huge. Thank you for putting this together for me specifically. It makes all the difference.', isMe: false },
+            { senderName: 'Dan', content: 'That morning anchor is one of the most powerful pieces. Keep building on it. You\'re doing great — this is exactly the trajectory I hoped for you.', isMe: true },
+        ],
+    },
+];
+
+export async function generateGmailThread(mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default'): Promise<GeneratedGmailThread> {
     // Try the API first, fall back to local templates
     try {
         const apiKey = getApiKey();
         let prompt: string;
-        if (mode === 'tinnitus-chat') {
+        if (mode === 'tinnitus-coaching') {
+            prompt = `Generate a realistic Gmail email thread between Dan Plants and someone who just completed a 1-on-1 tinnitus coaching session with him and is sharing how much it helped.
+Return ONLY valid JSON, no markdown:
+{
+  "subject": "Thread subject",
+  "messages": [
+    {"senderName": "Person Name", "content": "email content", "isMe": false},
+    {"senderName": "Dan", "content": "Dan's reply", "isMe": true},
+    ...2-3 more messages alternating
+  ]
+}
+Keep emails realistic, 2-4 sentences each. The person describes how personalized the session felt, what their specific breakthrough was, how their anxiety or sleep has improved, or how the plan Dan gave them is actually working. Dan is warm and encouraging. Do NOT promise a cure.`;
+        } else if (mode === 'tinnitus-chat') {
             prompt = `Generate a realistic Gmail email thread between Dan Plants and someone who used his free tinnitus AI chat and is sharing how much it helped them.
 Return ONLY valid JSON, no markdown:
 {
@@ -640,7 +748,7 @@ Return ONLY valid JSON, no markdown:
 }
 Keep emails realistic, 2-4 sentences each. The person describes how Dan's free tinnitus chat gave them hope, a game plan, reduced their anxiety, or explained things better than their doctor. Dan is warm and grateful. Do NOT promise a cure.`;
         } else if (mode === 'tinnitus') {
-            prompt = `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation program and is sharing their success.
+            prompt = `Generate a realistic Gmail email thread between Dan Plants (a tinnitus habituation coach) and someone who went through his tinnitus habituation group program and is sharing their success.
 Return ONLY valid JSON, no markdown:
 {
   "subject": "Thread subject",
@@ -680,7 +788,10 @@ Keep emails realistic, 2-4 sentences each. Customer has a genuine question or su
         return JSON.parse(raw);
     } catch {
         // Fallback to local templates
-        const templates = mode === 'tinnitus-chat' ? GMAIL_TEMPLATES_TINNITUS_CHAT : mode === 'tinnitus' ? GMAIL_TEMPLATES_TINNITUS : GMAIL_TEMPLATES_COF;
+        const templates = mode === 'tinnitus-coaching' ? GMAIL_TEMPLATES_TINNITUS_COACHING
+            : mode === 'tinnitus-chat' ? GMAIL_TEMPLATES_TINNITUS_CHAT
+            : mode === 'tinnitus' ? GMAIL_TEMPLATES_TINNITUS
+            : GMAIL_TEMPLATES_COF;
         return templates[Math.floor(Math.random() * templates.length)];
     }
 }
@@ -691,10 +802,22 @@ export interface GeneratedMessengerThread {
     contactName: string;
 }
 
-export async function generateMessengerThread(mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default'): Promise<GeneratedMessengerThread> {
+export async function generateMessengerThread(mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default'): Promise<GeneratedMessengerThread> {
     const apiKey = getApiKey();
     let prompt: string;
-    if (mode === 'tinnitus-chat') {
+    if (mode === 'tinnitus-coaching') {
+        prompt = `Generate a realistic Facebook Messenger conversation between Dan Plants and someone who just had a 1-on-1 tinnitus coaching session with him and is messaging to share how much it helped.
+Return ONLY valid JSON, no markdown:
+{
+  "contactName": "Full Name",
+  "messages": [
+    {"text": "message text", "isMe": false},
+    {"text": "Dan's reply", "isMe": true},
+    ...5-7 more messages alternating
+  ]
+}
+Messages should be short, 1-2 sentences, casual. Person shares how personalized the call felt, what shifted for them, how their anxiety/sleep/spike days improved. Dan is warm and encouraging. Do NOT promise a cure.`;
+    } else if (mode === 'tinnitus-chat') {
         prompt = `Generate a realistic Facebook Messenger conversation between Dan Plants and someone who just used his free tinnitus AI chat and is messaging him about how much it helped.
 Return ONLY valid JSON, no markdown:
 {
@@ -966,7 +1089,7 @@ export interface MixedContentItem {
 
 export async function generateMixedBulkContent(
     count: number,
-    mode: 'default' | 'tinnitus' | 'tinnitus-chat' = 'default',
+    mode: 'default' | 'tinnitus' | 'tinnitus-chat' | 'tinnitus-coaching' = 'default',
     incomeMin = 10000,
     incomeMax = 150000,
     onProgress?: (done: number, total: number) => void
@@ -1044,11 +1167,13 @@ export async function generateMixedBulkContent(
                     // Fallback to a facebook post on error
                     const name = generateRandomName();
                     const stats = generateEngagementStats();
-                    const fallbackText = mode === 'tinnitus-chat'
-                        ? TINNITUS_CHAT_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_CHAT_REVIEW_TEMPLATES.length)]()
-                        : mode === 'tinnitus'
-                            ? TINNITUS_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_REVIEW_TEMPLATES.length)](name)
-                            : REVIEW_TEMPLATES[Math.floor(Math.random() * REVIEW_TEMPLATES.length)](getRandomIncome(incomeMin, incomeMax));
+                    const fallbackText = mode === 'tinnitus-coaching'
+                        ? TINNITUS_COACHING_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_COACHING_REVIEW_TEMPLATES.length)]()
+                        : mode === 'tinnitus-chat'
+                            ? TINNITUS_CHAT_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_CHAT_REVIEW_TEMPLATES.length)]()
+                            : mode === 'tinnitus'
+                                ? TINNITUS_REVIEW_TEMPLATES[Math.floor(Math.random() * TINNITUS_REVIEW_TEMPLATES.length)](name)
+                                : REVIEW_TEMPLATES[Math.floor(Math.random() * REVIEW_TEMPLATES.length)](getRandomIncome(incomeMin, incomeMax));
                     return {
                         type: 'facebook',
                         fbReview: {
